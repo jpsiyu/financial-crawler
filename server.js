@@ -6,7 +6,17 @@ const util = require('./util.js')
 const app = express()
 
 app.get('/quote', (req, res) => {
-    const url = 'https://www.msn.com/en-us/money/stockdetails/fi-137.1.000423.SHE?symbol=000423&form=PRFIHQ'
+    const ticker = '000423'
+    const localPath = `data/${ticker}-quote.json`
+    data = util.local2json(localPath)
+    if(data){
+        util.log('Read From Local...')
+        util.serverMsg(res, data)
+        return 
+    }
+
+    util.log('Crawb The Website...')
+    const url = `https://www.msn.com/en-us/money/stockdetails/fi-137.1.${ticker}.SHE?symbol=000423&form=PRFIHQ`
     request(url ,(err, response, html) => {
         util.log('Handle Response...')
         let msg = {}
@@ -20,8 +30,11 @@ app.get('/quote', (req, res) => {
                 valueTab = keyTab.next()
                 msg[keyTab.text()] = valueTab.text()
             })
+            msg = JSON.stringify(msg)
+            util.json2local(localPath, msg)
         }else{
             util.log('ERR:', err)
+            util.log('Tips: Try Again With VPN Off!')
         }
         util.serverMsg(res, msg)
     })

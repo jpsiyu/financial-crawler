@@ -3,20 +3,40 @@ const buildUrl = require('build-url')
 const CSV = require('csv-string') 
 
 // switches
-const logOpen = true
-const saveHtml = false
+const LOG_OPEN = true
+const SAVE_HTML = false
+const SAVE_JSON = true
 
 function log(...args){
-    if(logOpen)
+    if(LOG_OPEN)
         console.log(...args)
 }
 
 function saveCrawled(data){
-    if(!saveHtml) return
+    if(!SAVE_HTML) return
     fs.writeFile('temp/crawled.html', data, (err)=>{
         if(err) throw err
-        log('File Saved!')
+        log('Html Saved!')
     })
+}
+
+function json2local(path, jsonData){
+    if(SAVE_JSON){
+        fs.writeFile(path, jsonData, (err) => {
+            if(err)
+                log('ERR:', err)
+            else
+                log('Json Saved')
+        })
+    }
+}
+
+function local2json(path){
+    if(fs.existsSync(path))
+        data = fs.readFileSync(path, 'utf8')
+    else
+        data = false
+    return data
 }
 
 function serverMsg(res, msg){
@@ -66,4 +86,6 @@ module.exports = {
     serverMsg: serverMsg,
     financialUrl: financialUrl,
     csvStr2Json: csvStr2Json,
+    json2local: json2local,
+    local2json: local2json
 }
