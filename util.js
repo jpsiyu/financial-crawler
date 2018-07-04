@@ -1,5 +1,6 @@
 const fs = require('fs')
 const buildUrl = require('build-url')
+const CSV = require('csv-string') 
 
 // switches
 const logOpen = true
@@ -47,9 +48,22 @@ function financialUrl(url, code, reportType='is', period=12, dataType='A', order
     return res
 }
 
+function csvStr2Json(csvStr){
+    let jsonObj = {}
+    CSV.forEach(csvStr, ',', (row, index) => {
+        if(index != 0){
+            let key = index === 1 ? 'Year': row[0]
+            let value = row.slice(1)
+            jsonObj[key] = value
+        }
+    })
+    return jsonObj
+}
+
 module.exports = {
     log: log,
     saveCrawled: saveCrawled,
     serverMsg: serverMsg,
     financialUrl: financialUrl,
+    csvStr2Json: csvStr2Json,
 }

@@ -56,7 +56,7 @@ app.get('/income_statement', (req, res) => {
     request(combinedUrl, (error, response, body) => {
         let msg = {}
         if(!error){
-            msg = body
+            msg = util.csvStr2Json(body)
         }else{
             util.log('ERR:', error)
         }
@@ -70,7 +70,7 @@ app.get('/balance_sheet', (req, res) => {
     request(combinedUrl, (error, response, body) => {
         let msg = {}
         if(!error){
-            msg = body
+            msg = util.csvStr2Json(body)
         }else{
             util.log('ERR:', error)
         }
@@ -85,7 +85,7 @@ app.get('/cashflow', (req, res) => {
     request(combinedUrl, (error, response, body) => {
         let msg = {}
         if(!error){
-            msg = body
+            msg = util.csvStr2Json(body)
         }else{
             util.log('ERR:', error)
         }
