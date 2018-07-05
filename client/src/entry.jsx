@@ -7,7 +7,8 @@ class Entry extends React.Component {
     constructor() {
         super()
         this.state = {
-            quoteData: null
+            quote: null,
+            keyRatio: null,
         }
         this.searchInput = null
         this.onBtnSearch = this.onBtnSearch.bind(this)
@@ -15,14 +16,33 @@ class Entry extends React.Component {
 
     onBtnSearch(event) {
         event.preventDefault()
-        console.log('onBtnSearch....', this.searchInput.value)
+        this.analyPipeline()
+    }
+
+    analyPipeline(){
+        this.quoteAnalysis()
+    }
+
+    quoteAnalysis(){
         axios.get('http://localhost/quote').then(response => {
             const serverMsg = response.data
-            const quoteData = JSON.parse(serverMsg.msg)
+            const quote = JSON.parse(serverMsg.msg)
             this.setState({
-                quoteData:quoteData
+                quote:quote
             })
         }).catch(error => console.log('ERR:',error))
+        .then(this.keyRatioAnalysis())
+    }
+
+    keyRatioAnalysis(){
+        axios.get('http://localhost/key_ratio').then(response => {
+            const serverMsg = response.data
+            const keyRatio = JSON.parse(serverMsg.msg)
+            this.setState({
+                keyRatio
+            })
+        }).catch(error => console.log('ERR:',error))
+        .then(console.log('analyse finish...'))
     }
 
     render() {
@@ -42,16 +62,25 @@ class Entry extends React.Component {
                 </div>
             </div>
 
-            <Quote quoteData={this.state.quoteData} />
+            <Quote quote={this.state.quote} />
+            <KeyRatio keyRatio={this.state.keyRatio} />
         </div>
     }
 }
 
-const Quote = (props) =>{
-    if(tool.empty(props.quoteData)){
+const Quote = (props) => {
+    if(tool.empty(props.quote)){
         return null
     }else{
-        return <DataTable quoteData={props.quoteData}/>
+        return <DataTable data={props.quote}/>
+    }
+}
+
+const KeyRatio = (props) => {
+    if(tool.empty(props.keyRatio)){
+        return null
+    }else{
+        return <DataTable data={props.keyRatio}/>
     }
 }
 

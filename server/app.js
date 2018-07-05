@@ -4,12 +4,14 @@ const cheerio = require('cheerio')
 const util = require('./util.js')
 const path = require('path')
 
+const DATA_PATH = 'server/data'
+
 const app = express()
 app.use(express.static(path.resolve(__dirname, '../client/public')))
 
 app.get('/quote', (req, res) => {
     const ticker = '000423'
-    const localPath = `data/${ticker}-quote.json`
+    const localPath = `${DATA_PATH}/${ticker}-quote.json`
     data = util.local2json(localPath)
     if(data){
         util.log('Read From Local...')
@@ -43,7 +45,16 @@ app.get('/quote', (req, res) => {
 })
 
 app.get('/key_ratio', (req, res) => {
-    const url = 'https://www.msn.com/en-us/money/stockdetails/analysis/fi-137.1.000423.SHE'
+    const ticker = '000423'
+    const localPath = `${DATA_PATH}/${ticker}-key-ratio.json`
+    data = util.local2json(localPath)
+    if(data){
+        util.log('Read From Local...')
+        util.serverMsg(res, data)
+        return 
+    }
+
+    const url = `https://www.msn.com/en-us/money/stockdetails/analysis/fi-137.1.${ticker}.SHE`
     request(url, (err, response, body) => {
         util.log('Handle Response...')
         let msg = {}
@@ -58,6 +69,8 @@ app.get('/key_ratio', (req, res) => {
                 valueTab = keyTab.next()
                 msg[keyTab.text().trim()] = valueTab.text().trim()
             })
+            msg = JSON.stringify(msg)
+            util.json2local(localPath, msg)
         }else{
             util.log('ERR:', err)
         }
