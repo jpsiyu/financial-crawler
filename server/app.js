@@ -19,11 +19,11 @@ app.get('/quote', (req, res) => {
 
     util.log('Crawb The Website...')
     const url = `https://www.msn.com/en-us/money/stockdetails/fi-137.1.${ticker}.SHE?symbol=000423&form=PRFIHQ`
-    request(url ,(err, response, html) => {
+    request(url ,(err, response, body) => {
         util.log('Handle Response...')
         let msg = {}
         if(!err){
-            const $ = cheerio.load(html)
+            const $ = cheerio.load(body)
             util.saveCrawled($.html())
             ul = $('ul.today-trading-container')
             ul.find('li').each((index, obj)=>{
@@ -44,11 +44,11 @@ app.get('/quote', (req, res) => {
 
 app.get('/key_ratio', (req, res) => {
     const url = 'https://www.msn.com/en-us/money/stockdetails/analysis/fi-137.1.000423.SHE'
-    request(url, (err, response, html) => {
+    request(url, (err, response, body) => {
         util.log('Handle Response...')
         let msg = {}
         if(!err){
-            const $ = cheerio.load(html)
+            const $ = cheerio.load(body)
             util.saveCrawled($.html())
             div = $('div.stock-highlights-left-container')
             divTable = div.find('div.table-data-rows')
