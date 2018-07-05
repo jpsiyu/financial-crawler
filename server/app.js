@@ -2,8 +2,10 @@ const express = require('express')
 const request = require('request')
 const cheerio = require('cheerio')
 const util = require('./util.js')
+const path = require('path')
 
 const app = express()
+app.use(express.static(path.resolve(__dirname, '../client/public')))
 
 app.get('/quote', (req, res) => {
     const ticker = '000423'
@@ -106,16 +108,13 @@ app.get('/cashflow', (req, res) => {
     })
 })
 
-app.get('/', (req, res) => {
-    res.status(200).json('Hello There...')
+app.use((req, res, next) => {
+    res.status(404).json('404 - Page Not Found...')
 })
 
-app.get('*', (req, res) => {
-    res.status(404).json('Page Not Found...')
-})
-
-app.get('*', (error, req, res) => {
-    res.status(500).json('Internal Server Error...')
+app.use((err, req, res, next) => {
+    console.log(JSON.stringify(err, null,  2))
+    res.status(500).json('500 - Internal Server Error...')
 })
 
 app.listen('3000', () => console.log('Server Listening On Port 3000..'))
