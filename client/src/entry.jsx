@@ -9,6 +9,7 @@ class Entry extends React.Component {
         this.state = {
             quote: null,
             keyRatio: null,
+            income: null
         }
         this.searchInput = null
         this.onBtnSearch = this.onBtnSearch.bind(this)
@@ -42,6 +43,17 @@ class Entry extends React.Component {
                 keyRatio
             })
         }).catch(error => console.log('ERR:',error))
+        .then(this.incomeAnalysis())
+    }
+
+    incomeAnalysis(){
+        axios.get('http://localhost/income_statement').then(response => {
+            const serverMsg = response.data
+            const income = JSON.parse(serverMsg.msg)
+            this.setState({
+                income
+            })
+        }).catch(error => console.log('ERR:',error))
         .then(console.log('analyse finish...'))
     }
 
@@ -64,6 +76,7 @@ class Entry extends React.Component {
 
             <Quote quote={this.state.quote} />
             <KeyRatio keyRatio={this.state.keyRatio} />
+            <IncomeStatement income={this.state.income} />
         </div>
     }
 }
@@ -81,6 +94,14 @@ const KeyRatio = (props) => {
         return null
     }else{
         return <DataTable data={props.keyRatio}/>
+    }
+}
+
+const IncomeStatement = (props) => {
+    if(tool.empty(props.income)){
+        return null
+    }else{
+        return <DataTable data={props.income}/>
     }
 }
 

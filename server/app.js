@@ -32,7 +32,7 @@ app.get('/quote', (req, res) => {
                 li = $(obj)
                 keyTab = li.children().first()
                 valueTab = keyTab.next()
-                msg[keyTab.text()] = valueTab.text()
+                msg[keyTab.text()] = [valueTab.text()]
             })
             msg = JSON.stringify(msg)
             util.json2local(localPath, msg)
@@ -67,7 +67,7 @@ app.get('/key_ratio', (req, res) => {
                 ul = $(obj)
                 keyTab = ul.children().first()
                 valueTab = keyTab.next()
-                msg[keyTab.text().trim()] = valueTab.text().trim()
+                msg[keyTab.text().trim()] = [valueTab.text().trim()]
             })
             msg = JSON.stringify(msg)
             util.json2local(localPath, msg)

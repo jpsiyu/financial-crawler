@@ -77,7 +77,7 @@ function csvStr2Json(csvStr){
             jsonObj[key] = value
         }
     })
-    return jsonObj
+    return JSON.stringify(jsonObj)
 }
 
 module.exports = {
