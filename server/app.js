@@ -79,12 +79,21 @@ app.get('/key_ratio', (req, res) => {
 })
 
 app.get('/income_statement', (req, res) => {
+    const ticker = '000423'
+    const localPath = `${DATA_PATH}/${ticker}-income-statement.json`
+    data = util.local2json(localPath)
+    if(data){
+        util.log('Read From Local...')
+        util.serverMsg(res, data)
+        return 
+    }
     const url = 'http://financials.morningstar.com/ajax/ReportProcess4CSV.html'
-    const combinedUrl = util.financialUrl(url, '000423')
+    const combinedUrl = util.financialUrl(url, ticker)
     request(combinedUrl, (error, response, body) => {
         let msg = {}
         if(!error){
             msg = util.csvStr2Json(body)
+            util.json2local(localPath, msg)
         }else{
             util.log('ERR:', error)
         }
@@ -93,12 +102,21 @@ app.get('/income_statement', (req, res) => {
 })
 
 app.get('/balance_sheet', (req, res) => {
+    const ticker = '000423'
+    const localPath = `${DATA_PATH}/${ticker}-balance-sheet.json`
+    data = util.local2json(localPath)
+    if(data){
+        util.log('Read From Local...')
+        util.serverMsg(res, data)
+        return 
+    }
     const url = 'http://financials.morningstar.com/ajax/ReportProcess4CSV.html'
-    const combinedUrl = util.financialUrl(url, '000423', reportType='bs')
+    const combinedUrl = util.financialUrl(url, ticker, reportType='bs')
     request(combinedUrl, (error, response, body) => {
         let msg = {}
         if(!error){
             msg = util.csvStr2Json(body)
+            util.json2local(localPath, msg)
         }else{
             util.log('ERR:', error)
         }
@@ -108,12 +126,21 @@ app.get('/balance_sheet', (req, res) => {
 
 
 app.get('/cashflow', (req, res) => {
+    const ticker = '000423'
+    const localPath = `${DATA_PATH}/${ticker}-cashflow.json`
+    data = util.local2json(localPath)
+    if(data){
+        util.log('Read From Local...')
+        util.serverMsg(res, data)
+        return 
+    }
     const url = 'http://financials.morningstar.com/ajax/ReportProcess4CSV.html'
-    const combinedUrl = util.financialUrl(url, '000423', reportType='cf')
+    const combinedUrl = util.financialUrl(url, ticker, reportType='cf')
     request(combinedUrl, (error, response, body) => {
         let msg = {}
         if(!error){
             msg = util.csvStr2Json(body)
+            util.json2local(localPath, msg)
         }else{
             util.log('ERR:', error)
         }

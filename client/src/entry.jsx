@@ -9,7 +9,9 @@ class Entry extends React.Component {
         this.state = {
             quote: null,
             keyRatio: null,
-            income: null
+            income: null,
+            balance: null,
+            cashflow: null,
         }
         this.searchInput = null
         this.onBtnSearch = this.onBtnSearch.bind(this)
@@ -54,6 +56,28 @@ class Entry extends React.Component {
                 income
             })
         }).catch(error => console.log('ERR:',error))
+        .then(this.balanceAnalysis())
+    }
+
+    balanceAnalysis(){
+        axios.get('http://localhost/balance_sheet').then(response => {
+            const serverMsg = response.data
+            const balance = JSON.parse(serverMsg.msg)
+            this.setState({
+                balance
+            })
+        }).catch(error => console.log('ERR:',error))
+        .then(this.cashflowAnalysis())
+    }
+
+    cashflowAnalysis(){
+        axios.get('http://localhost/cashflow').then(response => {
+            const serverMsg = response.data
+            const cashflow = JSON.parse(serverMsg.msg)
+            this.setState({
+                cashflow
+            })
+        }).catch(error => console.log('ERR:',error))
         .then(console.log('analyse finish...'))
     }
 
@@ -77,6 +101,8 @@ class Entry extends React.Component {
             <Quote quote={this.state.quote} />
             <KeyRatio keyRatio={this.state.keyRatio} />
             <IncomeStatement income={this.state.income} />
+            <BalanceSheet balance={this.state.balance} />
+            <Cashflow cashflow={this.state.cashflow} />
         </div>
     }
 }
@@ -105,4 +131,19 @@ const IncomeStatement = (props) => {
     }
 }
 
+const BalanceSheet = (props) => {
+    if(tool.empty(props.balance)){
+        return null
+    }else{
+        return <DataTable data={props.balance}/>
+    }
+}
+
+const Cashflow = (props) => {
+    if(tool.empty(props.cashflow)){
+        return null
+    }else{
+        return <DataTable data={props.cashflow}/>
+    }
+}
 export default Entry
