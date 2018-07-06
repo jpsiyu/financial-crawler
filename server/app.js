@@ -47,32 +47,23 @@ app.get('/quote', (req, res) => {
 app.get('/key_ratio', (req, res) => {
     const ticker = '000423'
     const localPath = `${DATA_PATH}/${ticker}-key-ratio.json`
-    data = util.local2json(localPath)
+    let data = util.local2json(localPath)
+    data = null
     if(data){
         util.log('Read From Local...')
         util.serverMsg(res, data)
         return 
     }
 
-    const url = `https://www.msn.com/en-us/money/stockdetails/analysis/fi-137.1.${ticker}.SHE`
-    request(url, (err, response, body) => {
-        util.log('Handle Response...')
+    const url = 'http://financials.morningstar.com/ajax/exportKR2CSV.html'
+    const combinedUrl = util.keyRatioUrl(url, ticker)
+    request(combinedUrl, (error, response, body) => {
         let msg = {}
-        if(!err){
-            const $ = cheerio.load(body)
-            util.saveCrawled($.html())
-            div = $('div.stock-highlights-left-container')
-            divTable = div.find('div.table-data-rows')
-            divTable.find('ul.level0').each((index, obj)=>{
-                ul = $(obj)
-                keyTab = ul.children().first()
-                valueTab = keyTab.next()
-                msg[keyTab.text().trim()] = [valueTab.text().trim()]
-            })
-            msg = JSON.stringify(msg)
+        if(!error){
+            msg = util.csvStr2Json(body)
             util.json2local(localPath, msg)
         }else{
-            util.log('ERR:', err)
+            util.log('ERR:', error)
         }
         util.serverMsg(res, msg)
     })

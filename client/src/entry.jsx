@@ -3,6 +3,7 @@ import axios from 'axios'
 import DataTable from './table.jsx'
 import tool from '../lib/tool.js'
 import pjson from '../../package.json'
+import Chart from './chart.jsx'
 
 class Entry extends React.Component {
     constructor() {
@@ -16,7 +17,6 @@ class Entry extends React.Component {
         }
         this.searchInput = null
         this.onBtnSearch = this.onBtnSearch.bind(this)
-        console.log('on server:', pjson.runOnServer)
         this.url = pjson.runOnServer ? "http://120.78.240.132:3000" : "http://localhost"
     }
 
@@ -106,7 +106,19 @@ class Entry extends React.Component {
             <IncomeStatement income={this.state.income} />
             <BalanceSheet balance={this.state.balance} />
             <Cashflow cashflow={this.state.cashflow} />
+            <ConditionChart income={this.state.income} />
         </div>
+    }
+}
+
+const ConditionChart = (props) => {
+    if(tool.empty(props.income))
+        return null
+    else{
+        const x = props.income['Year']
+        const y = props.income['Revenue']
+        return <Chart x={x} y={y} title='营业收入'/> 
+
     }
 }
 

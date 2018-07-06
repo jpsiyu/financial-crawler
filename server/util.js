@@ -68,6 +68,14 @@ function financialUrl(url, code, reportType='is', period=12, dataType='A', order
     return res
 }
 
+function keyRatioUrl(url, ticker){
+    queryParams = {
+        't': ticker
+    }
+    const res = buildUrl(url, {queryParams})
+    return res
+}
+
 function csvStr2Json(csvStr){
     let jsonObj = {}
     CSV.forEach(csvStr, ',', (row, index) => {
@@ -87,5 +95,6 @@ module.exports = {
     financialUrl: financialUrl,
     csvStr2Json: csvStr2Json,
     json2local: json2local,
-    local2json: local2json
+    local2json: local2json,
+    keyRatioUrl: keyRatioUrl,
 }
