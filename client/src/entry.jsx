@@ -2,7 +2,7 @@ import React from 'react'
 import axios from 'axios'
 import DataTable from './table.jsx'
 import tool from '../lib/tool.js'
-import config from '../config.js'
+import pjson from '../../package.json'
 
 class Entry extends React.Component {
     constructor() {
@@ -16,7 +16,7 @@ class Entry extends React.Component {
         }
         this.searchInput = null
         this.onBtnSearch = this.onBtnSearch.bind(this)
-        this.url = config.serverUrl()
+        this.url = pjson.runOnServer ? "http://http://120.78.240.132:3000" : "http://localhost"
     }
 
     onBtnSearch(event) {

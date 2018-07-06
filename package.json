@@ -8,6 +8,7 @@
     "start": "nodemon server/app.js --ignore client/ --ignore server/data/* --ignore server/temp/*",
     "watch": "webpack --watch"
   },
+  "runOnServer": false,
   "keywords": [],
   "author": "",
   "license": "ISC",
