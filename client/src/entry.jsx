@@ -15,7 +15,6 @@ class Entry extends React.Component {
         }
         this.searchInput = null
         this.onBtnSearch = this.onBtnSearch.bind(this)
-        this.axiosConfig = {}
         this.url = 'http://120.78.240.132:3000'
     }
 
@@ -29,7 +28,7 @@ class Entry extends React.Component {
     }
 
     quoteAnalysis(){
-        axios.get(`${this.url}/quote`, this.axiosConfig).then(response => {
+        axios.get(`${this.url}/quote`).then(response => {
             const serverMsg = response.data
             const quote = JSON.parse(serverMsg.msg)
             this.setState({
@@ -40,7 +39,7 @@ class Entry extends React.Component {
     }
 
     keyRatioAnalysis(){
-        axios.get(`${this.url}/key_ratio`, this.axiosConfig).then(response => {
+        axios.get(`${this.url}/key_ratio`).then(response => {
             const serverMsg = response.data
             const keyRatio = JSON.parse(serverMsg.msg)
             this.setState({
@@ -51,7 +50,7 @@ class Entry extends React.Component {
     }
 
     incomeAnalysis(){
-        axios.get(`${this.url}/income_statement`, this.axiosConfig).then(response => {
+        axios.get(`${this.url}/income_statement`).then(response => {
             const serverMsg = response.data
             const income = JSON.parse(serverMsg.msg)
             this.setState({
@@ -62,7 +61,7 @@ class Entry extends React.Component {
     }
 
     balanceAnalysis(){
-        axios.get(`${this.url}/balance_sheet`, this.axiosConfig).then(response => {
+        axios.get(`${this.url}/balance_sheet`).then(response => {
             const serverMsg = response.data
             const balance = JSON.parse(serverMsg.msg)
             this.setState({
@@ -73,7 +72,7 @@ class Entry extends React.Component {
     }
 
     cashflowAnalysis(){
-        axios.get(`${this.url}/cashflow`, this.axiosConfig).then(response => {
+        axios.get(`${this.url}/cashflow`).then(response => {
             const serverMsg = response.data
             const cashflow = JSON.parse(serverMsg.msg)
             this.setState({
