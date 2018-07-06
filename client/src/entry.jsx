@@ -15,6 +15,7 @@ class Entry extends React.Component {
         }
         this.searchInput = null
         this.onBtnSearch = this.onBtnSearch.bind(this)
+        this.axiosConfig = {headers: {"Access-Control-Allow-Origin": "*"}}
     }
 
     onBtnSearch(event) {
@@ -27,7 +28,7 @@ class Entry extends React.Component {
     }
 
     quoteAnalysis(){
-        axios.get('http://localhost/quote').then(response => {
+        axios.get('http://localhost/quote', this.axiosConfig).then(response => {
             const serverMsg = response.data
             const quote = JSON.parse(serverMsg.msg)
             this.setState({
@@ -38,7 +39,7 @@ class Entry extends React.Component {
     }
 
     keyRatioAnalysis(){
-        axios.get('http://localhost/key_ratio').then(response => {
+        axios.get('http://localhost/key_ratio', this.axiosConfig).then(response => {
             const serverMsg = response.data
             const keyRatio = JSON.parse(serverMsg.msg)
             this.setState({
@@ -49,7 +50,7 @@ class Entry extends React.Component {
     }
 
     incomeAnalysis(){
-        axios.get('http://localhost/income_statement').then(response => {
+        axios.get('http://localhost/income_statement', this.axiosConfig).then(response => {
             const serverMsg = response.data
             const income = JSON.parse(serverMsg.msg)
             this.setState({
@@ -60,7 +61,7 @@ class Entry extends React.Component {
     }
 
     balanceAnalysis(){
-        axios.get('http://localhost/balance_sheet').then(response => {
+        axios.get('http://localhost/balance_sheet', this.axiosConfig).then(response => {
             const serverMsg = response.data
             const balance = JSON.parse(serverMsg.msg)
             this.setState({
@@ -71,7 +72,7 @@ class Entry extends React.Component {
     }
 
     cashflowAnalysis(){
-        axios.get('http://localhost/cashflow').then(response => {
+        axios.get('http://localhost/cashflow', this.axiosConfig).then(response => {
             const serverMsg = response.data
             const cashflow = JSON.parse(serverMsg.msg)
             this.setState({
