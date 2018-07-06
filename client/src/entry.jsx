@@ -15,7 +15,7 @@ class Entry extends React.Component {
         }
         this.searchInput = null
         this.onBtnSearch = this.onBtnSearch.bind(this)
-        this.axiosConfig = {headers: {"Access-Control-Allow-Origin": "*"}}
+        this.axiosConfig = {}
         this.url = 'http://120.78.240.132:3000'
     }
 
