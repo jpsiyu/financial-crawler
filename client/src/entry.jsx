@@ -16,7 +16,8 @@ class Entry extends React.Component {
         }
         this.searchInput = null
         this.onBtnSearch = this.onBtnSearch.bind(this)
-        this.url = pjson.runOnServer ? "http://http://120.78.240.132:3000" : "http://localhost"
+        console.log('on server:', pjson.runOnServer)
+        this.url = pjson.runOnServer ? "http://120.78.240.132:3000" : "http://localhost"
     }
 
     onBtnSearch(event) {
