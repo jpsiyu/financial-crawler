@@ -9,20 +9,26 @@ class DataTable extends React.Component {
         const data = this.props.data
         let heads = []
         let rows = []
-        for (let i = 0; i < data.length; i++) {
+        let i = 0
+        Object.keys(data).forEach((key) => {
+            const values = data[key]
             let row = []
-            const values = data[i]
+            row.push(<td key={i}>{key}</td>)
+            let targets = i == 0 ? heads: rows 
             for (let j = 0; j < values.length; j++) {
-                row.push(<th key={`${i}-${j}`}>{values[j]}</th>)
+                if (i == 0) {
+                    row.push(<th key={`${i}-${j}`}>{values[j]}</th>)
+                }
+                else {
+                    row.push(<td key={`${i}-${j}`}>{values[j]}</td>)
+                }
             }
-            if(i == 0)
-                heads.push(<tr key={i}>{row}</tr>)
-            else
-                rows.push(<tr key={i}>{row}</tr>)
-        }
-        return <div>
+            targets.push(<tr key={i}>{row}</tr>)
+            i++
+        })
+        return <div className='jumbotron'>
             <h2>{this.props.title}</h2>
-            <table className='table'>
+            <table className='table table-striped table-bordered'>
                 <thead>{heads}</thead>
                 <tbody>{rows}</tbody>
             </table>

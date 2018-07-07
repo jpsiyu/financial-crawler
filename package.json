@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server/app.js --ignore client/ --ignore server/data/* --ignore server/temp/*",
+    "start": "nodemon server/app.js --ignore client/ --ignore server/data/ --ignore server/temp/",
     "watch": "webpack --watch"
   },
   "runOnServer": false,

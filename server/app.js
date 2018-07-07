@@ -9,6 +9,11 @@ const DATA_PATH = 'server/data'
 const app = express()
 app.use(express.static(path.resolve(__dirname, '../client/public')))
 
+app.use((req, res, next) => {
+    util.log(`A ${req.method} method to ${req.url}`)
+    next()
+})
+
 app.get('/quote', (req, res) => {
     const ticker = '000423'
     const localPath = `${DATA_PATH}/${ticker}-quote.json`
@@ -27,17 +32,15 @@ app.get('/quote', (req, res) => {
         if(!err){
             const $ = cheerio.load(body)
             util.saveCrawled($.html())
-            const heads = []
             const rows = [] 
             const ul = $('ul.today-trading-container')
             ul.find('li').each((index, obj)=>{
                 li = $(obj)
                 keyTab = li.children().first()
                 valueTab = keyTab.next()
-                heads.push(keyTab.text())
-                rows.push(valueTab.text())
+                rows.push([keyTab.text(), valueTab.text()])
             })
-            msg = JSON.stringify([heads, rows])
+            msg = JSON.stringify(rows)
             util.json2local(localPath, msg)
         }else{
             util.log('ERR:', err)
