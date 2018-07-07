@@ -4,6 +4,7 @@ import { Bar } from 'react-chartjs-2'
 class Chart extends React.Component {
     constructor() {
         super()
+        this.color = 'rgb(69,69,127)'
     }
 
     render() {
@@ -14,13 +15,13 @@ class Chart extends React.Component {
             labels: labels,
             datasets: [{
                 label: title,
-                backgroundColor: 'rgb(255, 99, 132)',
-                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: this.color,
+                borderColor: this.color,
                 data: values
             }]
         }
         let options = {maintainAspectRatio:false}
-        return <div >
+        return <div className='jumbotron' >
             <Bar data={data} width={400} height={400} options={options}/>
         </div>
     }

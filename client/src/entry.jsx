@@ -17,9 +17,9 @@ class Entry extends React.Component {
         }
         this.analysisState = [
             { name: 'quote', path: 'quote', open: false, pass: false, },
-            { name: 'keyRatio', path: 'key_ratio', open: false, pass: false },
+            { name: 'keyRatio', path: 'key_ratio', open: true, pass: false },
             { name: 'income', path: 'income_statement', open: false, pass: false },
-            { name: 'balance', path: 'balance_sheet', open: false, pass: false },
+            { name: 'balance', path: 'balance_sheet', open: true, pass: false },
             { name: 'cashflow', path: 'cashflow', open: true, pass: false },
         ]
         this.searchInput = null
@@ -70,9 +70,9 @@ class Entry extends React.Component {
         }).catch(error => console.log('ERR:', error))
     }
 
-    rawData2Dict(rawData){
+    rawData2Dict(rawData) {
         let d = {}
-        for(let i = 0; i < rawData.length; i++){
+        for (let i = 0; i < rawData.length; i++) {
             const row = rawData[i]
             d[row[0]] = row.slice(1)
         }
@@ -96,13 +96,62 @@ class Entry extends React.Component {
                 </div>
             </div>
 
+            {/*
             <ConditionTable title='Quote Info' data={this.state.quote} />
-            <ConditionTable title='Key Ratio' data={this.state.keyRatio} />
             <ConditionTable title='Income Statement' data={this.state.income} />
             <ConditionTable title='Balance Sheet' data={this.state.balance} />
             <ConditionTable title='Cashflow' data={this.state.cashflow} />
-            <ConditionChart data={this.state.cashflow} />
+            <ConditionTable title='Key Ratio' data={this.state.keyRatio} />
+            */}
+
+            <DebtMeasure data={this.state.balance} />
+
+            <div className='row'>
+                <div className='col'>
+                    <ConditionChart
+                        data={this.state.keyRatio}
+                        xkey='Cash Flow Ratios'
+                        ykey='Book Value Per Share * CNY'
+                        title='每股净资产'
+                    />
+                </div>
+                <div className='col'>
+                    <ConditionChart
+                        data={this.state.keyRatio}
+                        xkey='Cash Flow Ratios'
+                        ykey='Earnings Per Share CNY'
+                        title='每股净利润'
+                    />
+                </div>
+            </div>
+            <ConditionChart
+                data={this.state.cashflow}
+                xkey='Fiscal year ends in December. CNY in millions except per share data.'
+                ykey='Free cash flow'
+                title='自由现金流'
+            />
         </div>
+    }
+}
+
+const DebtMeasure = (props) => {
+    if(tool.empty(props.data)){
+        return null
+    }else{
+        const measureList = [
+            'Fiscal year ends in December. CNY in millions except per share data.',
+            'Short-term debt', 
+            'Other long-term liabilities', 
+            "Total stockholders' equity", 
+            'Total current assets',
+            'Total current liabilities'
+        ]
+        let measureData = {}
+        for(let i=0; i < measureList.length; i++){
+            let k = measureList[i]
+            measureData[k] = props.data[k]
+        }
+        return <DataTable title='权益与负债' data={measureData} />
     }
 }
 
@@ -118,9 +167,9 @@ const ConditionChart = (props) => {
     if (tool.empty(props.data))
         return null
     else {
-        const x = props.data['Fiscal year ends in December. CNY in millions except per share data.']
-        const y = props.data['Free cash flow']
-        return <Chart x={x} y={y} title='自由现金流' />
+        const x = props.data[props.xkey].slice(0, -1)
+        const y = props.data[props.ykey].slice(0, -1)
+        return <Chart x={x} y={y} title={props.title} />
 
     }
 }

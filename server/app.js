@@ -55,7 +55,6 @@ app.get('/key_ratio', (req, res) => {
     const ticker = '000423'
     const localPath = `${DATA_PATH}/${ticker}-key-ratio.json`
     let data = util.local2json(localPath)
-    data = null
     if(data){
         util.log('Read From Local...')
         util.serverMsg(res, data)

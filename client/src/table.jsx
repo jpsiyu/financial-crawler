@@ -27,7 +27,7 @@ class DataTable extends React.Component {
             i++
         })
         return <div className='jumbotron'>
-            <h2>{this.props.title}</h2>
+            <h3>{this.props.title}</h3>
             <table className='table table-striped table-bordered'>
                 <thead>{heads}</thead>
                 <tbody>{rows}</tbody>
