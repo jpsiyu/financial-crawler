@@ -23,22 +23,26 @@ app.get('/quote', (req, res) => {
     const url = `https://www.msn.com/en-us/money/stockdetails/fi-137.1.${ticker}.SHE?symbol=000423&form=PRFIHQ`
     request(url ,(err, response, body) => {
         util.log('Handle Response...')
-        let msg = {}
+        let msg = []
         if(!err){
             const $ = cheerio.load(body)
             util.saveCrawled($.html())
-            ul = $('ul.today-trading-container')
+            const heads = []
+            const rows = [] 
+            const ul = $('ul.today-trading-container')
             ul.find('li').each((index, obj)=>{
                 li = $(obj)
                 keyTab = li.children().first()
                 valueTab = keyTab.next()
-                msg[keyTab.text()] = [valueTab.text()]
+                heads.push(keyTab.text())
+                rows.push(valueTab.text())
             })
-            msg = JSON.stringify(msg)
+            msg = JSON.stringify([heads, rows])
             util.json2local(localPath, msg)
         }else{
             util.log('ERR:', err)
             util.log('Tips: Try Again With VPN Off!')
+            msg = JSON.stringify(msg)
         }
         util.serverMsg(res, msg)
     })
@@ -58,12 +62,13 @@ app.get('/key_ratio', (req, res) => {
     const url = 'http://financials.morningstar.com/ajax/exportKR2CSV.html'
     const combinedUrl = util.keyRatioUrl(url, ticker)
     request(combinedUrl, (error, response, body) => {
-        let msg = {}
+        let msg = []
         if(!error){
             msg = util.csvStr2Json(body)
             util.json2local(localPath, msg)
         }else{
             util.log('ERR:', error)
+            msg = JSON.stringify(msg)
         }
         util.serverMsg(res, msg)
     })
@@ -81,12 +86,13 @@ app.get('/income_statement', (req, res) => {
     const url = 'http://financials.morningstar.com/ajax/ReportProcess4CSV.html'
     const combinedUrl = util.financialUrl(url, ticker)
     request(combinedUrl, (error, response, body) => {
-        let msg = {}
+        let msg = []
         if(!error){
             msg = util.csvStr2Json(body)
             util.json2local(localPath, msg)
         }else{
             util.log('ERR:', error)
+            msg = JSON.stringify(msg)
         }
         util.serverMsg(res, msg)
     })
@@ -104,12 +110,13 @@ app.get('/balance_sheet', (req, res) => {
     const url = 'http://financials.morningstar.com/ajax/ReportProcess4CSV.html'
     const combinedUrl = util.financialUrl(url, ticker, reportType='bs')
     request(combinedUrl, (error, response, body) => {
-        let msg = {}
+        let msg = []
         if(!error){
             msg = util.csvStr2Json(body)
             util.json2local(localPath, msg)
         }else{
             util.log('ERR:', error)
+            msg = JSON.stringify(msg)
         }
         util.serverMsg(res, msg)
     })
@@ -128,12 +135,13 @@ app.get('/cashflow', (req, res) => {
     const url = 'http://financials.morningstar.com/ajax/ReportProcess4CSV.html'
     const combinedUrl = util.financialUrl(url, ticker, reportType='cf')
     request(combinedUrl, (error, response, body) => {
-        let msg = {}
+        let msg = []
         if(!error){
             msg = util.csvStr2Json(body)
             util.json2local(localPath, msg)
         }else{
             util.log('ERR:', error)
+            msg = JSON.stringify(msg)
         }
         util.serverMsg(res, msg)
     })

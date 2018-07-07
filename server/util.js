@@ -78,14 +78,9 @@ function keyRatioUrl(url, ticker){
 
 function csvStr2Json(csvStr){
     let jsonObj = {}
-    CSV.forEach(csvStr, ',', (row, index) => {
-        if(index != 0){
-            let key = index === 1 ? 'Year': row[0]
-            let value = row.slice(1)
-            jsonObj[key] = value
-        }
-    })
-    return JSON.stringify(jsonObj)
+    jsObj = CSV.parse(csvStr)
+    jsonObj = JSON.stringify(jsObj)
+    return jsonObj
 }
 
 module.exports = {

@@ -15,6 +15,8 @@ class Entry extends React.Component {
             balance: null,
             cashflow: null,
         }
+        this.analysisState = [
+            { name: 'quote', open:false, callback: this.quoteAnalysis.bind(this), pass: false, },
         this.searchInput = null
         this.onBtnSearch = this.onBtnSearch.bind(this)
         this.url = pjson.runOnServer ? "http://120.78.240.132:3000" : "http://localhost"
@@ -22,66 +24,77 @@ class Entry extends React.Component {
 
     onBtnSearch(event) {
         event.preventDefault()
-        this.analyPipeline()
+        this.analysisLoop()
     }
 
-    analyPipeline(){
-        this.quoteAnalysis()
+    analysisLoop() {
+        let target = null
+        for (let i = 0; i < this.analysisState.length; i++) {
+            let state = this.analysisState[i]
+            if (state.open && !state.pass) {
+                target = state
+                break
+            }
+        }
+        if (target) {
+            target.callback()
+        }else
+            console.log('Analysis Finish!')
     }
 
-    quoteAnalysis(){
+    analysisPass(name){
+        for(let i = 0; i < this.analysisState.length; i++){
+            let state = this.analysisState[i]
+            if(state.name == name){
+                state.pass = true
+                break
+            }
+        }
+    }
+
+    quoteAnalysis() {
         axios.get(`${this.url}/quote`).then(response => {
             const serverMsg = response.data
             const quote = JSON.parse(serverMsg.msg)
             this.setState({
-                quote:quote
+                quote: quote
             })
-        }).catch(error => console.log('ERR:',error))
-        .then(this.keyRatioAnalysis())
+            this.analysisPass('quote')
+            this.analysisLoop()
+        }).catch(error => console.log('ERR:', error))
     }
 
-    keyRatioAnalysis(){
+    keyRatioAnalysis() {
         axios.get(`${this.url}/key_ratio`).then(response => {
             const serverMsg = response.data
             const keyRatio = JSON.parse(serverMsg.msg)
             this.setState({
                 keyRatio
             })
-        }).catch(error => console.log('ERR:',error))
-        .then(this.incomeAnalysis())
     }
 
-    incomeAnalysis(){
         axios.get(`${this.url}/income_statement`).then(response => {
             const serverMsg = response.data
             const income = JSON.parse(serverMsg.msg)
             this.setState({
                 income
             })
-        }).catch(error => console.log('ERR:',error))
-        .then(this.balanceAnalysis())
     }
 
-    balanceAnalysis(){
         axios.get(`${this.url}/balance_sheet`).then(response => {
             const serverMsg = response.data
             const balance = JSON.parse(serverMsg.msg)
             this.setState({
                 balance
             })
-        }).catch(error => console.log('ERR:',error))
-        .then(this.cashflowAnalysis())
     }
 
-    cashflowAnalysis(){
         axios.get(`${this.url}/cashflow`).then(response => {
             const serverMsg = response.data
             const cashflow = JSON.parse(serverMsg.msg)
             this.setState({
                 cashflow
             })
-        }).catch(error => console.log('ERR:',error))
-        .then(console.log('analyse finish...'))
     }
 
     render() {
@@ -92,7 +105,6 @@ class Entry extends React.Component {
                         <div className='form-group form-inline'>
                             <input type='text' placeholder='Enter Ticker Symbol'
                                 className='form-control'
-                                ref={ element => this.searchInput = element}
                                 required
                             />
                             <button type='submit' className='btn btn-primary'>Search</button>
@@ -101,64 +113,18 @@ class Entry extends React.Component {
                 </div>
             </div>
 
-            <Quote quote={this.state.quote} />
-            <KeyRatio keyRatio={this.state.keyRatio} />
-            <IncomeStatement income={this.state.income} />
-            <BalanceSheet balance={this.state.balance} />
-            <Cashflow cashflow={this.state.cashflow} />
-            <ConditionChart income={this.state.income} />
         </div>
     }
 }
 
-const ConditionChart = (props) => {
-    if(tool.empty(props.income))
-        return null
-    else{
-        const x = props.income['Year']
-        const y = props.income['Revenue']
-        return <Chart x={x} y={y} title='营业收入'/> 
-
-    }
-}
-
-const Quote = (props) => {
-    if(tool.empty(props.quote)){
         return null
     }else{
-        return <DataTable data={props.quote}/>
     }
 }
 
-const KeyRatio = (props) => {
-    if(tool.empty(props.keyRatio)){
         return null
-    }else{
-        return <DataTable data={props.keyRatio}/>
+
     }
 }
 
-const IncomeStatement = (props) => {
-    if(tool.empty(props.income)){
-        return null
-    }else{
-        return <DataTable data={props.income}/>
-    }
-}
-
-const BalanceSheet = (props) => {
-    if(tool.empty(props.balance)){
-        return null
-    }else{
-        return <DataTable data={props.balance}/>
-    }
-}
-
-const Cashflow = (props) => {
-    if(tool.empty(props.cashflow)){
-        return null
-    }else{
-        return <DataTable data={props.cashflow}/>
-    }
-}
 export default Entry
