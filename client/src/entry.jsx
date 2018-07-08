@@ -1,9 +1,10 @@
 import React from 'react'
 import axios from 'axios'
-import DataTable from './table.jsx'
+import { DataTable, TransformTable } from './table.jsx'
 import tool from '../lib/tool.js'
 import pjson from '../../package.json'
-import Chart from './chart.jsx'
+import { BarChart, LineChart } from './chart.jsx'
+import {DcfSetting} from './dcf.jsx'
 
 class Entry extends React.Component {
     constructor() {
@@ -96,14 +97,6 @@ class Entry extends React.Component {
                 </div>
             </div>
 
-            {/*
-            <ConditionTable title='Quote Info' data={this.state.quote} />
-            <ConditionTable title='Income Statement' data={this.state.income} />
-            <ConditionTable title='Balance Sheet' data={this.state.balance} />
-            <ConditionTable title='Cashflow' data={this.state.cashflow} />
-            <ConditionTable title='Key Ratio' data={this.state.keyRatio} />
-            */}
-
             <DebtMeasure data={this.state.balance} />
 
             <div className='row'>
@@ -112,7 +105,7 @@ class Entry extends React.Component {
                         data={this.state.keyRatio}
                         xkey='Cash Flow Ratios'
                         ykey='Book Value Per Share * CNY'
-                        title='每股净资产'
+                        title='每股净资产(M)'
                     />
                 </div>
                 <div className='col'>
@@ -120,48 +113,74 @@ class Entry extends React.Component {
                         data={this.state.keyRatio}
                         xkey='Cash Flow Ratios'
                         ykey='Earnings Per Share CNY'
-                        title='每股净利润'
+                        title='每股净利润(M)'
                     />
                 </div>
             </div>
-            <ConditionChart
-                data={this.state.cashflow}
-                xkey='Fiscal year ends in December. CNY in millions except per share data.'
-                ykey='Free cash flow'
-                title='自由现金流'
-            />
+
+            <div className='row'>
+                <div className='col'>
+                    <ConditionChart
+                        data={this.state.cashflow}
+                        xkey='Fiscal year ends in December. CNY in millions except per share data.'
+                        ykey='Free cash flow'
+                        title='自由现金流(M)'
+                    />
+                </div>
+                <div className='col'>
+                    <ConditionChart
+                        data={this.state.cashflow}
+                        xkey='Fiscal year ends in December. CNY in millions except per share data.'
+                        ykey='Free cash flow'
+                        title='自由现金流(M)'
+                        line
+                    />
+                </div>
+            </div>
+
+            <DcfSetting beta={0.76} taxRate={0.3} marketEquity={3000} marketDebt={1000000}/>
         </div>
     }
 }
 
 const DebtMeasure = (props) => {
-    if(tool.empty(props.data)){
+    if (tool.empty(props.data)) {
         return null
-    }else{
+    } else {
         const measureList = [
             'Fiscal year ends in December. CNY in millions except per share data.',
-            'Short-term debt', 
-            'Other long-term liabilities', 
-            "Total stockholders' equity", 
+            'Short-term debt',
+            'Other long-term liabilities',
+            "Total stockholders' equity",
             'Total current assets',
             'Total current liabilities'
         ]
         let measureData = {}
-        for(let i=0; i < measureList.length; i++){
+        for (let i = 0; i < measureList.length; i++) {
             let k = measureList[i]
-            measureData[k] = props.data[k]
+            if (i == 0)
+                measureData['Year'] = tool.sliceYearList(props.data[k])
+            else
+                measureData[k] = tool.toNumList(props.data[k])
         }
-        return <DataTable title='权益与负债' data={measureData} />
+
+        for (let i = 0; i < measureData['Short-term debt'].length; i++) {
+            if (i == 0) {
+                measureData['债务权益比'] = []
+                measureData['流动比率'] = []
+            }
+            let debtOnEquity =
+                (measureData['Short-term debt'][i] + measureData['Other long-term liabilities'][i])
+                / measureData["Total stockholders' equity"][i]
+            measureData['债务权益比'][i] = debtOnEquity.toFixed(2)
+
+            let currentRatio = measureData['Total current assets'][i] / measureData['Total current liabilities'][i]
+            measureData['流动比率'][i] = currentRatio.toFixed(2)
+        }
+        return <TransformTable title='权益与负债(M)' data={measureData} />
     }
 }
 
-const ConditionTable = (props) => {
-    if (tool.empty(props.data)) {
-        return null
-    } else {
-        return <DataTable title={props.title} data={props.data} />
-    }
-}
 
 const ConditionChart = (props) => {
     if (tool.empty(props.data))
@@ -169,7 +188,9 @@ const ConditionChart = (props) => {
     else {
         const x = props.data[props.xkey].slice(0, -1)
         const y = props.data[props.ykey].slice(0, -1)
-        return <Chart x={x} y={y} title={props.title} />
+        return props.line ?
+            <LineChart x={x} y={y} title={props.title} /> :
+            <BarChart x={x} y={y} title={props.title} />
 
     }
 }
