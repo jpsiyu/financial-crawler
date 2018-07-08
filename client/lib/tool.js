@@ -20,14 +20,23 @@ const sliceYearList = (list) => {
     let newList = []
     for (let i = 0; i < list.length; i++) {
         let value = list[i]
-        newList.push(value.slice(0, 4))
+        newList.push(parseInt(value.slice(0, 4)))
     }
     return newList
 }
 
+const toMillion = (value) => {
+    let v = value.slice(0, -1)
+    let u = value.slice(-1)
+    if(u == 'B')
+        return parseFloat(v) * 1000
+    else if(u == 'M')
+        return parseFloat(v)
+}
 
 export default {
     empty,
     toNumList,
     sliceYearList,
+    toMillion,
 }

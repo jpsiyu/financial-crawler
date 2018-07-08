@@ -4,7 +4,7 @@ import { DataTable, TransformTable } from './table.jsx'
 import tool from '../lib/tool.js'
 import pjson from '../../package.json'
 import { BarChart, LineChart } from './chart.jsx'
-import {DcfSetting} from './dcf.jsx'
+import { DCFAnalysis } from './dcf.jsx'
 
 class Entry extends React.Component {
     constructor() {
@@ -15,11 +15,12 @@ class Entry extends React.Component {
             income: null,
             balance: null,
             cashflow: null,
+            dcfData: null,
         }
         this.analysisState = [
-            { name: 'quote', path: 'quote', open: false, pass: false, },
+            { name: 'quote', path: 'quote', open: true, pass: false, },
             { name: 'keyRatio', path: 'key_ratio', open: true, pass: false },
-            { name: 'income', path: 'income_statement', open: false, pass: false },
+            { name: 'income', path: 'income_statement', open: true, pass: false },
             { name: 'balance', path: 'balance_sheet', open: true, pass: false },
             { name: 'cashflow', path: 'cashflow', open: true, pass: false },
         ]
@@ -44,8 +45,38 @@ class Entry extends React.Component {
         }
         if (target) {
             this.specifyAnalysis(target)
-        } else
+        } else {
+            this.receiveAllData()
             console.log('Analysis Finish!')
+        }
+    }
+
+    receiveAllData() {
+        const beta = parseFloat(this.state.quote['Beta'][0])
+        const marketEquity = tool.toMillion(this.state.quote['Market Cap.'][0])
+        const marketDebt = 0
+
+        const data = {}
+        data['Provision for income taxes'] = tool.toNumList(this.state.income['Provision for income taxes'])
+        data['Income before taxes'] = tool.toNumList(this.state.income['Income before taxes'])
+        const len = data['Provision for income taxes'].length
+        let rateSum = 0
+        for(let i=0; i < len; i++){
+            let taxPay = data['Provision for income taxes'][i]
+            let income = data['Income before taxes'][i]
+            let rate = taxPay / income
+            rateSum += rate
+        }
+        const taxRate = parseFloat((rateSum / len).toFixed(2))
+        
+        const fcf = {}
+        fcf['Year'] = this.state.cashflow['Fiscal year ends in December. CNY in millions except per share data.']
+        fcf['Free cash flow'] = this.state.cashflow['Free cash flow']
+        fcf['Year'] = tool.sliceYearList(fcf['Year'].slice(0, -1))
+        fcf['Free cash flow'] = tool.toNumList(fcf['Free cash flow'].slice(0, -1))
+
+        const dcfData = {beta, marketEquity, marketDebt, taxRate, fcf}
+        this.setState({dcfData})
     }
 
     analysisPass(name) {
@@ -118,6 +149,7 @@ class Entry extends React.Component {
                 </div>
             </div>
 
+{/*
             <div className='row'>
                 <div className='col'>
                     <ConditionChart
@@ -137,8 +169,9 @@ class Entry extends React.Component {
                     />
                 </div>
             </div>
+*/}
 
-            <DcfSetting beta={0.76} taxRate={0.3} marketEquity={3000} marketDebt={1000000}/>
+            <DCFAnalysis data={this.state.dcfData} />
         </div>
     }
 }

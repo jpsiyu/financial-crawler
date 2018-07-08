@@ -52,7 +52,9 @@ const LineChart = (props) => {
 const BarAndLineChart = (props) => {
     const labels = props.x
     const values = props.y
+    const values2 = props.y2
     const title = props.title ? props.title : ''
+    const title2 = props.title2 ? props.title2 : ''
     let data = {
         labels: labels,
         datasets: [
@@ -63,8 +65,8 @@ const BarAndLineChart = (props) => {
                 data: values
             },
             {
-                label: title,
-                data: values,
+                label: title2,
+                data: values2,
                 type: 'line',
                 borderColor: yellow,
                 backgroundColor: yellow,
@@ -80,4 +82,4 @@ const BarAndLineChart = (props) => {
     </div>
 }
 
-export { BarChart, LineChart, BarAndLineChart }
+export { BarChart, LineChart, BarAndLineChart}
