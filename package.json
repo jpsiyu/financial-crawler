@@ -9,7 +9,7 @@
     "watch": "parcel watch client/public/index.html",
     "build": "parcel build client/public/index.html"
   },
-  "runOnServer": true,
+  "runOnServer": false,
   "keywords": [],
   "author": "",
   "license": "ISC",
