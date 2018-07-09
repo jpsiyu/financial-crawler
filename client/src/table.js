@@ -22,7 +22,7 @@ const DataTable = (props) => {
         i++
     })
     return <div className='jumbotron'>
-        <h3>{props.title}</h3>
+        <h4>{props.title}</h4>
         <table className='table table-striped table-bordered'>
             <thead>{heads}</thead>
             <tbody>{rows}</tbody>
@@ -49,7 +49,7 @@ const TransformTable = (props) => {
         rowsTab.push(<tr key={i}>{rows[i]}</tr>)
     }
     return <div className='jumbotron'>
-        <h3>{props.title}</h3>
+        <h4>{props.title}</h4>
         <table className='table table-striped table-bordered'>
             <thead><tr>{heads}</tr></thead>
             <tbody>{rowsTab}</tbody>

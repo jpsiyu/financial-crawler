@@ -29,8 +29,21 @@ class Entry extends React.Component {
         this.url = pjson.runOnServer ? "http://120.78.240.132:3000" : "http://localhost"
     }
 
+    clearState() {
+        const newState = {}
+        Object.keys(this.state).forEach(key => {
+            newState[key] = null
+        })
+        this.setState(newState)
+        for (let i = 0; i < this.analysisState.length; i++) {
+            let state = this.analysisState[i]
+            state.pass = false
+        }
+    }
+
     onBtnSearch(event) {
         event.preventDefault()
+        this.clearState()
         this.analysisLoop()
     }
 
@@ -62,22 +75,22 @@ class Entry extends React.Component {
         data['Income before taxes'] = tool.toNumList(this.state.income['Income before taxes'])
         const len = data['Provision for income taxes'].length
         let rateSum = 0
-        for(let i=0; i < len; i++){
+        for (let i = 0; i < len; i++) {
             let taxPay = data['Provision for income taxes'][i]
             let income = data['Income before taxes'][i]
             let rate = taxPay / income
             rateSum += rate
         }
         const taxRate = parseFloat((rateSum / len).toFixed(2))
-        
+
         const fcfPass = {}
         fcfPass['Year'] = this.state.cashflow['Fiscal year ends in December. CNY in millions except per share data.']
         fcfPass['Free cash flow'] = this.state.cashflow['Free cash flow']
         fcfPass['Year'] = tool.sliceYearList(fcfPass['Year'].slice(0, -1))
         fcfPass['Free cash flow'] = tool.toNumList(fcfPass['Free cash flow'].slice(0, -1))
 
-        const dcfData = {beta, marketEquity, marketDebt, taxRate, shareOutstanding, fcfPass}
-        this.setState({dcfData})
+        const dcfData = { beta, marketEquity, marketDebt, taxRate, shareOutstanding, fcfPass }
+        this.setState({ dcfData })
     }
 
     analysisPass(name) {
@@ -114,19 +127,20 @@ class Entry extends React.Component {
 
     render() {
         return <div className="container">
-            <div className="row align-items-center">
-                <div className="col-6 mx-auto">
-                    <form onSubmit={this.onBtnSearch}>
-                        <div className='form-group form-inline'>
-                            <input type='text' placeholder='Enter Ticker Symbol'
-                                className='form-control'
-                                ref={element => this.searchInput = element}
-                                required
-                            />
-                            <button type='submit' className='btn btn-primary'>Search</button>
-                        </div>
-                    </form>
-                </div>
+            <div className='d-flex justify-content-center' style={{ marginTop: 50, marginBottom: 50 }}>
+                <form onSubmit={this.onBtnSearch}>
+                    <div className='form-group form-inline'>
+                        <input type='text' placeholder='股票代码:'
+                            className='form-control'
+                            ref={element => this.searchInput = element}
+                            required
+                            style={{ width: 300 }}
+                        />
+                        <input type="submit"
+                            style={{position: 'absolute', left: -9999, width: 1, height: 1}}
+                            tabIndex="-1" />
+                    </div>
+                </form>
             </div>
 
             <DebtMeasure data={this.state.balance} />

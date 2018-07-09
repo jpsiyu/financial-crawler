@@ -3,8 +3,9 @@ import { TransformTable } from './table'
 import { BarChart, BarAndLineChart } from './chart'
 import regression from 'regression'
 
-class DcfModule {
-    constructor(beta, taxRate) {
+class DCFAnalysis extends React.Component {
+    constructor() {
+        super()
         this.riskFree = 0.036
         this.riskPremium = 0.035
         this.perpetuityGrowth = 0.03
@@ -86,7 +87,7 @@ class DcfModule {
             let year = fcfReport['Year'][i]
             let predict = fcfReport['Predict'][i]
             let termValue = 0
-            if(i == (l-1)){
+            if (i == (l - 1)) {
                 termValue = this.terminalValue(predict, l)
             }
             let sum = predict + termValue
@@ -97,82 +98,78 @@ class DcfModule {
         }
     }
 
-    fillValuationReport(fcfReport, valuationReport){
-        let intrinsic = 0
-        for(let i = 0; i < fcfReport['Sum Discount'].length; i++){
-            intrinsic += fcfReport['Sum Discount'][i]
+    valuationReport(fcfReport) {
+        const valuationReport = {}
+        let totalValue = 0
+        for (let i = 0; i < fcfReport['Sum Discount'].length; i++) {
+            totalValue+= fcfReport['Sum Discount'][i]
         }
-        let shares = this.shareOutstanding
-        let valuePerShare = parseFloat((intrinsic / shares).toFixed(2))
-        valuationReport['Intrinsic Value'].push(intrinsic)
-        valuationReport['Market Price Debt'].push(this.marketDebt)
-        valuationReport['Shares Outstanding'].push(shares)
-        valuationReport['Value Per Share'].push(valuePerShare)
+        const intrinsic = totalValue - this.marketDebt
+        const valuePerShare = parseFloat((intrinsic / this.shareOutstanding).toFixed(2))
+        valuationReport['Total Value'] = [totalValue]
+        valuationReport['Market Price Debt'] = [this.marketDebt]
+        valuationReport['Intrinsic Value'] = [intrinsic]
+        valuationReport['Shares Outstanding'] = [this.shareOutstanding]
+        valuationReport['Value Per Share'] = [valuePerShare]
+        return valuationReport
     }
-}
 
-const DCFAnalysis = (props) => {
-    const data = props.data
-    if (!data) return null
-    const dcf = new DcfModule()
-    dcf.modelInit(data)
+    render() {
+        const data = this.props.data
+        if (!data) return null
+        this.modelInit(data)
 
-    // DCF Setting
-    const report = {
-        'Beta': [dcf.beta],
-        'Risk Free': [dcf.riskFree],
-        'Risk Premium': [dcf.riskPremium],
-        'Cost Of Equity': [dcf.costOfEquity()],
-        'Tax Rate': [dcf.taxRate],
-        'Cost Of Debt': [dcf.costOfDebtAfterTax()],
-        'Market Price Equity': [dcf.marketEquity],
-        'Market Price Debt': [dcf.marketDebt],
-        'Wacc': [dcf.wacc()]
-    }
-    const predictData = dcf.predict()
+        // DCF Setting
+        const report = {
+            'Beta': [this.beta],
+            'Risk Free': [this.riskFree],
+            'Risk Premium': [this.riskPremium],
+            'Cost Of Equity': [this.costOfEquity()],
+            'Tax Rate': [this.taxRate],
+            'Cost Of Debt': [this.costOfDebtAfterTax()],
+            'Market Price Equity': [this.marketEquity],
+            'Market Price Debt': [this.marketDebt],
+            'Wacc': [this.wacc()]
+        }
+        const predictData = this.predict()
 
-    // Cash Flow Discount
-    const fcfReport = {
-        'Year': predictData.futureX,
-        'Predict': predictData.futureY,
-        'Terminal': [],
-        'Sum Predict Terminal': [],
-        'Sum Discount': [],
-    }
-    dcf.fillFcfReport(fcfReport)
+        // Cash Flow Discount
+        const fcfReport = {
+            'Year': predictData.futureX,
+            'Predict': predictData.futureY,
+            'Terminal': [],
+            'Sum Predict Terminal': [],
+            'Sum Discount': [],
+        }
+        this.fillFcfReport(fcfReport)
 
-    // Valuation
-    const valuationReport = {
-        'Intrinsic Value': [],
-        'Market Price Debt': [],
-        'Shares Outstanding':[],
-        'Value Per Share':[],
-    }
-    dcf.fillValuationReport(fcfReport, valuationReport)
+        // Valuation
+        const valuationReport = this.valuationReport(fcfReport)
 
-    return <div>
-        <TransformTable data={report} title='DCF模型参数' />
-        <div className='row'>
-            <div className='col'>
-                <BarChart
-                    x={dcf.fcfPass['Year']}
-                    y={dcf.fcfPass['Free cash flow']}
-                    title='自由现金流(M)'
-                />
+        return <div>
+            <TransformTable data={report} title='DCF模型参数' />
+            <div className='row'>
+                <div className='col'>
+                    <BarChart
+                        x={this.fcfPass['Year']}
+                        y={this.fcfPass['Free cash flow']}
+                        title='自由现金流(M)'
+                    />
+                </div>
+                <div className='col'>
+                    <BarAndLineChart
+                        x={predictData.regressionX}
+                        y={predictData.historyY}
+                        y2={predictData.regressionY}
+                        title='自由现金流(M)'
+                        title2='自由现金流线性回归(M)'
+                    />
+                </div>
             </div>
-            <div className='col'>
-                <BarAndLineChart
-                    x={predictData.regressionX}
-                    y={predictData.historyY}
-                    y2={predictData.regressionY}
-                    title='自由现金流(M)'
-                    title2='自由现金流线性回归(M)'
-                />
-            </div>
+            <TransformTable data={fcfReport} title='现金流预测(M)' />
+            <TransformTable data={valuationReport} title='估值计算' />
         </div>
-        <TransformTable data={fcfReport} title='现金流预测(M)' />
-        <TransformTable data={valuationReport} title='估值计算' />
-    </div>
-}
+    }
 
+}
 export { DCFAnalysis }
