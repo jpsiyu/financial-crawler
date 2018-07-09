@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server/app.js --ignore client/ --ignore server/data/ --ignore server/temp/",
-    "watch": "webpack --watch"
+    "watch": "parcel watch client/public/index.html",
+    "build": "parcel build client/public/index.html"
   },
   "runOnServer": false,
   "keywords": [],
@@ -27,14 +28,8 @@
     "request": "^2.87.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-loader": "^7.1.4",
-    "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
-    "css-loader": "^0.28.11",
-    "style-loader": "^0.21.0",
-    "webpack": "^4.15.0",
-    "webpack-cli": "^3.0.8"
+    "parcel-bundler": "^1.9.4"
   }
 }

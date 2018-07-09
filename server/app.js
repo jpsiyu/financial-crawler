@@ -7,7 +7,7 @@ const path = require('path')
 const DATA_PATH = 'server/data'
 
 const app = express()
-app.use(express.static(path.resolve(__dirname, '../client/public')))
+app.use(express.static(path.resolve(__dirname, '../dist')))
 
 app.use((req, res, next) => {
     util.log(`A ${req.method} method to ${req.url}`)
