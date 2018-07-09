@@ -54,6 +54,7 @@ class Entry extends React.Component {
     receiveAllData() {
         const beta = parseFloat(this.state.quote['Beta'][0])
         const marketEquity = tool.toMillion(this.state.quote['Market Cap.'][0])
+        const shareOutstanding = tool.toMillion(this.state.quote['Shares Outstanding'][0])
         const marketDebt = 0
 
         const data = {}
@@ -69,13 +70,13 @@ class Entry extends React.Component {
         }
         const taxRate = parseFloat((rateSum / len).toFixed(2))
         
-        const fcf = {}
-        fcf['Year'] = this.state.cashflow['Fiscal year ends in December. CNY in millions except per share data.']
-        fcf['Free cash flow'] = this.state.cashflow['Free cash flow']
-        fcf['Year'] = tool.sliceYearList(fcf['Year'].slice(0, -1))
-        fcf['Free cash flow'] = tool.toNumList(fcf['Free cash flow'].slice(0, -1))
+        const fcfPass = {}
+        fcfPass['Year'] = this.state.cashflow['Fiscal year ends in December. CNY in millions except per share data.']
+        fcfPass['Free cash flow'] = this.state.cashflow['Free cash flow']
+        fcfPass['Year'] = tool.sliceYearList(fcfPass['Year'].slice(0, -1))
+        fcfPass['Free cash flow'] = tool.toNumList(fcfPass['Free cash flow'].slice(0, -1))
 
-        const dcfData = {beta, marketEquity, marketDebt, taxRate, fcf}
+        const dcfData = {beta, marketEquity, marketDebt, taxRate, shareOutstanding, fcfPass}
         this.setState({dcfData})
     }
 
@@ -148,28 +149,6 @@ class Entry extends React.Component {
                     />
                 </div>
             </div>
-
-{/*
-            <div className='row'>
-                <div className='col'>
-                    <ConditionChart
-                        data={this.state.cashflow}
-                        xkey='Fiscal year ends in December. CNY in millions except per share data.'
-                        ykey='Free cash flow'
-                        title='自由现金流(M)'
-                    />
-                </div>
-                <div className='col'>
-                    <ConditionChart
-                        data={this.state.cashflow}
-                        xkey='Fiscal year ends in December. CNY in millions except per share data.'
-                        ykey='Free cash flow'
-                        title='自由现金流(M)'
-                        line
-                    />
-                </div>
-            </div>
-*/}
 
             <DCFAnalysis data={this.state.dcfData} />
         </div>
