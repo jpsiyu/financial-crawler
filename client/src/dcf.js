@@ -1,6 +1,6 @@
 import React from 'react'
-import { TransformTable } from './table.jsx'
-import { BarChart, BarAndLineChart } from './chart.jsx'
+import { TransformTable } from './table'
+import { BarChart, BarAndLineChart } from './chart'
 import regression from 'regression'
 
 class DcfModule {

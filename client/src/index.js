@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Entry from './entry.jsx'
+import Entry from './entry'
 import { HashRouter, Route } from 'react-router-dom'
 
 class App extends React.Component {

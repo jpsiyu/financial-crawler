@@ -1,10 +1,10 @@
 import React from 'react'
 import axios from 'axios'
-import { DataTable, TransformTable } from './table.jsx'
+import { DataTable, TransformTable } from './table'
 import tool from '../lib/tool.js'
 import pjson from '../../package.json'
-import { BarChart, LineChart } from './chart.jsx'
-import { DCFAnalysis } from './dcf.jsx'
+import { BarChart, LineChart } from './chart'
+import { DCFAnalysis } from './dcf'
 
 class Entry extends React.Component {
     constructor() {
