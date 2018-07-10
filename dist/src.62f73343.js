@@ -21369,7 +21369,63 @@ module.exports.default = axios;
 
 },{"./utils":89,"./helpers/bind":91,"./core/Axios":92,"./defaults":90,"./cancel/Cancel":93,"./cancel/CancelToken":94,"./cancel/isCancel":95,"./helpers/spread":96}],29:[function(require,module,exports) {
 module.exports = require('./lib/axios');
-},{"./lib/axios":59}],21:[function(require,module,exports) {
+},{"./lib/axios":59}],19:[function(require,module,exports) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+var DIV_COLOR = 'rgb(250,250,250)';
+
+var empty = function empty(obj) {
+    if (obj === null) return true;
+    if (Object.keys(obj).length === 0) return true;
+    return false;
+};
+
+var toNumList = function toNumList(list) {
+    if (!list) return [];
+    var newList = [];
+    for (var i = 0; i < list.length; i++) {
+        var value = list[i];
+        if (isNaN(value) || value == '') newList.push(0);else newList.push(parseFloat(value));
+    }
+    return newList;
+};
+
+var sliceYearList = function sliceYearList(list) {
+    var newList = [];
+    for (var i = 0; i < list.length; i++) {
+        var value = list[i];
+        newList.push(parseInt(value.slice(0, 4)));
+    }
+    return newList;
+};
+
+/**
+ * units: tr, bn, m
+ */
+var toMillion = function toMillion(value) {
+    var v = value.slice(0, -2);
+    var u = value.slice(-2);
+    if (value.match('tr')) return parseFloat(v) * 1000 * 1000;else if (value.match('bn')) return parseFloat(v) * 1000;else if (value.match('m')) return parseFloat(v);
+};
+
+var toFloat = function toFloat(value) {
+    var d = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
+
+    return parseFloat(value.toFixed(2));
+};
+
+exports.default = {
+    empty: empty,
+    toNumList: toNumList,
+    sliceYearList: sliceYearList,
+    toMillion: toMillion,
+    DIV_COLOR: DIV_COLOR,
+    toFloat: toFloat
+};
+},{}],21:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -21380,6 +21436,10 @@ exports.TransformTable = exports.DataTable = undefined;
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
+
+var _tool = require('../lib/tool');
+
+var _tool2 = _interopRequireDefault(_tool);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -21429,7 +21489,7 @@ var DataTable = function DataTable(props) {
         ),
         _react2.default.createElement(
             'table',
-            { className: 'table table-striped table-bordered' },
+            { className: 'table table-bordered' },
             _react2.default.createElement(
                 'thead',
                 null,
@@ -21476,7 +21536,7 @@ var TransformTable = function TransformTable(props) {
     }
     return _react2.default.createElement(
         'div',
-        { className: 'jumbotron' },
+        { className: 'jumbotron', style: { backgroundColor: _tool2.default.DIV_COLOR } },
         _react2.default.createElement(
             'h4',
             null,
@@ -21484,7 +21544,7 @@ var TransformTable = function TransformTable(props) {
         ),
         _react2.default.createElement(
             'table',
-            { className: 'table table-striped table-bordered' },
+            { className: 'table table-bordered' },
             _react2.default.createElement(
                 'thead',
                 null,
@@ -21505,49 +21565,7 @@ var TransformTable = function TransformTable(props) {
 
 exports.DataTable = DataTable;
 exports.TransformTable = TransformTable;
-},{"react":9}],19:[function(require,module,exports) {
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-var empty = function empty(obj) {
-    if (obj === null) return true;
-    if (Object.keys(obj).length === 0) return true;
-    return false;
-};
-
-var toNumList = function toNumList(list) {
-    var newList = [];
-    for (var i = 0; i < list.length; i++) {
-        var value = list[i];
-        if (isNaN(value) || value == '') newList.push(0);else newList.push(parseFloat(value));
-    }
-    return newList;
-};
-
-var sliceYearList = function sliceYearList(list) {
-    var newList = [];
-    for (var i = 0; i < list.length; i++) {
-        var value = list[i];
-        newList.push(parseInt(value.slice(0, 4)));
-    }
-    return newList;
-};
-
-var toMillion = function toMillion(value) {
-    var v = value.slice(0, -1);
-    var u = value.slice(-1);
-    if (u == 'B') return parseFloat(v) * 1000;else if (u == 'M') return parseFloat(v);
-};
-
-exports.default = {
-    empty: empty,
-    toNumList: toNumList,
-    sliceYearList: sliceYearList,
-    toMillion: toMillion
-};
-},{}],18:[function(require,module,exports) {
+},{"react":9,"../lib/tool":19}],18:[function(require,module,exports) {
 module.exports = {
   "name": "financial-crawler",
   "version": "1.0.0",
@@ -21565,6 +21583,7 @@ module.exports = {
   "license": "ISC",
   "dependencies": {
     "axios": "^0.18.0",
+    "body-parser": "^1.18.3",
     "build-url": "^1.1.2",
     "chart.js": "^2.7.2",
     "cheerio": "^1.0.0-rc.2",
@@ -21574,6 +21593,8 @@ module.exports = {
     "react-chartjs-2": "^2.7.2",
     "react-dom": "^16.4.1",
     "react-router-dom": "^4.3.1",
+    "redux": "^4.0.0",
+    "redux-devtools-extension": "^2.13.5",
     "regression": "^2.0.1",
     "request": "^2.87.0"
   },
@@ -45433,6 +45454,10 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactChartjs = require('react-chartjs-2');
 
+var _tool = require('../lib/tool');
+
+var _tool2 = _interopRequireDefault(_tool);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var blue = 'rgb(69,69,127)';
@@ -45454,7 +45479,7 @@ var BarChart = function BarChart(props) {
     var options = { maintainAspectRatio: false };
     return _react2.default.createElement(
         'div',
-        { className: 'jumbotron' },
+        { className: 'jumbotron', style: { backgroundColor: _tool2.default.DIV_COLOR } },
         _react2.default.createElement(_reactChartjs.Bar, { data: data, width: 400, height: 400, options: options })
     );
 };
@@ -45477,7 +45502,7 @@ var LineChart = function LineChart(props) {
     var options = { maintainAspectRatio: false };
     return _react2.default.createElement(
         'div',
-        { className: 'jumbotron' },
+        { className: 'jumbotron', style: { backgroundColor: _tool2.default.DIV_COLOR } },
         _react2.default.createElement(_reactChartjs.Bar, { data: data, width: 400, height: 400, options: options })
     );
 };
@@ -45509,7 +45534,7 @@ var BarAndLineChart = function BarAndLineChart(props) {
     var options = { maintainAspectRatio: false };
     return _react2.default.createElement(
         'div',
-        { className: 'jumbotron' },
+        { className: 'jumbotron', style: { backgroundColor: _tool2.default.DIV_COLOR } },
         _react2.default.createElement(_reactChartjs.Bar, { data: data, width: 400, height: 400, options: options })
     );
 };
@@ -45517,7 +45542,7 @@ var BarAndLineChart = function BarAndLineChart(props) {
 exports.BarChart = BarChart;
 exports.LineChart = LineChart;
 exports.BarAndLineChart = BarAndLineChart;
-},{"react":9,"react-chartjs-2":74}],73:[function(require,module,exports) {
+},{"react":9,"react-chartjs-2":74,"../lib/tool":19}],73:[function(require,module,exports) {
 var define;
 var global = arguments[3];
 (function (global, factory) {
@@ -45927,6 +45952,10 @@ var _regression = require('regression');
 
 var _regression2 = _interopRequireDefault(_regression);
 
+var _tool = require('../lib/tool');
+
+var _tool2 = _interopRequireDefault(_tool);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -46055,7 +46084,8 @@ var DCFAnalysis = function (_React$Component) {
             for (var i = 0; i < fcfReport['Sum Discount'].length; i++) {
                 totalValue += fcfReport['Sum Discount'][i];
             }
-            var intrinsic = totalValue - this.marketDebt;
+            totalValue = _tool2.default.toFloat(totalValue);
+            var intrinsic = _tool2.default.toFloat(totalValue - this.marketDebt);
             var valuePerShare = parseFloat((intrinsic / this.shareOutstanding).toFixed(2));
             valuationReport['Total Value'] = [totalValue];
             valuationReport['Market Price Debt'] = [this.marketDebt];
@@ -46077,6 +46107,7 @@ var DCFAnalysis = function (_React$Component) {
                 'Risk Free': [this.riskFree],
                 'Risk Premium': [this.riskPremium],
                 'Cost Of Equity': [this.costOfEquity()],
+                'Cost Of Debt PreTax': [this.costOfDebtPreTax()],
                 'Tax Rate': [this.taxRate],
                 'Cost Of Debt': [this.costOfDebtAfterTax()],
                 'Market Price Equity': [this.marketEquity],
@@ -46136,7 +46167,768 @@ var DCFAnalysis = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.DCFAnalysis = DCFAnalysis;
-},{"react":9,"./table":21,"./chart":22,"regression":73}],6:[function(require,module,exports) {
+},{"react":9,"./table":21,"./chart":22,"regression":73,"../lib/tool":19}],328:[function(require,module,exports) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = symbolObservablePonyfill;
+function symbolObservablePonyfill(root) {
+	var result;
+	var Symbol = root.Symbol;
+
+	if (typeof Symbol === 'function') {
+		if (Symbol.observable) {
+			result = Symbol.observable;
+		} else {
+			result = Symbol('observable');
+			Symbol.observable = result;
+		}
+	} else {
+		result = '@@observable';
+	}
+
+	return result;
+};
+},{}],327:[function(require,module,exports) {
+var global = arguments[3];
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _ponyfill = require('./ponyfill.js');
+
+var _ponyfill2 = _interopRequireDefault(_ponyfill);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var root; /* global window */
+
+
+if (typeof self !== 'undefined') {
+  root = self;
+} else if (typeof window !== 'undefined') {
+  root = window;
+} else if (typeof global !== 'undefined') {
+  root = global;
+} else if (typeof module !== 'undefined') {
+  root = module;
+} else {
+  root = Function('return this')();
+}
+
+var result = (0, _ponyfill2.default)(root);
+exports.default = result;
+},{"./ponyfill.js":328}],326:[function(require,module,exports) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.__DO_NOT_USE__ActionTypes = exports.compose = exports.applyMiddleware = exports.bindActionCreators = exports.combineReducers = exports.createStore = undefined;
+
+var _symbolObservable = require('symbol-observable');
+
+var _symbolObservable2 = _interopRequireDefault(_symbolObservable);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * These are private action types reserved by Redux.
+ * For any unknown actions, you must return the current state.
+ * If the current state is undefined, you must return the initial state.
+ * Do not reference these action types directly in your code.
+ */
+var ActionTypes = {
+  INIT: '@@redux/INIT' + Math.random().toString(36).substring(7).split('').join('.'),
+  REPLACE: '@@redux/REPLACE' + Math.random().toString(36).substring(7).split('').join('.')
+};
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) {
+  return typeof obj;
+} : function (obj) {
+  return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+};
+
+var _extends = Object.assign || function (target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i];
+
+    for (var key in source) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+};
+
+/**
+ * @param {any} obj The object to inspect.
+ * @returns {boolean} True if the argument appears to be a plain object.
+ */
+function isPlainObject(obj) {
+  if ((typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) !== 'object' || obj === null) return false;
+
+  var proto = obj;
+  while (Object.getPrototypeOf(proto) !== null) {
+    proto = Object.getPrototypeOf(proto);
+  }
+
+  return Object.getPrototypeOf(obj) === proto;
+}
+
+/**
+ * Creates a Redux store that holds the state tree.
+ * The only way to change the data in the store is to call `dispatch()` on it.
+ *
+ * There should only be a single store in your app. To specify how different
+ * parts of the state tree respond to actions, you may combine several reducers
+ * into a single reducer function by using `combineReducers`.
+ *
+ * @param {Function} reducer A function that returns the next state tree, given
+ * the current state tree and the action to handle.
+ *
+ * @param {any} [preloadedState] The initial state. You may optionally specify it
+ * to hydrate the state from the server in universal apps, or to restore a
+ * previously serialized user session.
+ * If you use `combineReducers` to produce the root reducer function, this must be
+ * an object with the same shape as `combineReducers` keys.
+ *
+ * @param {Function} [enhancer] The store enhancer. You may optionally specify it
+ * to enhance the store with third-party capabilities such as middleware,
+ * time travel, persistence, etc. The only store enhancer that ships with Redux
+ * is `applyMiddleware()`.
+ *
+ * @returns {Store} A Redux store that lets you read the state, dispatch actions
+ * and subscribe to changes.
+ */
+function createStore(reducer, preloadedState, enhancer) {
+  var _ref2;
+
+  if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
+    enhancer = preloadedState;
+    preloadedState = undefined;
+  }
+
+  if (typeof enhancer !== 'undefined') {
+    if (typeof enhancer !== 'function') {
+      throw new Error('Expected the enhancer to be a function.');
+    }
+
+    return enhancer(createStore)(reducer, preloadedState);
+  }
+
+  if (typeof reducer !== 'function') {
+    throw new Error('Expected the reducer to be a function.');
+  }
+
+  var currentReducer = reducer;
+  var currentState = preloadedState;
+  var currentListeners = [];
+  var nextListeners = currentListeners;
+  var isDispatching = false;
+
+  function ensureCanMutateNextListeners() {
+    if (nextListeners === currentListeners) {
+      nextListeners = currentListeners.slice();
+    }
+  }
+
+  /**
+   * Reads the state tree managed by the store.
+   *
+   * @returns {any} The current state tree of your application.
+   */
+  function getState() {
+    if (isDispatching) {
+      throw new Error('You may not call store.getState() while the reducer is executing. ' + 'The reducer has already received the state as an argument. ' + 'Pass it down from the top reducer instead of reading it from the store.');
+    }
+
+    return currentState;
+  }
+
+  /**
+   * Adds a change listener. It will be called any time an action is dispatched,
+   * and some part of the state tree may potentially have changed. You may then
+   * call `getState()` to read the current state tree inside the callback.
+   *
+   * You may call `dispatch()` from a change listener, with the following
+   * caveats:
+   *
+   * 1. The subscriptions are snapshotted just before every `dispatch()` call.
+   * If you subscribe or unsubscribe while the listeners are being invoked, this
+   * will not have any effect on the `dispatch()` that is currently in progress.
+   * However, the next `dispatch()` call, whether nested or not, will use a more
+   * recent snapshot of the subscription list.
+   *
+   * 2. The listener should not expect to see all state changes, as the state
+   * might have been updated multiple times during a nested `dispatch()` before
+   * the listener is called. It is, however, guaranteed that all subscribers
+   * registered before the `dispatch()` started will be called with the latest
+   * state by the time it exits.
+   *
+   * @param {Function} listener A callback to be invoked on every dispatch.
+   * @returns {Function} A function to remove this change listener.
+   */
+  function subscribe(listener) {
+    if (typeof listener !== 'function') {
+      throw new Error('Expected the listener to be a function.');
+    }
+
+    if (isDispatching) {
+      throw new Error('You may not call store.subscribe() while the reducer is executing. ' + 'If you would like to be notified after the store has been updated, subscribe from a ' + 'component and invoke store.getState() in the callback to access the latest state. ' + 'See https://redux.js.org/api-reference/store#subscribe(listener) for more details.');
+    }
+
+    var isSubscribed = true;
+
+    ensureCanMutateNextListeners();
+    nextListeners.push(listener);
+
+    return function unsubscribe() {
+      if (!isSubscribed) {
+        return;
+      }
+
+      if (isDispatching) {
+        throw new Error('You may not unsubscribe from a store listener while the reducer is executing. ' + 'See https://redux.js.org/api-reference/store#subscribe(listener) for more details.');
+      }
+
+      isSubscribed = false;
+
+      ensureCanMutateNextListeners();
+      var index = nextListeners.indexOf(listener);
+      nextListeners.splice(index, 1);
+    };
+  }
+
+  /**
+   * Dispatches an action. It is the only way to trigger a state change.
+   *
+   * The `reducer` function, used to create the store, will be called with the
+   * current state tree and the given `action`. Its return value will
+   * be considered the **next** state of the tree, and the change listeners
+   * will be notified.
+   *
+   * The base implementation only supports plain object actions. If you want to
+   * dispatch a Promise, an Observable, a thunk, or something else, you need to
+   * wrap your store creating function into the corresponding middleware. For
+   * example, see the documentation for the `redux-thunk` package. Even the
+   * middleware will eventually dispatch plain object actions using this method.
+   *
+   * @param {Object} action A plain object representing “what changed”. It is
+   * a good idea to keep actions serializable so you can record and replay user
+   * sessions, or use the time travelling `redux-devtools`. An action must have
+   * a `type` property which may not be `undefined`. It is a good idea to use
+   * string constants for action types.
+   *
+   * @returns {Object} For convenience, the same action object you dispatched.
+   *
+   * Note that, if you use a custom middleware, it may wrap `dispatch()` to
+   * return something else (for example, a Promise you can await).
+   */
+  function dispatch(action) {
+    if (!isPlainObject(action)) {
+      throw new Error('Actions must be plain objects. ' + 'Use custom middleware for async actions.');
+    }
+
+    if (typeof action.type === 'undefined') {
+      throw new Error('Actions may not have an undefined "type" property. ' + 'Have you misspelled a constant?');
+    }
+
+    if (isDispatching) {
+      throw new Error('Reducers may not dispatch actions.');
+    }
+
+    try {
+      isDispatching = true;
+      currentState = currentReducer(currentState, action);
+    } finally {
+      isDispatching = false;
+    }
+
+    var listeners = currentListeners = nextListeners;
+    for (var i = 0; i < listeners.length; i++) {
+      var listener = listeners[i];
+      listener();
+    }
+
+    return action;
+  }
+
+  /**
+   * Replaces the reducer currently used by the store to calculate the state.
+   *
+   * You might need this if your app implements code splitting and you want to
+   * load some of the reducers dynamically. You might also need this if you
+   * implement a hot reloading mechanism for Redux.
+   *
+   * @param {Function} nextReducer The reducer for the store to use instead.
+   * @returns {void}
+   */
+  function replaceReducer(nextReducer) {
+    if (typeof nextReducer !== 'function') {
+      throw new Error('Expected the nextReducer to be a function.');
+    }
+
+    currentReducer = nextReducer;
+    dispatch({ type: ActionTypes.REPLACE });
+  }
+
+  /**
+   * Interoperability point for observable/reactive libraries.
+   * @returns {observable} A minimal observable of state changes.
+   * For more information, see the observable proposal:
+   * https://github.com/tc39/proposal-observable
+   */
+  function observable() {
+    var _ref;
+
+    var outerSubscribe = subscribe;
+    return _ref = {
+      /**
+       * The minimal observable subscription method.
+       * @param {Object} observer Any object that can be used as an observer.
+       * The observer object should have a `next` method.
+       * @returns {subscription} An object with an `unsubscribe` method that can
+       * be used to unsubscribe the observable from the store, and prevent further
+       * emission of values from the observable.
+       */
+      subscribe: function subscribe(observer) {
+        if ((typeof observer === 'undefined' ? 'undefined' : _typeof(observer)) !== 'object' || observer === null) {
+          throw new TypeError('Expected the observer to be an object.');
+        }
+
+        function observeState() {
+          if (observer.next) {
+            observer.next(getState());
+          }
+        }
+
+        observeState();
+        var unsubscribe = outerSubscribe(observeState);
+        return { unsubscribe: unsubscribe };
+      }
+    }, _ref[_symbolObservable2.default] = function () {
+      return this;
+    }, _ref;
+  }
+
+  // When a store is created, an "INIT" action is dispatched so that every
+  // reducer returns their initial state. This effectively populates
+  // the initial state tree.
+  dispatch({ type: ActionTypes.INIT });
+
+  return _ref2 = {
+    dispatch: dispatch,
+    subscribe: subscribe,
+    getState: getState,
+    replaceReducer: replaceReducer
+  }, _ref2[_symbolObservable2.default] = observable, _ref2;
+}
+
+/**
+ * Prints a warning in the console if it exists.
+ *
+ * @param {String} message The warning message.
+ * @returns {void}
+ */
+function warning(message) {
+  /* eslint-disable no-console */
+  if (typeof console !== 'undefined' && typeof console.error === 'function') {
+    console.error(message);
+  }
+  /* eslint-enable no-console */
+  try {
+    // This error was thrown as a convenience so that if you enable
+    // "break on all exceptions" in your console,
+    // it would pause the execution at this line.
+    throw new Error(message);
+  } catch (e) {} // eslint-disable-line no-empty
+}
+
+function getUndefinedStateErrorMessage(key, action) {
+  var actionType = action && action.type;
+  var actionDescription = actionType && 'action "' + String(actionType) + '"' || 'an action';
+
+  return 'Given ' + actionDescription + ', reducer "' + key + '" returned undefined. ' + 'To ignore an action, you must explicitly return the previous state. ' + 'If you want this reducer to hold no value, you can return null instead of undefined.';
+}
+
+function getUnexpectedStateShapeWarningMessage(inputState, reducers, action, unexpectedKeyCache) {
+  var reducerKeys = Object.keys(reducers);
+  var argumentName = action && action.type === ActionTypes.INIT ? 'preloadedState argument passed to createStore' : 'previous state received by the reducer';
+
+  if (reducerKeys.length === 0) {
+    return 'Store does not have a valid reducer. Make sure the argument passed ' + 'to combineReducers is an object whose values are reducers.';
+  }
+
+  if (!isPlainObject(inputState)) {
+    return 'The ' + argumentName + ' has unexpected type of "' + {}.toString.call(inputState).match(/\s([a-z|A-Z]+)/)[1] + '". Expected argument to be an object with the following ' + ('keys: "' + reducerKeys.join('", "') + '"');
+  }
+
+  var unexpectedKeys = Object.keys(inputState).filter(function (key) {
+    return !reducers.hasOwnProperty(key) && !unexpectedKeyCache[key];
+  });
+
+  unexpectedKeys.forEach(function (key) {
+    unexpectedKeyCache[key] = true;
+  });
+
+  if (action && action.type === ActionTypes.REPLACE) return;
+
+  if (unexpectedKeys.length > 0) {
+    return 'Unexpected ' + (unexpectedKeys.length > 1 ? 'keys' : 'key') + ' ' + ('"' + unexpectedKeys.join('", "') + '" found in ' + argumentName + '. ') + 'Expected to find one of the known reducer keys instead: ' + ('"' + reducerKeys.join('", "') + '". Unexpected keys will be ignored.');
+  }
+}
+
+function assertReducerShape(reducers) {
+  Object.keys(reducers).forEach(function (key) {
+    var reducer = reducers[key];
+    var initialState = reducer(undefined, { type: ActionTypes.INIT });
+
+    if (typeof initialState === 'undefined') {
+      throw new Error('Reducer "' + key + '" returned undefined during initialization. ' + 'If the state passed to the reducer is undefined, you must ' + 'explicitly return the initial state. The initial state may ' + 'not be undefined. If you don\'t want to set a value for this reducer, ' + 'you can use null instead of undefined.');
+    }
+
+    var type = '@@redux/PROBE_UNKNOWN_ACTION_' + Math.random().toString(36).substring(7).split('').join('.');
+    if (typeof reducer(undefined, { type: type }) === 'undefined') {
+      throw new Error('Reducer "' + key + '" returned undefined when probed with a random type. ' + ('Don\'t try to handle ' + ActionTypes.INIT + ' or other actions in "redux/*" ') + 'namespace. They are considered private. Instead, you must return the ' + 'current state for any unknown actions, unless it is undefined, ' + 'in which case you must return the initial state, regardless of the ' + 'action type. The initial state may not be undefined, but can be null.');
+    }
+  });
+}
+
+/**
+ * Turns an object whose values are different reducer functions, into a single
+ * reducer function. It will call every child reducer, and gather their results
+ * into a single state object, whose keys correspond to the keys of the passed
+ * reducer functions.
+ *
+ * @param {Object} reducers An object whose values correspond to different
+ * reducer functions that need to be combined into one. One handy way to obtain
+ * it is to use ES6 `import * as reducers` syntax. The reducers may never return
+ * undefined for any action. Instead, they should return their initial state
+ * if the state passed to them was undefined, and the current state for any
+ * unrecognized action.
+ *
+ * @returns {Function} A reducer function that invokes every reducer inside the
+ * passed object, and builds a state object with the same shape.
+ */
+function combineReducers(reducers) {
+  var reducerKeys = Object.keys(reducers);
+  var finalReducers = {};
+  for (var i = 0; i < reducerKeys.length; i++) {
+    var key = reducerKeys[i];
+
+    if ('development' !== 'production') {
+      if (typeof reducers[key] === 'undefined') {
+        warning('No reducer provided for key "' + key + '"');
+      }
+    }
+
+    if (typeof reducers[key] === 'function') {
+      finalReducers[key] = reducers[key];
+    }
+  }
+  var finalReducerKeys = Object.keys(finalReducers);
+
+  var unexpectedKeyCache = void 0;
+  if ('development' !== 'production') {
+    unexpectedKeyCache = {};
+  }
+
+  var shapeAssertionError = void 0;
+  try {
+    assertReducerShape(finalReducers);
+  } catch (e) {
+    shapeAssertionError = e;
+  }
+
+  return function combination() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var action = arguments[1];
+
+    if (shapeAssertionError) {
+      throw shapeAssertionError;
+    }
+
+    if ('development' !== 'production') {
+      var warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action, unexpectedKeyCache);
+      if (warningMessage) {
+        warning(warningMessage);
+      }
+    }
+
+    var hasChanged = false;
+    var nextState = {};
+    for (var _i = 0; _i < finalReducerKeys.length; _i++) {
+      var _key = finalReducerKeys[_i];
+      var reducer = finalReducers[_key];
+      var previousStateForKey = state[_key];
+      var nextStateForKey = reducer(previousStateForKey, action);
+      if (typeof nextStateForKey === 'undefined') {
+        var errorMessage = getUndefinedStateErrorMessage(_key, action);
+        throw new Error(errorMessage);
+      }
+      nextState[_key] = nextStateForKey;
+      hasChanged = hasChanged || nextStateForKey !== previousStateForKey;
+    }
+    return hasChanged ? nextState : state;
+  };
+}
+
+function bindActionCreator(actionCreator, dispatch) {
+  return function () {
+    return dispatch(actionCreator.apply(this, arguments));
+  };
+}
+
+/**
+ * Turns an object whose values are action creators, into an object with the
+ * same keys, but with every function wrapped into a `dispatch` call so they
+ * may be invoked directly. This is just a convenience method, as you can call
+ * `store.dispatch(MyActionCreators.doSomething())` yourself just fine.
+ *
+ * For convenience, you can also pass a single function as the first argument,
+ * and get a function in return.
+ *
+ * @param {Function|Object} actionCreators An object whose values are action
+ * creator functions. One handy way to obtain it is to use ES6 `import * as`
+ * syntax. You may also pass a single function.
+ *
+ * @param {Function} dispatch The `dispatch` function available on your Redux
+ * store.
+ *
+ * @returns {Function|Object} The object mimicking the original object, but with
+ * every action creator wrapped into the `dispatch` call. If you passed a
+ * function as `actionCreators`, the return value will also be a single
+ * function.
+ */
+function bindActionCreators(actionCreators, dispatch) {
+  if (typeof actionCreators === 'function') {
+    return bindActionCreator(actionCreators, dispatch);
+  }
+
+  if ((typeof actionCreators === 'undefined' ? 'undefined' : _typeof(actionCreators)) !== 'object' || actionCreators === null) {
+    throw new Error('bindActionCreators expected an object or a function, instead received ' + (actionCreators === null ? 'null' : typeof actionCreators === 'undefined' ? 'undefined' : _typeof(actionCreators)) + '. ' + 'Did you write "import ActionCreators from" instead of "import * as ActionCreators from"?');
+  }
+
+  var keys = Object.keys(actionCreators);
+  var boundActionCreators = {};
+  for (var i = 0; i < keys.length; i++) {
+    var key = keys[i];
+    var actionCreator = actionCreators[key];
+    if (typeof actionCreator === 'function') {
+      boundActionCreators[key] = bindActionCreator(actionCreator, dispatch);
+    }
+  }
+  return boundActionCreators;
+}
+
+/**
+ * Composes single-argument functions from right to left. The rightmost
+ * function can take multiple arguments as it provides the signature for
+ * the resulting composite function.
+ *
+ * @param {...Function} funcs The functions to compose.
+ * @returns {Function} A function obtained by composing the argument functions
+ * from right to left. For example, compose(f, g, h) is identical to doing
+ * (...args) => f(g(h(...args))).
+ */
+
+function compose() {
+  for (var _len = arguments.length, funcs = Array(_len), _key = 0; _key < _len; _key++) {
+    funcs[_key] = arguments[_key];
+  }
+
+  if (funcs.length === 0) {
+    return function (arg) {
+      return arg;
+    };
+  }
+
+  if (funcs.length === 1) {
+    return funcs[0];
+  }
+
+  return funcs.reduce(function (a, b) {
+    return function () {
+      return a(b.apply(undefined, arguments));
+    };
+  });
+}
+
+/**
+ * Creates a store enhancer that applies middleware to the dispatch method
+ * of the Redux store. This is handy for a variety of tasks, such as expressing
+ * asynchronous actions in a concise manner, or logging every action payload.
+ *
+ * See `redux-thunk` package as an example of the Redux middleware.
+ *
+ * Because middleware is potentially asynchronous, this should be the first
+ * store enhancer in the composition chain.
+ *
+ * Note that each middleware will be given the `dispatch` and `getState` functions
+ * as named arguments.
+ *
+ * @param {...Function} middlewares The middleware chain to be applied.
+ * @returns {Function} A store enhancer applying the middleware.
+ */
+function applyMiddleware() {
+  for (var _len = arguments.length, middlewares = Array(_len), _key = 0; _key < _len; _key++) {
+    middlewares[_key] = arguments[_key];
+  }
+
+  return function (createStore) {
+    return function () {
+      for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        args[_key2] = arguments[_key2];
+      }
+
+      var store = createStore.apply(undefined, args);
+      var _dispatch = function dispatch() {
+        throw new Error('Dispatching while constructing your middleware is not allowed. ' + 'Other middleware would not be applied to this dispatch.');
+      };
+
+      var middlewareAPI = {
+        getState: store.getState,
+        dispatch: function dispatch() {
+          return _dispatch.apply(undefined, arguments);
+        }
+      };
+      var chain = middlewares.map(function (middleware) {
+        return middleware(middlewareAPI);
+      });
+      _dispatch = compose.apply(undefined, chain)(store.dispatch);
+
+      return _extends({}, store, {
+        dispatch: _dispatch
+      });
+    };
+  };
+}
+
+/*
+ * This is a dummy function to check if the function name has been altered by minification.
+ * If the function has been minified and NODE_ENV !== 'production', warn the user.
+ */
+function isCrushed() {}
+
+if ('development' !== 'production' && typeof isCrushed.name === 'string' && isCrushed.name !== 'isCrushed') {
+  warning("You are currently using minified code outside of NODE_ENV === 'production'. " + 'This means that you are running a slower development build of Redux. ' + 'You can use loose-envify (https://github.com/zertosh/loose-envify) for browserify ' + 'or DefinePlugin for webpack (http://stackoverflow.com/questions/30030031) ' + 'to ensure you have the correct code for your production build.');
+}
+
+exports.createStore = createStore;
+exports.combineReducers = combineReducers;
+exports.bindActionCreators = bindActionCreators;
+exports.applyMiddleware = applyMiddleware;
+exports.compose = compose;
+exports.__DO_NOT_USE__ActionTypes = ActionTypes;
+},{"symbol-observable":327}],329:[function(require,module,exports) {
+"use strict";
+
+var compose = require('redux').compose;
+
+exports.__esModule = true;
+exports.composeWithDevTools = (
+  typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ :
+    function() {
+      if (arguments.length === 0) return undefined;
+      if (typeof arguments[0] === 'object') return compose;
+      return compose.apply(null, arguments);
+    }
+);
+
+exports.devToolsEnhancer = (
+  typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION__ ?
+    window.__REDUX_DEVTOOLS_EXTENSION__ :
+    function() { return function(noop) { return noop; } }
+);
+
+},{"redux":326}],325:[function(require,module,exports) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _redux = require('redux');
+
+var _reduxDevtoolsExtension = require('redux-devtools-extension');
+
+var quoteReducer = function quoteReducer() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var action = arguments[1];
+
+    switch (action.type) {
+        case 'quote':
+            return action.payload;
+        default:
+            return state;
+    }
+};
+
+var keyRatioReducer = function keyRatioReducer() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var action = arguments[1];
+
+    switch (action.type) {
+        case 'keyRatio':
+            return action.payload;
+        default:
+            return state;
+    }
+};
+
+var incomeReducer = function incomeReducer() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var action = arguments[1];
+
+    switch (action.type) {
+        case 'income':
+            return action.payload;
+        default:
+            return state;
+    }
+};
+
+var balanceReducer = function balanceReducer() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var action = arguments[1];
+
+    switch (action.type) {
+        case 'balance':
+            return action.payload;
+        default:
+            return state;
+    }
+};
+var cashflowReducer = function cashflowReducer() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var action = arguments[1];
+
+    switch (action.type) {
+        case 'cashflow':
+            return action.payload;
+        default:
+            return state;
+    }
+};
+
+var store = (0, _redux.createStore)((0, _redux.combineReducers)({
+    quote: quoteReducer,
+    keyRatio: keyRatioReducer,
+    income: incomeReducer,
+    balance: balanceReducer,
+    cashflow: cashflowReducer
+}), (0, _reduxDevtoolsExtension.composeWithDevTools)());
+
+exports.default = store;
+},{"redux":326,"redux-devtools-extension":329}],6:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -46166,6 +46958,10 @@ var _package2 = _interopRequireDefault(_package);
 var _chart = require('./chart');
 
 var _dcf = require('./dcf');
+
+var _store = require('./store');
+
+var _store2 = _interopRequireDefault(_store);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -46242,7 +47038,12 @@ var Entry = function (_React$Component) {
             var beta = parseFloat(this.state.quote['Beta'][0]);
             var marketEquity = _tool2.default.toMillion(this.state.quote['Market Cap.'][0]);
             var shareOutstanding = _tool2.default.toMillion(this.state.quote['Shares Outstanding'][0]);
-            var marketDebt = 0;
+
+            var debts = _tool2.default.toNumList(this.state.balance['Short-term debt']);
+            var shortDebt = debts[debts.length - 1];
+            var longTermDebts = _tool2.default.toNumList(this.state.balance['Other long-term liabilities']);
+            var longDebt = longTermDebts[longTermDebts.length - 1];
+            var marketDebt = shortDebt + longDebt;
 
             var data = {};
             data['Provision for income taxes'] = _tool2.default.toNumList(this.state.income['Provision for income taxes']);
@@ -46282,12 +47083,14 @@ var Entry = function (_React$Component) {
         value: function specifyAnalysis(state) {
             var _this2 = this;
 
-            _axios2.default.get(this.url + '/' + state.path).then(function (response) {
+            var t = this.searchInput.value.trim();
+            _axios2.default.get(this.url + '/' + state.path + '?ticker=' + t).then(function (response) {
                 var serverMsg = response.data;
                 var rawData = JSON.parse(serverMsg.msg);
                 var dictData = _this2.rawData2Dict(rawData);
                 var newState = {};
                 newState[state.name] = dictData;
+                _store2.default.dispatch({ type: state.name, payload: dictData });
                 _this2.setState(newState);
                 _this2.analysisPass(state.name);
                 _this2.analysisLoop();
@@ -46315,7 +47118,7 @@ var Entry = function (_React$Component) {
                 { className: 'container' },
                 _react2.default.createElement(
                     'div',
-                    { className: 'd-flex justify-content-center', style: { marginTop: 50, marginBottom: 50 } },
+                    { className: 'd-flex justify-content-left', style: { marginTop: 50, marginBottom: 50 } },
                     _react2.default.createElement(
                         'form',
                         { onSubmit: this.onBtnSearch },
@@ -46404,7 +47207,7 @@ var ConditionChart = function ConditionChart(props) {
 };
 
 exports.default = Entry;
-},{"react":9,"axios":29,"./table":21,"../lib/tool.js":19,"../../package.json":18,"./chart":22,"./dcf":23}],76:[function(require,module,exports) {
+},{"react":9,"axios":29,"./table":21,"../lib/tool.js":19,"../../package.json":18,"./chart":22,"./dcf":23,"./store":325}],76:[function(require,module,exports) {
 /**
  * Copyright (c) 2014-present, Facebook, Inc.
  *

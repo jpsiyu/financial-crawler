@@ -2,6 +2,7 @@ import React from 'react'
 import { TransformTable } from './table'
 import { BarChart, BarAndLineChart } from './chart'
 import regression from 'regression'
+import tool from '../lib/tool';
 
 class DCFAnalysis extends React.Component {
     constructor() {
@@ -104,7 +105,8 @@ class DCFAnalysis extends React.Component {
         for (let i = 0; i < fcfReport['Sum Discount'].length; i++) {
             totalValue+= fcfReport['Sum Discount'][i]
         }
-        const intrinsic = totalValue - this.marketDebt
+        totalValue = tool.toFloat(totalValue)
+        const intrinsic = tool.toFloat(totalValue - this.marketDebt)
         const valuePerShare = parseFloat((intrinsic / this.shareOutstanding).toFixed(2))
         valuationReport['Total Value'] = [totalValue]
         valuationReport['Market Price Debt'] = [this.marketDebt]
@@ -125,6 +127,7 @@ class DCFAnalysis extends React.Component {
             'Risk Free': [this.riskFree],
             'Risk Premium': [this.riskPremium],
             'Cost Of Equity': [this.costOfEquity()],
+            'Cost Of Debt PreTax': [this.costOfDebtPreTax()],
             'Tax Rate': [this.taxRate],
             'Cost Of Debt': [this.costOfDebtAfterTax()],
             'Market Price Equity': [this.marketEquity],

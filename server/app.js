@@ -3,19 +3,21 @@ const request = require('request')
 const cheerio = require('cheerio')
 const util = require('./util.js')
 const path = require('path')
+const bodyParser = require('body-parser')
 
 const DATA_PATH = 'server/data'
 
 const app = express()
 app.use(express.static(path.resolve(__dirname, '../dist')))
+app.use(bodyParser.json())
 
 app.use((req, res, next) => {
-    util.log(`A ${req.method} method to ${req.url}`)
+    util.log(`${req.method},${req.url}`)
     next()
 })
 
 app.get('/quote', (req, res) => {
-    const ticker = '000423'
+    const ticker = req.query.ticker
     const localPath = `${DATA_PATH}/${ticker}-quote.json`
     data = util.local2json(localPath)
     if(data){
@@ -25,7 +27,8 @@ app.get('/quote', (req, res) => {
     }
 
     util.log('Crawb The Website...')
-    const url = `https://www.msn.com/en-us/money/stockdetails/fi-137.1.${ticker}.SHE?symbol=000423&form=PRFIHQ`
+    //const url = `https://www.msn.com/en-gb/money/stockdetails/fi-136.1.${ticker}.SHG?symbol=601318&form=PRFIEQ1`
+    const url = `https://www.msn.com/en-gb/money/stockdetails/fi-137.1.${ticker}.SHE?symbol=${ticker}&form=PRFIHQ`
     request(url ,(err, response, body) => {
         util.log('Handle Response...')
         let msg = []
@@ -52,7 +55,7 @@ app.get('/quote', (req, res) => {
 })
 
 app.get('/key_ratio', (req, res) => {
-    const ticker = '000423'
+    const ticker = req.query.ticker
     const localPath = `${DATA_PATH}/${ticker}-key-ratio.json`
     let data = util.local2json(localPath)
     if(data){
@@ -77,7 +80,7 @@ app.get('/key_ratio', (req, res) => {
 })
 
 app.get('/income_statement', (req, res) => {
-    const ticker = '000423'
+    const ticker = req.query.ticker
     const localPath = `${DATA_PATH}/${ticker}-income-statement.json`
     data = util.local2json(localPath)
     if(data){
@@ -101,7 +104,7 @@ app.get('/income_statement', (req, res) => {
 })
 
 app.get('/balance_sheet', (req, res) => {
-    const ticker = '000423'
+    const ticker = req.query.ticker
     const localPath = `${DATA_PATH}/${ticker}-balance-sheet.json`
     data = util.local2json(localPath)
     if(data){
@@ -126,7 +129,7 @@ app.get('/balance_sheet', (req, res) => {
 
 
 app.get('/cashflow', (req, res) => {
-    const ticker = '000423'
+    const ticker = req.query.ticker
     const localPath = `${DATA_PATH}/${ticker}-cashflow.json`
     data = util.local2json(localPath)
     if(data){

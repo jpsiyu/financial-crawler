@@ -1,3 +1,5 @@
+const DIV_COLOR = 'rgb(250,250,250)'
+
 const empty = (obj) => {
     if (obj === null) return true
     if (Object.keys(obj).length === 0) return true
@@ -5,6 +7,7 @@ const empty = (obj) => {
 }
 
 const toNumList = (list) => {
+    if (!list) return []
     let newList = []
     for (let i = 0; i < list.length; i++) {
         let value = list[i]
@@ -25,13 +28,22 @@ const sliceYearList = (list) => {
     return newList
 }
 
+/**
+ * units: tr, bn, m
+ */
 const toMillion = (value) => {
-    let v = value.slice(0, -1)
-    let u = value.slice(-1)
-    if(u == 'B')
+    let v = value.slice(0, -2)
+    let u = value.slice(-2)
+    if (value.match('tr'))
+        return parseFloat(v) * 1000 * 1000
+    else if (value.match('bn'))
         return parseFloat(v) * 1000
-    else if(u == 'M')
+    else if (value.match('m'))
         return parseFloat(v)
+}
+
+const toFloat = (value, d = 2) => {
+    return parseFloat(value.toFixed(2))
 }
 
 export default {
@@ -39,4 +51,6 @@ export default {
     toNumList,
     sliceYearList,
     toMillion,
+    DIV_COLOR,
+    toFloat,
 }

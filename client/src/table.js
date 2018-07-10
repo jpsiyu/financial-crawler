@@ -1,4 +1,5 @@
 import React from 'react'
+import tool from '../lib/tool'
 
 const DataTable = (props) => {
     const data = props.data
@@ -23,7 +24,7 @@ const DataTable = (props) => {
     })
     return <div className='jumbotron'>
         <h4>{props.title}</h4>
-        <table className='table table-striped table-bordered'>
+        <table className='table table-bordered'>
             <thead>{heads}</thead>
             <tbody>{rows}</tbody>
         </table>
@@ -48,9 +49,9 @@ const TransformTable = (props) => {
     for(let i=0; i < rows.length; i++){
         rowsTab.push(<tr key={i}>{rows[i]}</tr>)
     }
-    return <div className='jumbotron'>
+    return <div className='jumbotron' style={{backgroundColor:tool.DIV_COLOR}}>
         <h4>{props.title}</h4>
-        <table className='table table-striped table-bordered'>
+        <table className='table table-bordered'>
             <thead><tr>{heads}</tr></thead>
             <tbody>{rowsTab}</tbody>
         </table>

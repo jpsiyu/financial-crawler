@@ -5,6 +5,7 @@ import tool from '../lib/tool.js'
 import pjson from '../../package.json'
 import { BarChart, LineChart } from './chart'
 import { DCFAnalysis } from './dcf'
+import store from './store'
 
 class Entry extends React.Component {
     constructor() {
@@ -68,7 +69,12 @@ class Entry extends React.Component {
         const beta = parseFloat(this.state.quote['Beta'][0])
         const marketEquity = tool.toMillion(this.state.quote['Market Cap.'][0])
         const shareOutstanding = tool.toMillion(this.state.quote['Shares Outstanding'][0])
-        const marketDebt = 0
+
+        const debts = tool.toNumList(this.state.balance['Short-term debt'])
+        const shortDebt = debts[debts.length-1]
+        const longTermDebts = tool.toNumList(this.state.balance['Other long-term liabilities'])
+        const longDebt = longTermDebts[longTermDebts.length-1]
+        const marketDebt = shortDebt + longDebt
 
         const data = {}
         data['Provision for income taxes'] = tool.toNumList(this.state.income['Provision for income taxes'])
@@ -104,12 +110,14 @@ class Entry extends React.Component {
     }
 
     specifyAnalysis(state) {
-        axios.get(`${this.url}/${state.path}`).then(response => {
+        const t = this.searchInput.value.trim()
+        axios.get(`${this.url}/${state.path}?ticker=${t}`).then(response => {
             const serverMsg = response.data
             const rawData = JSON.parse(serverMsg.msg)
             const dictData = this.rawData2Dict(rawData)
             const newState = {}
             newState[state.name] = dictData
+            store.dispatch({ type: state.name, payload: dictData })
             this.setState(newState)
             this.analysisPass(state.name)
             this.analysisLoop()
@@ -127,7 +135,7 @@ class Entry extends React.Component {
 
     render() {
         return <div className="container">
-            <div className='d-flex justify-content-center' style={{ marginTop: 50, marginBottom: 50 }}>
+            <div className='d-flex justify-content-left' style={{ marginTop: 50, marginBottom: 50 }}>
                 <form onSubmit={this.onBtnSearch}>
                     <div className='form-group form-inline'>
                         <input type='text' placeholder='股票代码:'
@@ -137,7 +145,7 @@ class Entry extends React.Component {
                             style={{ width: 300 }}
                         />
                         <input type="submit"
-                            style={{position: 'absolute', left: -9999, width: 1, height: 1}}
+                            style={{ position: 'absolute', left: -9999, width: 1, height: 1 }}
                             tabIndex="-1" />
                     </div>
                 </form>

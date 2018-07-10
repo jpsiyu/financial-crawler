@@ -6,6 +6,7 @@ const CSV = require('csv-string')
 const LOG_OPEN = true
 const SAVE_HTML = false
 const SAVE_JSON = true
+const READ_LOCAL = true
 
 function log(...args){
     if(LOG_OPEN)
@@ -14,7 +15,7 @@ function log(...args){
 
 function saveCrawled(data){
     if(!SAVE_HTML) return
-    fs.writeFile('temp/crawled.html', data, (err)=>{
+    fs.writeFile('server/temp/crawled.html', data, (err)=>{
         if(err) throw err
         log('Html Saved!')
     })
@@ -32,6 +33,7 @@ function json2local(path, jsonData){
 }
 
 function local2json(path){
+    if(!READ_LOCAL) return false
     if(fs.existsSync(path))
         data = fs.readFileSync(path, 'utf8')
     else
@@ -40,6 +42,7 @@ function local2json(path){
 }
 
 function serverMsg(res, msg){
+    log('server msg sended')
     res.status(200).json({msg})
 }
 
