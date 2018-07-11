@@ -56,4 +56,9 @@ const store = createStore(
     composeWithDevTools()
 )
 
+const select = (subState) => {
+    const state = store.getState()
+    return state[subState]
+}
+
 export default store

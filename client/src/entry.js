@@ -1,11 +1,10 @@
 import React from 'react'
 import axios from 'axios'
-import { DataTable, TransformTable } from './table'
-import tool from '../lib/tool.js'
 import pjson from '../../package.json'
-import { BarChart, LineChart } from './chart'
-import { DCFAnalysis } from './dcf'
 import store from './store'
+import DebtMeasure from './analysis/debtMeasure'
+import GrowthMeasure from './analysis/growthMeasure'
+import DCFMeasure from './analysis/dcfMeasure'
 
 class Entry extends React.Component {
     constructor() {
@@ -60,44 +59,10 @@ class Entry extends React.Component {
         if (target) {
             this.specifyAnalysis(target)
         } else {
-            this.receiveAllData()
-            console.log('Analysis Finish!')
+            console.log('Fetch All Data!')
         }
     }
 
-    receiveAllData() {
-        const beta = parseFloat(this.state.quote['Beta'][0])
-        const marketEquity = tool.toMillion(this.state.quote['Market Cap.'][0])
-        const shareOutstanding = tool.toMillion(this.state.quote['Shares Outstanding'][0])
-
-        const debts = tool.toNumList(this.state.balance['Short-term debt'])
-        const shortDebt = debts[debts.length-1]
-        const longTermDebts = tool.toNumList(this.state.balance['Other long-term liabilities'])
-        const longDebt = longTermDebts[longTermDebts.length-1]
-        const marketDebt = shortDebt + longDebt
-
-        const data = {}
-        data['Provision for income taxes'] = tool.toNumList(this.state.income['Provision for income taxes'])
-        data['Income before taxes'] = tool.toNumList(this.state.income['Income before taxes'])
-        const len = data['Provision for income taxes'].length
-        let rateSum = 0
-        for (let i = 0; i < len; i++) {
-            let taxPay = data['Provision for income taxes'][i]
-            let income = data['Income before taxes'][i]
-            let rate = taxPay / income
-            rateSum += rate
-        }
-        const taxRate = parseFloat((rateSum / len).toFixed(2))
-
-        const fcfPass = {}
-        fcfPass['Year'] = this.state.cashflow['Fiscal year ends in December. CNY in millions except per share data.']
-        fcfPass['Free cash flow'] = this.state.cashflow['Free cash flow']
-        fcfPass['Year'] = tool.sliceYearList(fcfPass['Year'].slice(0, -1))
-        fcfPass['Free cash flow'] = tool.toNumList(fcfPass['Free cash flow'].slice(0, -1))
-
-        const dcfData = { beta, marketEquity, marketDebt, taxRate, shareOutstanding, fcfPass }
-        this.setState({ dcfData })
-    }
 
     analysisPass(name) {
         for (let i = 0; i < this.analysisState.length; i++) {
@@ -151,81 +116,10 @@ class Entry extends React.Component {
                 </form>
             </div>
 
-            <DebtMeasure data={this.state.balance} />
-
-            <div className='row'>
-                <div className='col'>
-                    <ConditionChart
-                        data={this.state.keyRatio}
-                        xkey='Cash Flow Ratios'
-                        ykey='Book Value Per Share * CNY'
-                        title='每股净资产(M)'
-                    />
-                </div>
-                <div className='col'>
-                    <ConditionChart
-                        data={this.state.keyRatio}
-                        xkey='Cash Flow Ratios'
-                        ykey='Earnings Per Share CNY'
-                        title='每股净利润(M)'
-                    />
-                </div>
-            </div>
-
-            <DCFAnalysis data={this.state.dcfData} />
+            <DebtMeasure />
+            <GrowthMeasure />
+            <DCFMeasure />
         </div>
-    }
-}
-
-const DebtMeasure = (props) => {
-    if (tool.empty(props.data)) {
-        return null
-    } else {
-        const measureList = [
-            'Fiscal year ends in December. CNY in millions except per share data.',
-            'Short-term debt',
-            'Other long-term liabilities',
-            "Total stockholders' equity",
-            'Total current assets',
-            'Total current liabilities'
-        ]
-        let measureData = {}
-        for (let i = 0; i < measureList.length; i++) {
-            let k = measureList[i]
-            if (i == 0)
-                measureData['Year'] = tool.sliceYearList(props.data[k])
-            else
-                measureData[k] = tool.toNumList(props.data[k])
-        }
-
-        for (let i = 0; i < measureData['Short-term debt'].length; i++) {
-            if (i == 0) {
-                measureData['债务权益比'] = []
-                measureData['流动比率'] = []
-            }
-            let debtOnEquity =
-                (measureData['Short-term debt'][i] + measureData['Other long-term liabilities'][i])
-                / measureData["Total stockholders' equity"][i]
-            measureData['债务权益比'][i] = debtOnEquity.toFixed(2)
-
-            let currentRatio = measureData['Total current assets'][i] / measureData['Total current liabilities'][i]
-            measureData['流动比率'][i] = currentRatio.toFixed(2)
-        }
-        return <TransformTable title='权益与负债(M)' data={measureData} />
-    }
-}
-
-
-const ConditionChart = (props) => {
-    if (tool.empty(props.data))
-        return null
-    else {
-        const x = props.data[props.xkey].slice(0, -1)
-        const y = props.data[props.ykey].slice(0, -1)
-        return props.line ?
-            <LineChart x={x} y={y} title={props.title} /> :
-            <BarChart x={x} y={y} title={props.title} />
-
     }
 }
 

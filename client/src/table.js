@@ -22,9 +22,11 @@ const DataTable = (props) => {
         targets.push(<tr key={i}>{row}</tr>)
         i++
     })
-    return <div className='jumbotron'>
+    const divColor = props.warn ? tool.DIV_COLOR_WARN: tool.DIV_COLOR
+    return <div className='jumbotron' style={{backgroundColor: divColor}}>
         <h4>{props.title}</h4>
-        <table className='table table-bordered'>
+        <p>{props.desc}</p>
+        <table className='table table-bordered' style={{backgroundColor: tool.TABLE_COLOR}}>
             <thead>{heads}</thead>
             <tbody>{rows}</tbody>
         </table>
@@ -51,7 +53,7 @@ const TransformTable = (props) => {
     }
     return <div className='jumbotron' style={{backgroundColor:tool.DIV_COLOR}}>
         <h4>{props.title}</h4>
-        <table className='table table-bordered'>
+        <table className='table table-bordered' style={{backgroundColor:tool.TABLE_COLOR}}>
             <thead><tr>{heads}</tr></thead>
             <tbody>{rowsTab}</tbody>
         </table>

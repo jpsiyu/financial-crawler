@@ -4,6 +4,8 @@ import tool from '../lib/tool'
 
 const blue = 'rgb(69,69,127)'
 const yellow = '#EC932F'
+const height = 280
+const width = 420
 
 const BarChart = (props) => {
     const labels = props.x
@@ -21,8 +23,8 @@ const BarChart = (props) => {
         ]
     }
     let options = { maintainAspectRatio: false }
-    return <div className='jumbotron' style={{backgroundColor:tool.DIV_COLOR}} >
-        <Bar data={data} width={400} height={400} options={options} />
+    return <div className='jumbotron' style={{backgroundColor:tool.CHART_COLOR}} >
+        <Bar data={data} width={width} height={height} options={options} />
     </div>
 }
 
@@ -44,8 +46,8 @@ const LineChart = (props) => {
         ]
     }
     let options = { maintainAspectRatio: false }
-    return <div className='jumbotron' style={{backgroundColor:tool.DIV_COLOR}} >
-        <Bar data={data} width={400} height={400} options={options} />
+    return <div className='jumbotron' style={{backgroundColor:tool.CHART_COLOR}} >
+        <Bar data={data} width={width} height={height} options={options} />
     </div>
 
 }
@@ -78,8 +80,8 @@ const BarAndLineChart = (props) => {
         ]
     }
     let options = { maintainAspectRatio: false }
-    return <div className='jumbotron' style={{backgroundColor:tool.DIV_COLOR}} >
-        <Bar data={data} width={400} height={400} options={options} />
+    return <div className='jumbotron' style={{backgroundColor:tool.CHART_COLOR}} >
+        <Bar data={data} width={width} height={height} options={options} />
     </div>
 }
 

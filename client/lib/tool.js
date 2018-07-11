@@ -1,4 +1,9 @@
+import { isIPv4 } from "net";
+
 const DIV_COLOR = 'rgb(250,250,250)'
+const TABLE_COLOR = 'white'
+const DIV_COLOR_WARN = 'rgb(255,255,200)'
+const CHART_COLOR = 'white'
 
 const empty = (obj) => {
     if (obj === null) return true
@@ -11,10 +16,7 @@ const toNumList = (list) => {
     let newList = []
     for (let i = 0; i < list.length; i++) {
         let value = list[i]
-        if (isNaN(value) || value == '')
-            newList.push(0)
-        else
-            newList.push(parseFloat(value))
+        newList.push(toFloat(value))
     }
     return newList
 }
@@ -43,7 +45,8 @@ const toMillion = (value) => {
 }
 
 const toFloat = (value, d = 2) => {
-    return parseFloat(value.toFixed(2))
+    if (value == '' || isNaN(value)) return 0
+    return parseFloat(value).toFixed(2) * 1
 }
 
 export default {
@@ -52,5 +55,8 @@ export default {
     sliceYearList,
     toMillion,
     DIV_COLOR,
+    DIV_COLOR_WARN,
+    TABLE_COLOR,
+    CHART_COLOR,
     toFloat,
 }
