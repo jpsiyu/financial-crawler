@@ -5,18 +5,16 @@ import store from './store'
 import DebtMeasure from './analysis/debtMeasure'
 import GrowthMeasure from './analysis/growthMeasure'
 import DCFMeasure from './analysis/dcfMeasure'
+import macro from '../lib/macro';
+import Search from './search'
 
 class Entry extends React.Component {
     constructor() {
         super()
         this.state = {
-            quote: null,
-            keyRatio: null,
-            income: null,
-            balance: null,
-            cashflow: null,
-            dcfData: null,
+            loading: false
         }
+        this.ticker = undefined
         this.analysisState = [
             { name: 'quote', path: 'quote', open: true, pass: false, },
             { name: 'keyRatio', path: 'key_ratio', open: true, pass: false },
@@ -24,26 +22,21 @@ class Entry extends React.Component {
             { name: 'balance', path: 'balance_sheet', open: true, pass: false },
             { name: 'cashflow', path: 'cashflow', open: true, pass: false },
         ]
-        this.searchInput = null
-        this.onBtnSearch = this.onBtnSearch.bind(this)
         this.url = pjson.runOnServer ? "http://120.78.240.132:3000" : "http://localhost"
+        this.clearState = this.clearState.bind(this)
     }
 
     clearState() {
-        const newState = {}
-        Object.keys(this.state).forEach(key => {
-            newState[key] = null
-        })
-        this.setState(newState)
+        store.dispatch({ type: macro.STATE_CLEAR, payload: {} })
         for (let i = 0; i < this.analysisState.length; i++) {
             let state = this.analysisState[i]
             state.pass = false
         }
     }
 
-    onBtnSearch(event) {
-        event.preventDefault()
-        this.clearState()
+    startAnalysis(ticker) {
+        this.setState({ loading: true })
+        this.ticker = ticker
         this.analysisLoop()
     }
 
@@ -56,11 +49,10 @@ class Entry extends React.Component {
                 break
             }
         }
-        if (target) {
+        if (target)
             this.specifyAnalysis(target)
-        } else {
-            console.log('Fetch All Data!')
-        }
+        else
+            this.setState({ loading: false})
     }
 
 
@@ -75,15 +67,11 @@ class Entry extends React.Component {
     }
 
     specifyAnalysis(state) {
-        const t = this.searchInput.value.trim()
-        axios.get(`${this.url}/${state.path}?ticker=${t}`).then(response => {
+        axios.get(`${this.url}/${state.path}?ticker=${this.ticker}`).then(response => {
             const serverMsg = response.data
             const rawData = JSON.parse(serverMsg.msg)
             const dictData = this.rawData2Dict(rawData)
-            const newState = {}
-            newState[state.name] = dictData
             store.dispatch({ type: state.name, payload: dictData })
-            this.setState(newState)
             this.analysisPass(state.name)
             this.analysisLoop()
         }).catch(error => console.log('ERR:', error))
@@ -100,22 +88,11 @@ class Entry extends React.Component {
 
     render() {
         return <div className="container">
-            <div className='d-flex justify-content-left' style={{ marginTop: 50, marginBottom: 50 }}>
-                <form onSubmit={this.onBtnSearch}>
-                    <div className='form-group form-inline'>
-                        <input type='text' placeholder='股票代码:'
-                            className='form-control'
-                            ref={element => this.searchInput = element}
-                            required
-                            style={{ width: 300 }}
-                        />
-                        <input type="submit"
-                            style={{ position: 'absolute', left: -9999, width: 1, height: 1 }}
-                            tabIndex="-1" />
-                    </div>
-                </form>
-            </div>
-
+            <Search
+                startAnalysis={ticker => this.startAnalysis(ticker)}
+                clearState={this.clearState}
+                loading={this.state.loading}
+            />
             <DebtMeasure />
             <GrowthMeasure />
             <DCFMeasure />

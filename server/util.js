@@ -86,13 +86,23 @@ function csvStr2Json(csvStr){
     return jsonObj
 }
 
+function quoteUrl(ticker){
+    if(ticker.match('^60'))
+        return `https://www.msn.com/en-gb/money/stockdetails/fi-136.1.${ticker}.SHG?symbol=${ticker}&form=PRFIHQ`
+    else if(ticker.match('^00'))
+        return `https://www.msn.com/en-gb/money/stockdetails/fi-137.1.${ticker}.SHE?symbol=${ticker}&form=PRFIHQ`
+    else
+        return ''
+}
+
 module.exports = {
-    log: log,
-    saveCrawled: saveCrawled,
-    serverMsg: serverMsg,
-    financialUrl: financialUrl,
-    csvStr2Json: csvStr2Json,
-    json2local: json2local,
-    local2json: local2json,
-    keyRatioUrl: keyRatioUrl,
+    log,
+    saveCrawled,
+    serverMsg,
+    financialUrl,
+    csvStr2Json,
+    json2local,
+    local2json,
+    keyRatioUrl,
+    quoteUrl,
 }

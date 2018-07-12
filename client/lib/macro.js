@@ -2,4 +2,6 @@ export default {
     DATA_EMPTY: 'DATA_EMPTY',
     DATA_LOSE: 'DATA_LOSE',
     DATA_PERFECT: 'DATA_PERFECT',
+
+    STATE_CLEAR: 'STATE_CLEAR',
 }

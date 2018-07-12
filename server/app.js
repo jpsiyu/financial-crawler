@@ -9,6 +9,7 @@ const DATA_PATH = 'server/data'
 
 const app = express()
 app.use(express.static(path.resolve(__dirname, '../dist')))
+app.use(express.static(path.resolve(__dirname, '../client/public')))
 app.use(bodyParser.json())
 
 app.use((req, res, next) => {
@@ -27,10 +28,9 @@ app.get('/quote', (req, res) => {
     }
 
     util.log('Crawb The Website...')
-    //const url = `https://www.msn.com/en-gb/money/stockdetails/fi-136.1.${ticker}.SHG?symbol=601318&form=PRFIEQ1`
-    const url = `https://www.msn.com/en-gb/money/stockdetails/fi-137.1.${ticker}.SHE?symbol=${ticker}&form=PRFIHQ`
+    const url = util.quoteUrl(ticker)
     request(url ,(err, response, body) => {
-        util.log('Handle Response...')
+        util.log('Parse Website...')
         let msg = []
         if(!err){
             const $ = cheerio.load(body)

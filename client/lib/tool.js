@@ -6,7 +6,7 @@ const DIV_COLOR_WARN = 'rgb(255,255,200)'
 const CHART_COLOR = 'white'
 
 const empty = (obj) => {
-    if (obj === null) return true
+    if (!obj) return true
     if (Object.keys(obj).length === 0) return true
     return false
 }

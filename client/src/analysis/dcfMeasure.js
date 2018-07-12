@@ -181,7 +181,7 @@ class DCFMeasure extends React.Component {
                 lose[key] = []
             }
             else {
-                measureData[key] = tool.toFloat(value[-1])
+                measureData[key] = tool.toFloat(value[value.length-1])
             }
         }
 
