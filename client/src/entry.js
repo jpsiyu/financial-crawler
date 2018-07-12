@@ -22,7 +22,7 @@ class Entry extends React.Component {
             { name: 'balance', path: 'balance_sheet', open: true, pass: false },
             { name: 'cashflow', path: 'cashflow', open: true, pass: false },
         ]
-        this.url = pjson.runOnServer ? "http://120.78.240.132:3000" : "http://localhost"
+        this.url = pjson.production ? "http://120.78.240.132:3000" : "http://localhost"
         this.clearState = this.clearState.bind(this)
     }
 
@@ -36,6 +36,7 @@ class Entry extends React.Component {
 
     startAnalysis(ticker) {
         this.setState({ loading: true })
+        this.clearState()
         this.ticker = ticker
         this.analysisLoop()
     }
@@ -90,7 +91,6 @@ class Entry extends React.Component {
         return <div className="container">
             <Search
                 startAnalysis={ticker => this.startAnalysis(ticker)}
-                clearState={this.clearState}
                 loading={this.state.loading}
             />
             <DebtMeasure />

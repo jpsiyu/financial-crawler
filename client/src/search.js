@@ -1,4 +1,5 @@
 import React from 'react'
+import tool from '../lib/tool'
 
 const loadingSize = 30
 
@@ -18,8 +19,6 @@ class Search extends React.Component {
         if (this.checkInput()) {
             const ticker = this.searchInput.value.trim()
             this.props.startAnalysis(ticker)
-        } else {
-            this.props.clearState()
         }
     }
 
@@ -50,7 +49,7 @@ class Search extends React.Component {
 
     conditionImg() {
         if (!this.props.loading) return null
-        return <img src="loading.gif"
+        return <img src="loading2.gif"
             className="img-fluid"
             alt="loading..."
             width={loadingSize}
@@ -60,8 +59,8 @@ class Search extends React.Component {
     }
 
     render() {
-        return <div className="container">
-            <div className='d-flex justify-content-left' style={{ marginTop: 50, marginBottom: 50 }}>
+        return <div className='jumbotron' style={{ backgroundColor: tool.DIV_COLOR }}>
+            <div className='d-flex justify-content-left' >
                 <form onSubmit={this.onBtnSearch}>
                     <div className='form-group form-inline'>
                         <input type='text' placeholder='股票代码:'
@@ -74,9 +73,6 @@ class Search extends React.Component {
                     </div>
                     <div className='form-group'>
                         <span className="badge badge-danger">{this.state.inputTips}</span>
-                        <input type="submit"
-                            style={{ position: 'absolute', left: -9999, width: 1, height: 1 }}
-                            tabIndex="-1" />
                     </div>
                 </form>
             </div>

@@ -19,6 +19,11 @@ app.use((req, res, next) => {
 
 app.get('/quote', (req, res) => {
     const ticker = req.query.ticker
+    if(!util.checkTickerValid(ticker)) {
+        util.serverMsg(res, JSON.stringify([]))
+        return
+    }
+
     const localPath = `${DATA_PATH}/${ticker}-quote.json`
     data = util.local2json(localPath)
     if(data){
@@ -29,6 +34,7 @@ app.get('/quote', (req, res) => {
 
     util.log('Crawb The Website...')
     const url = util.quoteUrl(ticker)
+    util.log('quote......', url)
     request(url ,(err, response, body) => {
         util.log('Parse Website...')
         let msg = []
@@ -56,6 +62,10 @@ app.get('/quote', (req, res) => {
 
 app.get('/key_ratio', (req, res) => {
     const ticker = req.query.ticker
+    if(!util.checkTickerValid(ticker)) {
+        util.serverMsg(res, JSON.stringify([]))
+        return
+    }
     const localPath = `${DATA_PATH}/${ticker}-key-ratio.json`
     let data = util.local2json(localPath)
     if(data){
@@ -81,6 +91,10 @@ app.get('/key_ratio', (req, res) => {
 
 app.get('/income_statement', (req, res) => {
     const ticker = req.query.ticker
+    if(!util.checkTickerValid(ticker)) {
+        util.serverMsg(res, JSON.stringify([]))
+        return
+    }
     const localPath = `${DATA_PATH}/${ticker}-income-statement.json`
     data = util.local2json(localPath)
     if(data){
@@ -105,6 +119,10 @@ app.get('/income_statement', (req, res) => {
 
 app.get('/balance_sheet', (req, res) => {
     const ticker = req.query.ticker
+    if(!util.checkTickerValid(ticker)) {
+        util.serverMsg(res, JSON.stringify([]))
+        return
+    }
     const localPath = `${DATA_PATH}/${ticker}-balance-sheet.json`
     data = util.local2json(localPath)
     if(data){
@@ -130,6 +148,10 @@ app.get('/balance_sheet', (req, res) => {
 
 app.get('/cashflow', (req, res) => {
     const ticker = req.query.ticker
+    if(!util.checkTickerValid(ticker)) {
+        util.serverMsg(res, JSON.stringify([]))
+        return
+    }
     const localPath = `${DATA_PATH}/${ticker}-cashflow.json`
     data = util.local2json(localPath)
     if(data){

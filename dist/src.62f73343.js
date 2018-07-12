@@ -21381,7 +21381,7 @@ module.exports = {
     "watch": "parcel watch client/public/index.html",
     "build": "parcel build client/public/index.html"
   },
-  "runOnServer": false,
+  "production": false,
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -48772,8 +48772,8 @@ var DCFMeasure = function (_React$Component) {
                 if (i == l - 1) {
                     termValue = this.terminalValue(predict, l);
                 }
-                var sum = predict + termValue;
-                var discount = parseFloat((sum / Math.pow(1 + wacc, i + 1)).toFixed(2));
+                var sum = _tool2.default.toFloat(predict + termValue);
+                var discount = _tool2.default.toFloat(sum / Math.pow(1 + wacc, i + 1));
                 fcfReport['Terminal'].push(termValue);
                 fcfReport['Sum Predict Terminal'].push(sum);
                 fcfReport['Sum Discount'].push(discount);
@@ -48883,6 +48883,7 @@ var DCFMeasure = function (_React$Component) {
                 'Cost Of Debt': [this.costOfDebtAfterTax()],
                 'Market Price Equity': [this.marketEquity],
                 'Market Price Debt': [this.marketDebt],
+                'Perpetuity Growth': [this.perpetuityGrowth],
                 'Wacc': [this.wacc()]
             };
             var predictData = this.predict();
@@ -48906,26 +48907,35 @@ var DCFMeasure = function (_React$Component) {
                 _react2.default.createElement(_table.TransformTable, { data: report, title: 'DCF\u6A21\u578B\u53C2\u6570' }),
                 _react2.default.createElement(
                     'div',
-                    { className: 'row' },
+                    { className: 'jumbotron', style: { backgroundColor: _tool2.default.DIV_COLOR } },
                     _react2.default.createElement(
-                        'div',
-                        { className: 'col' },
-                        _react2.default.createElement(_chart.BarChart, {
-                            x: this.fcfPass['Year'],
-                            y: this.fcfPass['Free cash flow'],
-                            title: '\u81EA\u7531\u73B0\u91D1\u6D41(M)'
-                        })
+                        'h4',
+                        null,
+                        '\u73B0\u91D1\u6D41\u7EBF\u6027\u56DE\u5F52\u9884\u6D4B'
                     ),
                     _react2.default.createElement(
                         'div',
-                        { className: 'col' },
-                        _react2.default.createElement(_chart.BarAndLineChart, {
-                            x: predictData.regressionX,
-                            y: predictData.historyY,
-                            y2: predictData.regressionY,
-                            title: '\u81EA\u7531\u73B0\u91D1\u6D41(M)',
-                            title2: '\u81EA\u7531\u73B0\u91D1\u6D41\u7EBF\u6027\u56DE\u5F52(M)'
-                        })
+                        { className: 'row' },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'col' },
+                            _react2.default.createElement(_chart.BarChart, {
+                                x: this.fcfPass['Year'],
+                                y: this.fcfPass['Free cash flow'],
+                                title: '\u81EA\u7531\u73B0\u91D1\u6D41(M)'
+                            })
+                        ),
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'col' },
+                            _react2.default.createElement(_chart.BarAndLineChart, {
+                                x: predictData.regressionX,
+                                y: predictData.historyY,
+                                y2: predictData.regressionY,
+                                title: '\u81EA\u7531\u73B0\u91D1\u6D41(M)',
+                                title2: '\u81EA\u7531\u73B0\u91D1\u6D41\u7EBF\u6027\u56DE\u5F52(M)'
+                            })
+                        )
                     )
                 ),
                 _react2.default.createElement(_table.TransformTable, { data: fcfReport, title: '\u73B0\u91D1\u6D41\u9884\u6D4B(M)' }),
@@ -48976,6 +48986,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _tool = require('../lib/tool');
+
+var _tool2 = _interopRequireDefault(_tool);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -49010,8 +49024,6 @@ var Search = function (_React$Component) {
             if (this.checkInput()) {
                 var ticker = this.searchInput.value.trim();
                 this.props.startAnalysis(ticker);
-            } else {
-                this.props.clearState();
             }
         }
     }, {
@@ -49044,7 +49056,7 @@ var Search = function (_React$Component) {
         key: 'conditionImg',
         value: function conditionImg() {
             if (!this.props.loading) return null;
-            return _react2.default.createElement('img', { src: 'loading.gif',
+            return _react2.default.createElement('img', { src: 'loading2.gif',
                 className: 'img-fluid',
                 alt: 'loading...',
                 width: loadingSize,
@@ -49059,10 +49071,10 @@ var Search = function (_React$Component) {
 
             return _react2.default.createElement(
                 'div',
-                { className: 'container' },
+                { className: 'jumbotron', style: { backgroundColor: _tool2.default.DIV_COLOR } },
                 _react2.default.createElement(
                     'div',
-                    { className: 'd-flex justify-content-left', style: { marginTop: 50, marginBottom: 50 } },
+                    { className: 'd-flex justify-content-left' },
                     _react2.default.createElement(
                         'form',
                         { onSubmit: this.onBtnSearch },
@@ -49086,10 +49098,7 @@ var Search = function (_React$Component) {
                                 'span',
                                 { className: 'badge badge-danger' },
                                 this.state.inputTips
-                            ),
-                            _react2.default.createElement('input', { type: 'submit',
-                                style: { position: 'absolute', left: -9999, width: 1, height: 1 },
-                                tabIndex: '-1' })
+                            )
                         )
                     )
                 )
@@ -49101,7 +49110,7 @@ var Search = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = Search;
-},{"react":9}],6:[function(require,module,exports) {
+},{"react":9,"../lib/tool":113}],6:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -49167,7 +49176,7 @@ var Entry = function (_React$Component) {
         };
         _this.ticker = undefined;
         _this.analysisState = [{ name: 'quote', path: 'quote', open: true, pass: false }, { name: 'keyRatio', path: 'key_ratio', open: true, pass: false }, { name: 'income', path: 'income_statement', open: true, pass: false }, { name: 'balance', path: 'balance_sheet', open: true, pass: false }, { name: 'cashflow', path: 'cashflow', open: true, pass: false }];
-        _this.url = _package2.default.runOnServer ? "http://120.78.240.132:3000" : "http://localhost";
+        _this.url = _package2.default.production ? "http://120.78.240.132:3000" : "http://localhost";
         _this.clearState = _this.clearState.bind(_this);
         return _this;
     }
@@ -49185,6 +49194,7 @@ var Entry = function (_React$Component) {
         key: 'startAnalysis',
         value: function startAnalysis(ticker) {
             this.setState({ loading: true });
+            this.clearState();
             this.ticker = ticker;
             this.analysisLoop();
         }
@@ -49250,7 +49260,6 @@ var Entry = function (_React$Component) {
                     startAnalysis: function startAnalysis(ticker) {
                         return _this3.startAnalysis(ticker);
                     },
-                    clearState: this.clearState,
                     loading: this.state.loading
                 }),
                 _react2.default.createElement(_debtMeasure2.default, null),

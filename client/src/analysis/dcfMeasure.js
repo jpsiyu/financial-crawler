@@ -113,8 +113,8 @@ class DCFMeasure extends React.Component {
             if (i == (l - 1)) {
                 termValue = this.terminalValue(predict, l)
             }
-            let sum = predict + termValue
-            let discount = parseFloat((sum / Math.pow(1 + wacc, i + 1)).toFixed(2))
+            let sum = tool.toFloat(predict + termValue)
+            let discount = tool.toFloat((sum / Math.pow(1 + wacc, i + 1)))
             fcfReport['Terminal'].push(termValue)
             fcfReport['Sum Predict Terminal'].push(sum)
             fcfReport['Sum Discount'].push(discount)
@@ -181,7 +181,7 @@ class DCFMeasure extends React.Component {
                 lose[key] = []
             }
             else {
-                measureData[key] = tool.toFloat(value[value.length-1])
+                measureData[key] = tool.toFloat(value[value.length - 1])
             }
         }
 
@@ -243,6 +243,7 @@ class DCFMeasure extends React.Component {
             'Cost Of Debt': [this.costOfDebtAfterTax()],
             'Market Price Equity': [this.marketEquity],
             'Market Price Debt': [this.marketDebt],
+            'Perpetuity Growth': [this.perpetuityGrowth],
             'Wacc': [this.wacc()]
         }
         const predictData = this.predict()
@@ -262,22 +263,25 @@ class DCFMeasure extends React.Component {
 
         return <div>
             <TransformTable data={report} title='DCF模型参数' />
-            <div className='row'>
-                <div className='col'>
-                    <BarChart
-                        x={this.fcfPass['Year']}
-                        y={this.fcfPass['Free cash flow']}
-                        title='自由现金流(M)'
-                    />
-                </div>
-                <div className='col'>
-                    <BarAndLineChart
-                        x={predictData.regressionX}
-                        y={predictData.historyY}
-                        y2={predictData.regressionY}
-                        title='自由现金流(M)'
-                        title2='自由现金流线性回归(M)'
-                    />
+            <div className='jumbotron' style={{ backgroundColor: tool.DIV_COLOR}} >
+                <h4>现金流线性回归预测</h4>
+                <div className='row'>
+                    <div className='col'>
+                        <BarChart
+                            x={this.fcfPass['Year']}
+                            y={this.fcfPass['Free cash flow']}
+                            title='自由现金流(M)'
+                        />
+                    </div>
+                    <div className='col'>
+                        <BarAndLineChart
+                            x={predictData.regressionX}
+                            y={predictData.historyY}
+                            y2={predictData.regressionY}
+                            title='自由现金流(M)'
+                            title2='自由现金流线性回归(M)'
+                        />
+                    </div>
                 </div>
             </div>
             <TransformTable data={fcfReport} title='现金流预测(M)' />
