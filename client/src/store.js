@@ -1,6 +1,7 @@
 import { createStore, combineReducers } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import macro from '../lib/macro'
+import pjson from '../../package.json'
 
 const quoteReducer = (state = {}, action) => {
     switch (action.type) {
@@ -46,9 +47,21 @@ const cashflowReducer = (state = {}, action) => {
     }
 }
 
+const commonReducer = (state = { searched: false }, action) => {
+    switch (action.type) {
+        case 'searched':
+            return { searched: true }
+        default:
+            return state
+    }
+}
+
 const rootReducer = (state = {}, action) => {
-    if (action.type === macro.STATE_CLEAR){
-        return action.payload
+    if (action.type === macro.STATE_CLEAR) {
+        const s = {
+            common: state.common
+        }
+        return s
     }
     else
         return appReducer(state, action)
@@ -59,12 +72,17 @@ const appReducer = combineReducers({
     keyRatio: keyRatioReducer,
     income: incomeReducer,
     balance: balanceReducer,
-    cashflow: cashflowReducer
+    cashflow: cashflowReducer,
+    common: commonReducer,
 })
 
-const store = createStore(
-    rootReducer,
-    composeWithDevTools()
-)
+const build = () => {
+    if (pjson.production)
+        return createStore(rootReducer)
+    else
+        return createStore(rootReducer, composeWithDevTools())
+}
+
+const store = build()
 
 export default store

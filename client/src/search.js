@@ -1,5 +1,7 @@
 import React from 'react'
 import tool from '../lib/tool'
+import {Intro} from './small'
+import {connect} from 'react-redux'
 
 const loadingSize = 30
 
@@ -19,6 +21,7 @@ class Search extends React.Component {
         if (this.checkInput()) {
             const ticker = this.searchInput.value.trim()
             this.props.startAnalysis(ticker)
+            if(!this.props.common.searched) this.props.actionSearch()
         }
     }
 
@@ -59,7 +62,8 @@ class Search extends React.Component {
     }
 
     render() {
-        return <div className='jumbotron' style={{ backgroundColor: tool.DIV_COLOR}}>
+        return <div className='jumbotron mt-3' style={{ backgroundColor: tool.DIV_COLOR}}>
+            <Intro />
             <div className='d-flex justify-content-left' >
                 <form onSubmit={this.onBtnSearch}>
                     <div className='form-group form-inline'>
@@ -80,5 +84,16 @@ class Search extends React.Component {
 
     }
 }
+const mapStateToProps = (state) => {
+    return {
+        common: state.common
+    }
+}
 
-export default Search
+const mapDispatchToProps = (dispatch) => {
+    return {
+        actionSearch: () => { dispatch({type:'searched', payload:null})} 
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Search)

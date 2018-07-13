@@ -5,6 +5,7 @@ import regression from 'regression'
 import tool from '../../lib/tool';
 import { connect } from 'react-redux';
 import macro from '../../lib/macro'
+import {NoData} from '../small'
 
 class DCFMeasure extends React.Component {
     constructor() {
@@ -295,7 +296,7 @@ class DCFMeasure extends React.Component {
         const title = '自由现金流分析'
         switch (this.state.health) {
             case macro.DATA_EMPTY:
-                return null
+                return <NoData title={title} />
             case macro.DATA_LOSE:
                 return <DataTable warn title={title} desc='以下数据缺失:' data={this.state.lose} />
             case macro.DATA_PERFECT:

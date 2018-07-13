@@ -1,13 +1,13 @@
 import React from 'react'
 import axios from 'axios'
 import pjson from '../../package.json'
-import store from './store'
 import DebtMeasure from './analysis/debtMeasure'
 import GrowthMeasure from './analysis/growthMeasure'
 import DCFMeasure from './analysis/dcfMeasure'
 import macro from '../lib/macro';
 import Search from './search'
-import Intro from './intro'
+import { connect } from 'react-redux'
+import {Hello} from './small'
 
 class Entry extends React.Component {
     constructor() {
@@ -28,7 +28,7 @@ class Entry extends React.Component {
     }
 
     clearState() {
-        store.dispatch({ type: macro.STATE_CLEAR, payload: {} })
+        this.props.actionClear()
         for (let i = 0; i < this.analysisState.length; i++) {
             let state = this.analysisState[i]
             state.pass = false
@@ -54,7 +54,7 @@ class Entry extends React.Component {
         if (target)
             this.specifyAnalysis(target)
         else
-            this.setState({ loading: false})
+            this.setState({ loading: false })
     }
 
 
@@ -73,7 +73,7 @@ class Entry extends React.Component {
             const serverMsg = response.data
             const rawData = JSON.parse(serverMsg.msg)
             const dictData = this.rawData2Dict(rawData)
-            store.dispatch({ type: state.name, payload: dictData })
+            this.props.actionReceive(state.name, dictData)
             this.analysisPass(state.name)
             this.analysisLoop()
         }).catch(error => console.log('ERR:', error))
@@ -89,17 +89,33 @@ class Entry extends React.Component {
     }
 
     render() {
-        return <div className="container">
-            <Intro />
-            <Search
-                startAnalysis={ticker => this.startAnalysis(ticker)}
-                loading={this.state.loading}
-            />
-            <DebtMeasure />
-            <GrowthMeasure />
-            <DCFMeasure />
-        </div>
+        if (this.props.common.searched) {
+            return <div className="container">
+                <Search startAnalysis={ticker => this.startAnalysis(ticker)} loading={this.state.loading} />
+                <DebtMeasure />
+                <GrowthMeasure />
+                <DCFMeasure />
+            </div>
+        }else{
+            return <div className="container">
+                <Search startAnalysis={ticker => this.startAnalysis(ticker)} loading={this.state.loading} />
+                <Hello />
+            </div>
+        }
     }
 }
 
-export default Entry
+const mapStateToProps = (state) => {
+    return {
+        common: state.common
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        actionReceive: (name, dictData) => dispatch({ type: name, payload: dictData }),
+        actionClear: () => dispatch({ type: macro.STATE_CLEAR, payload: {} })
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Entry)

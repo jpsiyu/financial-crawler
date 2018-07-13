@@ -1,4 +1,4 @@
-import { isIPv4 } from "net";
+import React from 'react'
 
 const DIV_COLOR = 'rgb(250,250,250)'
 const TABLE_COLOR = 'white'

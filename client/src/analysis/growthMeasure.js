@@ -4,6 +4,7 @@ import macro from '../../lib/macro'
 import { DataTable } from '../table'
 import { connect } from 'react-redux'
 import { BarChart } from '../chart'
+import {NoData} from '../small'
 
 class GrowthMeasure extends React.Component {
     constructor() {
@@ -55,7 +56,7 @@ class GrowthMeasure extends React.Component {
         const standard = '选取标准：Book Value与净利润稳定增长，成长趋势可预测'
         switch (this.state.health) {
             case macro.DATA_EMPTY:
-                return null
+                return <NoData title={title} />
             case macro.DATA_LOSE:
                 return <DataTable warn title={title} desc='以下数据缺失:' data={this.state.lose} />
             case macro.DATA_PERFECT:
