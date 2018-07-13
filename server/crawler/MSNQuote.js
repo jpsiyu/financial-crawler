@@ -1,6 +1,7 @@
 const Crawler = require('./crawler')
 const util = require('../util')
 const cheerio = require('cheerio')
+const request = require('request')
 
 class MSNQuote extends Crawler {
     constructor(ticker) {
@@ -26,9 +27,9 @@ class MSNQuote extends Crawler {
                 util.saveCrawled($.html())
                 const ul = $('ul.today-trading-container')
                 ul.find('li').each((index, obj) => {
-                    li = $(obj)
-                    keyTab = li.children().first()
-                    valueTab = keyTab.next()
+                    let li = $(obj)
+                    let keyTab = li.children().first()
+                    let valueTab = keyTab.next()
                     data.push([keyTab.text(), valueTab.text()])
                 })
             } else {
@@ -37,7 +38,7 @@ class MSNQuote extends Crawler {
 
             data = JSON.stringify(data)
             const ok = !err
-            if(ok) util.json2local(localPath, data)
+            if(ok) util.json2local(this.localPath, data)
             callback(ok, data)
         })
     }

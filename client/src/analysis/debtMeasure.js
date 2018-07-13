@@ -70,13 +70,14 @@ class DebtMesure extends React.Component {
     render() {
         this.check()
         const title = '权益与负债(M)'
+        const standard = '选取标准：1.债务权益比 < 0.5; 2.流动比率 > 1.5'
         switch (this.state.health) {
             case macro.DATA_EMPTY:
                 return null
             case macro.DATA_LOSE:
                 return <DataTable warn title={title} desc='以下数据缺失:' data={this.state.lose}/>
             case macro.DATA_PERFECT:
-                return <TransformTable title={title} data={this.state.measureData} />
+                return <TransformTable title={title} desc={standard} data={this.state.measureData} />
             default:
                 return null
         }

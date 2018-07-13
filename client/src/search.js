@@ -59,7 +59,7 @@ class Search extends React.Component {
     }
 
     render() {
-        return <div className='jumbotron' style={{ backgroundColor: tool.DIV_COLOR }}>
+        return <div className='jumbotron' style={{ backgroundColor: tool.DIV_COLOR}}>
             <div className='d-flex justify-content-left' >
                 <form onSubmit={this.onBtnSearch}>
                     <div className='form-group form-inline'>

@@ -1,5 +1,6 @@
 const Crawler = require('./crawler')
 const util = require('../util')
+const request = require('request')
 
 class MSKeyRatio extends Crawler {
     constructor(ticker) {
@@ -21,7 +22,10 @@ class MSKeyRatio extends Crawler {
         request(combinedUrl, (error, response, body) => {
             let data = []
             let ok = false
-            if (!error) {
+            if(body === ''){
+                util.log('Err: Body Empty')
+                data = JSON.stringify([])
+            }else if (!error) {
                 data = util.csvStr2Json(body)
                 util.json2local(this.localPath, data)
                 ok = true

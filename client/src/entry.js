@@ -7,6 +7,7 @@ import GrowthMeasure from './analysis/growthMeasure'
 import DCFMeasure from './analysis/dcfMeasure'
 import macro from '../lib/macro';
 import Search from './search'
+import Intro from './intro'
 
 class Entry extends React.Component {
     constructor() {
@@ -89,6 +90,7 @@ class Entry extends React.Component {
 
     render() {
         return <div className="container">
+            <Intro />
             <Search
                 startAnalysis={ticker => this.startAnalysis(ticker)}
                 loading={this.state.loading}

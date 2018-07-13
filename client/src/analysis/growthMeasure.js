@@ -52,6 +52,7 @@ class GrowthMeasure extends React.Component {
     render() {
         this.check()
         const title = '成长性分析'
+        const standard = '选取标准：Book Value与净利润稳定增长，成长趋势可预测'
         switch (this.state.health) {
             case macro.DATA_EMPTY:
                 return null
@@ -63,6 +64,7 @@ class GrowthMeasure extends React.Component {
                 const y2 = this.state.measureData['Earnings Per Share CNY']
                 return <div className='jumbotron' style={{backgroundColor:tool.DIV_COLOR}}>
                     <h4>{title}</h4>
+                    <p>{standard}</p>
                     <div className='row'>
                         <div className='col'>
                             <BarChart x={x} y={y1} title='每股净资产(M)' />

@@ -22215,6 +22215,7 @@ var DIV_COLOR = 'rgb(250,250,250)';
 var TABLE_COLOR = 'white';
 var DIV_COLOR_WARN = 'rgb(255,255,200)';
 var CHART_COLOR = 'white';
+var BG_COLOR = 'white';
 
 var empty = function empty(obj) {
     if (!obj) return true;
@@ -22266,6 +22267,7 @@ exports.default = {
     DIV_COLOR_WARN: DIV_COLOR_WARN,
     TABLE_COLOR: TABLE_COLOR,
     CHART_COLOR: CHART_COLOR,
+    BG_COLOR: BG_COLOR,
     toFloat: toFloat
 };
 },{"net":129}],113:[function(require,module,exports) {
@@ -22390,6 +22392,11 @@ var TransformTable = function TransformTable(props) {
             'h4',
             null,
             props.title
+        ),
+        _react2.default.createElement(
+            'p',
+            null,
+            props.desc
         ),
         _react2.default.createElement(
             'table',
@@ -24685,13 +24692,14 @@ var DebtMesure = function (_React$Component) {
         value: function render() {
             this.check();
             var title = '权益与负债(M)';
+            var standard = '选取标准：1.债务权益比 < 0.5; 2.流动比率 > 1.5';
             switch (this.state.health) {
                 case _macro2.default.DATA_EMPTY:
                     return null;
                 case _macro2.default.DATA_LOSE:
                     return _react2.default.createElement(_table.DataTable, { warn: true, title: title, desc: '\u4EE5\u4E0B\u6570\u636E\u7F3A\u5931:', data: this.state.lose });
                 case _macro2.default.DATA_PERFECT:
-                    return _react2.default.createElement(_table.TransformTable, { title: title, data: this.state.measureData });
+                    return _react2.default.createElement(_table.TransformTable, { title: title, desc: standard, data: this.state.measureData });
                 default:
                     return null;
             }
@@ -48172,6 +48180,7 @@ var GrowthMeasure = function (_React$Component) {
         value: function render() {
             this.check();
             var title = '成长性分析';
+            var standard = '选取标准：Book Value与净利润稳定增长，成长趋势可预测';
             switch (this.state.health) {
                 case _macro2.default.DATA_EMPTY:
                     return null;
@@ -48188,6 +48197,11 @@ var GrowthMeasure = function (_React$Component) {
                             'h4',
                             null,
                             title
+                        ),
+                        _react2.default.createElement(
+                            'p',
+                            null,
+                            standard
                         ),
                         _react2.default.createElement(
                             'div',
@@ -49110,6 +49124,75 @@ var Search = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = Search;
+},{"react":10,"../lib/tool":88}],370:[function(require,module,exports) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _tool = require('../lib/tool');
+
+var _tool2 = _interopRequireDefault(_tool);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var iconSize = 50;
+
+var Intro = function (_React$Component) {
+    _inherits(Intro, _React$Component);
+
+    function Intro() {
+        _classCallCheck(this, Intro);
+
+        return _possibleConstructorReturn(this, (Intro.__proto__ || Object.getPrototypeOf(Intro)).call(this));
+    }
+
+    _createClass(Intro, [{
+        key: 'render',
+        value: function render() {
+            return _react2.default.createElement(
+                'div',
+                { className: 'jumbotron', style: { backgroundColor: _tool2.default.DIV_COLOR } },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'media' },
+                    _react2.default.createElement('img', { src: 'logo.png', alt: 'Logo', className: 'mr-3 align-self-start', style: { width: iconSize } }),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'media-body' },
+                        _react2.default.createElement(
+                            'h5',
+                            null,
+                            '\u725B\u5927\u8F66\u4F30\u503C'
+                        ),
+                        _react2.default.createElement(
+                            'p',
+                            null,
+                            '\u6B22\u8FCE\u4F7F\u7528\u725B\u5927\u8F66\u4F30\u503C\u5DE5\u5177\uFF01\u8F93\u5165\u80A1\u7968\u4EE3\u7801\uFF0C\u725B\u5927\u8F66\u4E3A\u60A8\u6382\u91CF\u6382\u91CF\uFF01'
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return Intro;
+}(_react2.default.Component);
+
+exports.default = Intro;
 },{"react":10,"../lib/tool":88}],6:[function(require,module,exports) {
 'use strict';
 
@@ -49154,6 +49237,10 @@ var _macro2 = _interopRequireDefault(_macro);
 var _search = require('./search');
 
 var _search2 = _interopRequireDefault(_search);
+
+var _intro = require('./intro');
+
+var _intro2 = _interopRequireDefault(_intro);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -49256,6 +49343,7 @@ var Entry = function (_React$Component) {
             return _react2.default.createElement(
                 'div',
                 { className: 'container' },
+                _react2.default.createElement(_intro2.default, null),
                 _react2.default.createElement(_search2.default, {
                     startAnalysis: function startAnalysis(ticker) {
                         return _this3.startAnalysis(ticker);
@@ -49273,7 +49361,7 @@ var Entry = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = Entry;
-},{"react":10,"axios":35,"../../package.json":22,"./store":7,"./analysis/debtMeasure":26,"./analysis/growthMeasure":27,"./analysis/dcfMeasure":28,"../lib/macro":24,"./search":25}],91:[function(require,module,exports) {
+},{"react":10,"axios":35,"../../package.json":22,"./store":7,"./analysis/debtMeasure":26,"./analysis/growthMeasure":27,"./analysis/dcfMeasure":28,"../lib/macro":24,"./search":25,"./intro":370}],91:[function(require,module,exports) {
 /**
  * Copyright (c) 2014-present, Facebook, Inc.
  *

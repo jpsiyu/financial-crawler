@@ -1,5 +1,6 @@
 const Crawler = require('./crawler')
 const util = require('../util')
+const request = require('request')
 
 class MSReport extends Crawler {
     constructor(ticker, reportType) {
@@ -38,15 +39,18 @@ class MSReport extends Crawler {
 
     crawlWebSite(callback) {
         const url = 'http://financials.morningstar.com/ajax/ReportProcess4CSV.html'
-        const combinedUrl = util.financialUrl(url, ticker, reportType = this.reportType)
+        const combinedUrl = util.financialUrl(url, this.ticker, this.reportType)
         request(combinedUrl, (error, response, body) => {
             let data = []
             let ok = false
-            if (!error) {
+            if(body === ''){
+                util.log('Err: Body Empty')
+                data = JSON.stringify([])
+            }else if (!error) {
                 data = util.csvStr2Json(body)
                 util.json2local(this.localPath, data)
                 ok = true
-            } else {
+            }else {
                 util.log('ERR:', error)
                 data = JSON.stringify([])
             }

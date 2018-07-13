@@ -1,11 +1,8 @@
 const express = require('express')
-const request = require('request')
-const cheerio = require('cheerio')
 const util = require('./util.js')
 const path = require('path')
 const bodyParser = require('body-parser')
 
-const DATA_PATH = 'server/data'
 
 const MSNQuote = require('./crawler/MSNQuote')
 const MSKeyRatio = require('./crawler/MSKeyRatio')

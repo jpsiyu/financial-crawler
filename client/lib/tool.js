@@ -4,6 +4,7 @@ const DIV_COLOR = 'rgb(250,250,250)'
 const TABLE_COLOR = 'white'
 const DIV_COLOR_WARN = 'rgb(255,255,200)'
 const CHART_COLOR = 'white'
+const BG_COLOR = 'white'
 
 const empty = (obj) => {
     if (!obj) return true
@@ -58,5 +59,6 @@ export default {
     DIV_COLOR_WARN,
     TABLE_COLOR,
     CHART_COLOR,
+    BG_COLOR,
     toFloat,
 }
