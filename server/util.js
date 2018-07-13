@@ -8,6 +8,7 @@ const SAVE_HTML = false
 const SAVE_JSON = true
 const READ_LOCAL = true
 
+const DATA_PATH = 'server/data'
 const A_DAY = 24 * 3600 * 1000
 
 function log(...args) {
@@ -46,9 +47,9 @@ function local2json(path) {
     return data
 }
 
-function serverMsg(res, msg) {
+function serverMsg(res, msg, ok=true) {
     log('server msg sended')
-    res.status(200).json({ msg })
+    res.status(200).json({ msg, ok })
 }
 
 
@@ -121,4 +122,5 @@ module.exports = {
     keyRatioUrl,
     quoteUrl,
     checkTickerValid,
+    DATA_PATH,
 }
