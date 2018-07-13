@@ -52,7 +52,7 @@ class Search extends React.Component {
 
     conditionImg() {
         if (!this.props.loading) return null
-        return <img src="loading2.gif"
+        return <img src="loading.gif"
             className="img-fluid"
             alt="loading..."
             width={loadingSize}

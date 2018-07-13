@@ -54,7 +54,7 @@ const TransformTable = (props) => {
     return <div className='jumbotron' style={{backgroundColor:tool.DIV_COLOR}}>
         <h4>{props.title}</h4>
         <p>{props.desc}</p>
-        <table className='table table-bordered' style={{backgroundColor:tool.TABLE_COLOR}}>
+        <table className='table table-bordered table-sm table-responsive-md' style={{backgroundColor:tool.TABLE_COLOR}}>
             <thead><tr>{heads}</tr></thead>
             <tbody>{rowsTab}</tbody>
         </table>

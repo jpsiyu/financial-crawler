@@ -16,17 +16,17 @@ const Intro = (props) => {
 const NoData = (props) => {
     const size = 400
     const desc = '数据尚未采集'
-    return <div className='jumbotron' style={{ backgroundColor: tool.DIV_COLOR }}>
+    return <div className='jumbotron' style={{ backgroundColor: tool.DIV_COLOR_WARN}}>
         <h4>{props.title}</h4>
         <p>{desc}</p>
-        <img src='nodata.gif' style={{ width: size }} />
+        <img className='img-fluid' src='nodata.gif' style={{ width: size }} />
     </div>
 
 }
 
 const Hello = (props) => {
     const size = 300
-    return <div className='jumbotron' style={{ backgroundColor: tool.BG_COLOR}}>
+    return <div className='jumbotron' style={{ backgroundColor: tool.DIV_COLOR}}>
         <img  src='welcome.gif' style={{ width: size, margin:'auto', display:'block'}} />
     </div>
 }

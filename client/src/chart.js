@@ -24,7 +24,7 @@ const BarChart = (props) => {
     }
     let options = { maintainAspectRatio: false }
     return <div className='jumbotron' style={{backgroundColor:tool.CHART_COLOR}} >
-        <Bar data={data} width={width} height={height} options={options} />
+        <Bar data={data} width={width} options={options} />
     </div>
 }
 
@@ -47,7 +47,7 @@ const LineChart = (props) => {
     }
     let options = { maintainAspectRatio: false }
     return <div className='jumbotron' style={{backgroundColor:tool.CHART_COLOR}} >
-        <Bar data={data} width={width} height={height} options={options} />
+        <Bar data={data} width={width} options={options} />
     </div>
 
 }
@@ -81,7 +81,7 @@ const BarAndLineChart = (props) => {
     }
     let options = { maintainAspectRatio: false }
     return <div className='jumbotron' style={{backgroundColor:tool.CHART_COLOR}} >
-        <Bar data={data} width={width} height={height} options={options} />
+        <Bar data={data} width={width} options={options} />
     </div>
 }
 
