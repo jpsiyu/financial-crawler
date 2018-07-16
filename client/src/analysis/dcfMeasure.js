@@ -9,16 +9,19 @@ class DCFMeasure extends React.Component {
     constructor() {
         super()
         this.dcfCalculator = new DcfCalculator()
-        this.selectMethod = this.selectMethod.bind(this)
+        this.onMethodChange = this.onMethodChange.bind(this)
+        this.onDurationChange = this.onDurationChange.bind(this)
         this.state = {
-            method: macro.MethodRegression
+            method: macro.MethodRegression,
+            duration: macro.Duration5,
         }
     }
 
     analysis() {
         const report = this.dcfCalculator.settingReport()
         const predictData = this.state.method === macro.MethodRegression ?
-            this.dcfCalculator.predictRegression() : this.dcfCalculator.predictOperatingGrowth()
+            this.dcfCalculator.predictRegression(this.state.duration) : 
+            this.dcfCalculator.predictOperatingGrowth(this.state.duration)
 
         const fcfReport = {
             'Year': predictData.futureX,
@@ -33,26 +36,32 @@ class DCFMeasure extends React.Component {
 
         return <div>
             <TransformTable data={report} title='DCF模型参数' />
-            <PredictChart  method={this.state.method} selectMethod={this.selectMethod} predictData={predictData}/>
+            <PredictChart
+                method={this.state.method}
+                onMethodChange={this.onMethodChange}
+                predictData={predictData}
+                duration={this.state.duration}
+                onDurationChange={this.onDurationChange}
+            />
             <TransformTable data={fcfReport} title='现金流预测(M)' />
             <TransformTable data={valuationReport} title='估值计算' />
         </div>
 
     }
 
-    selectMethod(event) {
+    onMethodChange(event) {
         this.setState({
-            method:event.target.value
+            method: event.target.value
+        })
+    }
+
+    onDurationChange(event){
+        this.setState({
+            duration: parseInt(event.target.value)
         })
     }
 
     render() {
-        const data = {
-            quote: this.props.quote,
-            income: this.props.income,
-            balance: this.props.balance,
-            cashflow: this.props.cashflow
-        }
         this.dcfCalculator.startAnalyse()
         const title = '自由现金流分析'
         switch (this.dcfCalculator.health) {
@@ -77,6 +86,7 @@ const PredictChart = (props) => {
         <h4>{chartTitle}</h4>
         <div className='row'>
             <div className='col-md-5'>
+
                 <div className="input-group " >
                     <div className="input-group-prepend">
                         <label className="input-group-text" htmlFor="inputGroupSelect01">预测方法</label>
@@ -84,11 +94,24 @@ const PredictChart = (props) => {
 
                     <select className="custom-select"
                         id="inputGroupSelect01"
-                        value={props.method}
-                        onChange={props.selectMethod}>
+                        onChange={props.onMethodChange}>
 
                         <option value={macro.MethodRegression}>自由现金流线性回归</option>
                         <option value={macro.MethodCAGR}>营业利润复合增长率</option>
+                    </select>
+                </div>
+
+                <div className="input-group " >
+                    <div className="input-group-prepend">
+                        <label className="input-group-text" htmlFor="inputGroupSelect02">预测时长</label>
+                    </div>
+
+                    <select className="custom-select"
+                        id="inputGroupSelect02"
+                        onChange={props.onDurationChange}>
+
+                        <option value={macro.Duration5}>未来5年</option>
+                        <option value={macro.Duration10}>未来10年</option>
                     </select>
                 </div>
             </div>

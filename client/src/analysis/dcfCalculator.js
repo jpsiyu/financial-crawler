@@ -14,7 +14,7 @@ class DcfCalculator {
         this.measureData = null
     }
 
-    startAnalyse(){
+    startAnalyse() {
         const all = store.getState()
         const data = {
             quote: all.quote,
@@ -26,7 +26,7 @@ class DcfCalculator {
     }
 
     check(data) {
-        const {quote, income, balance, cashflow} = data
+        const { quote, income, balance, cashflow } = data
         if (tool.empty(quote) || tool.empty(income) || tool.empty(balance) || tool.empty(cashflow)) {
             this.health = macro.DATA_EMPTY
             return
@@ -41,33 +41,23 @@ class DcfCalculator {
             'Market Cap.',
             'Shares Outstanding'
         ]
-        for (let i = 0; i < measureList.length; i++) {
-            let key = measureList[i]
+        measureList.forEach(key => {
             let value = quote[key]
-            if (!value || value.length === 0) {
-                lose[key] = []
-            }
-            else if (value[0] == '' || value[0] == '-')
-                lose[key] = value
-            else
-                measureData[key] = key == 'Beta' ? tool.toFloat(value[0]) : tool.toMillion(value[0])
-        }
+            if (!value || value.length === 0) lose[key] = []
+            else if (value[0] == '' || value[0] == '-') lose[key] = value
+            else measureData[key] = key == 'Beta' ? tool.toFloat(value[0]) : tool.toMillion(value[0])
+        })
 
         // measure balance data
         measureList = [
             'Short-term debt',
             'Other long-term liabilities'
         ]
-        for (let i = 0; i < measureList.length; i++) {
-            let key = measureList[i]
+        measureList.forEach(key => {
             let value = balance[key]
-            if (!value || value.length === 0) {
-                lose[key] = []
-            }
-            else {
-                measureData[key] = tool.toFloat(value[value.length - 1])
-            }
-        }
+            if (!value || value.length === 0) lose[key] = []
+            else measureData[key] = tool.toFloat(value[value.length - 1])
+        })
 
         // measure income data
         measureList = [
@@ -75,36 +65,25 @@ class DcfCalculator {
             'Income before taxes',
             'Operating income',
         ]
-        for (let i = 0; i < measureList.length; i++) {
-            let key = measureList[i]
+        measureList.forEach(key => {
             let value = income[key]
-            if (!value || value.length === 0) {
-                lose[key] = []
-            }
-            else {
-                measureData[key] = tool.toNumList(value).slice(0, -1)
-            }
-        }
+            if (!value || value.length === 0) lose[key] = []
+            else measureData[key] = tool.toNumList(value).slice(0, -1)
+        })
 
         // measure cashflow data
         measureList = [
             'Fiscal year ends in December. CNY in millions except per share data.',
             'Free cash flow'
         ]
-        for (let i = 0; i < measureList.length; i++) {
-            let key = measureList[i]
+        measureList.forEach((key,i) => {
             let value = cashflow[key]
-            if (!value || value.length === 0) {
-                lose[key] = []
-            }
+            if (!value || value.length === 0) lose[key] = []
             else {
-                if (i === 0)
-                    measureData['Year'] = tool.sliceYearList(value).slice(0, -1)
-                else {
-                    measureData[key] = tool.toNumList(value).slice(0, -1)
-                }
+                if (i === 0) measureData['Year'] = tool.sliceYearList(value).slice(0, -1)
+                else measureData[key] = tool.toNumList(value).slice(0, -1)
             }
-        }
+        })
 
         if (!tool.empty(lose)) {
             this.health = macro.DATA_LOSE

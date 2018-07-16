@@ -13,4 +13,7 @@ export default {
 
     MethodRegression: 'MethodRegression',
     MethodCAGR: 'MethodCAGR',
+
+    Duration5: 5,
+    Duration10: 10,
 }

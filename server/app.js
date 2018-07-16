@@ -2,7 +2,7 @@ const express = require('express')
 const util = require('./util.js')
 const path = require('path')
 const bodyParser = require('body-parser')
-
+const cors = require('cors')
 
 const MSNQuote = require('./crawler/MSNQuote')
 const MSKeyRatio = require('./crawler/MSKeyRatio')
@@ -12,6 +12,7 @@ const app = express()
 app.use(express.static(path.resolve(__dirname, '../dist')))
 app.use(express.static(path.resolve(__dirname, '../client/public')))
 app.use(bodyParser.json())
+app.use(cors())
 
 app.use((req, res, next) => {
     util.log(`${req.method},${req.url}`)
