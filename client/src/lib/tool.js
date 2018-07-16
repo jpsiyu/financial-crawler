@@ -39,7 +39,7 @@ const toMillion = (value) => {
 
 const toFloat = (value, d = 2) => {
     if (value == '' || isNaN(value)) return 0
-    return parseFloat(value).toFixed(2) * 1
+    return parseFloat(value).toFixed(d) * 1
 }
 
 export default {

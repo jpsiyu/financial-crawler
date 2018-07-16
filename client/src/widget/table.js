@@ -1,5 +1,4 @@
 import React from 'react'
-import tool from '../lib/tool'
 import macro from '../lib/macro'
 
 const DataTable = (props) => {

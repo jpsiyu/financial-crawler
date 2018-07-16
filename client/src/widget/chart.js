@@ -23,9 +23,8 @@ const BarChart = (props) => {
             },
         ]
     }
-    let options = { maintainAspectRatio: false }
-    return <div className='jumbotron' style={{backgroundColor:macro.CHART_COLOR}} >
-        <Bar data={data} width={width} options={options} />
+    return <div className='jumbotron' style={{ backgroundColor: macro.CHART_COLOR }} >
+        <Bar data={data} width={width} height={height} />
     </div>
 }
 
@@ -46,9 +45,8 @@ const LineChart = (props) => {
             },
         ]
     }
-    let options = { maintainAspectRatio: false }
-    return <div className='jumbotron' style={{backgroundColor:macro.CHART_COLOR}} >
-        <Bar data={data} width={width} options={options} />
+    return <div className='jumbotron' style={{ backgroundColor: macro.CHART_COLOR }} >
+        <Bar data={data} width={width} />
     </div>
 
 }
@@ -80,10 +78,50 @@ const BarAndLineChart = (props) => {
             }
         ]
     }
-    let options = { maintainAspectRatio: false }
-    return <div className='jumbotron' style={{backgroundColor:macro.CHART_COLOR}} >
-        <Bar data={data} width={width} options={options} />
+    return <div className='jumbotron' style={{ backgroundColor: macro.CHART_COLOR }} >
+        <Bar data={data} width={width} height={height} />
     </div>
 }
 
-export { BarChart, LineChart, BarAndLineChart}
+
+const BarAndBarChart = (props) => {
+    const labels = props.x
+    const values = props.y
+    const values2 = props.y2
+    const title = props.title ? props.title : ''
+    const title2 = props.title2 ? props.title2 : ''
+    let data = {
+        labels: labels,
+        datasets: [
+            {
+                label: title,
+                backgroundColor: blue,
+                borderColor: blue,
+                data: values
+            },
+            {
+                label: title2,
+                data: values2,
+                borderColor: yellow,
+                backgroundColor: yellow,
+                pointBorderColor: yellow,
+                pointBackgroundColor: yellow,
+                fill: false,
+            }
+        ]
+    }
+    const options = {
+        legend: {
+            display: true,
+            labels: { 
+                fontSize: 10,
+                boxWidth: 10,
+            }
+        }
+    }
+    return <div className='jumbotron' style={{ backgroundColor: macro.CHART_COLOR }} >
+        <Bar data={data} width={width} height={height} options={options} />
+    </div>
+}
+
+export { BarChart, LineChart, BarAndLineChart, BarAndBarChart }

@@ -10,4 +10,7 @@ export default {
     DIV_COLOR_WARN: 'rgb(255,255,200)',
     CHART_COLOR: 'white',
     BG_COLOR: 'white',
+
+    MethodRegression: 'MethodRegression',
+    MethodCAGR: 'MethodCAGR',
 }

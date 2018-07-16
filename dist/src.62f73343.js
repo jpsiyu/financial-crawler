@@ -21454,7 +21454,7 @@ var toFloat = function toFloat(value) {
     var d = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 2;
 
     if (value == '' || isNaN(value)) return 0;
-    return parseFloat(value).toFixed(2) * 1;
+    return parseFloat(value).toFixed(d) * 1;
 };
 
 exports.default = {
@@ -21481,7 +21481,10 @@ exports.default = {
     TABLE_COLOR: 'white',
     DIV_COLOR_WARN: 'rgb(255,255,200)',
     CHART_COLOR: 'white',
-    BG_COLOR: 'white'
+    BG_COLOR: 'white',
+
+    MethodRegression: 'MethodRegression',
+    MethodCAGR: 'MethodCAGR'
 };
 },{}],119:[function(require,module,exports) {
 'use strict';
@@ -21494,10 +21497,6 @@ exports.TransformTable = exports.DataTable = undefined;
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
-
-var _tool = require('../lib/tool');
-
-var _tool2 = _interopRequireDefault(_tool);
 
 var _macro = require('../lib/macro');
 
@@ -21638,7 +21637,7 @@ var TransformTable = function TransformTable(props) {
 
 exports.DataTable = DataTable;
 exports.TransformTable = TransformTable;
-},{"react":14,"../lib/tool":118,"../lib/macro":31}],131:[function(require,module,exports) {
+},{"react":14,"../lib/macro":31}],131:[function(require,module,exports) {
 /**
  * Copyright (c) 2013-present, Facebook, Inc.
  *
@@ -47951,7 +47950,7 @@ exports.Chart = _chart2.default;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.BarAndLineChart = exports.LineChart = exports.BarChart = undefined;
+exports.BarAndBarChart = exports.BarAndLineChart = exports.LineChart = exports.BarChart = undefined;
 
 var _react = require('react');
 
@@ -47987,11 +47986,10 @@ var BarChart = function BarChart(props) {
             data: values
         }]
     };
-    var options = { maintainAspectRatio: false };
     return _react2.default.createElement(
         'div',
         { className: 'jumbotron', style: { backgroundColor: _macro2.default.CHART_COLOR } },
-        _react2.default.createElement(_reactChartjs.Bar, { data: data, width: width, options: options })
+        _react2.default.createElement(_reactChartjs.Bar, { data: data, width: width, height: height })
     );
 };
 
@@ -48010,11 +48008,10 @@ var LineChart = function LineChart(props) {
             data: values
         }]
     };
-    var options = { maintainAspectRatio: false };
     return _react2.default.createElement(
         'div',
         { className: 'jumbotron', style: { backgroundColor: _macro2.default.CHART_COLOR } },
-        _react2.default.createElement(_reactChartjs.Bar, { data: data, width: width, options: options })
+        _react2.default.createElement(_reactChartjs.Bar, { data: data, width: width })
     );
 };
 
@@ -48042,17 +48039,56 @@ var BarAndLineChart = function BarAndLineChart(props) {
             fill: false
         }]
     };
-    var options = { maintainAspectRatio: false };
     return _react2.default.createElement(
         'div',
         { className: 'jumbotron', style: { backgroundColor: _macro2.default.CHART_COLOR } },
-        _react2.default.createElement(_reactChartjs.Bar, { data: data, width: width, options: options })
+        _react2.default.createElement(_reactChartjs.Bar, { data: data, width: width, height: height })
+    );
+};
+
+var BarAndBarChart = function BarAndBarChart(props) {
+    var labels = props.x;
+    var values = props.y;
+    var values2 = props.y2;
+    var title = props.title ? props.title : '';
+    var title2 = props.title2 ? props.title2 : '';
+    var data = {
+        labels: labels,
+        datasets: [{
+            label: title,
+            backgroundColor: blue,
+            borderColor: blue,
+            data: values
+        }, {
+            label: title2,
+            data: values2,
+            borderColor: yellow,
+            backgroundColor: yellow,
+            pointBorderColor: yellow,
+            pointBackgroundColor: yellow,
+            fill: false
+        }]
+    };
+    var options = {
+        legend: {
+            display: true,
+            labels: {
+                fontSize: 10,
+                boxWidth: 10
+            }
+        }
+    };
+    return _react2.default.createElement(
+        'div',
+        { className: 'jumbotron', style: { backgroundColor: _macro2.default.CHART_COLOR } },
+        _react2.default.createElement(_reactChartjs.Bar, { data: data, width: width, height: height, options: options })
     );
 };
 
 exports.BarChart = BarChart;
 exports.LineChart = LineChart;
 exports.BarAndLineChart = BarAndLineChart;
+exports.BarAndBarChart = BarAndBarChart;
 },{"react":14,"react-chartjs-2":149,"../lib/tool":118,"../lib/macro":31}],29:[function(require,module,exports) {
 'use strict';
 
@@ -48153,7 +48189,7 @@ var GrowthMeasure = function (_React$Component) {
                     var y2 = this.state.measureData['Earnings Per Share CNY'];
                     return _react2.default.createElement(
                         'div',
-                        { className: 'jumbotron', style: { backgroundColor: _tool2.default.DIV_COLOR } },
+                        { className: 'jumbotron', style: { backgroundColor: _macro2.default.DIV_COLOR } },
                         _react2.default.createElement(
                             'h4',
                             null,
@@ -48169,12 +48205,12 @@ var GrowthMeasure = function (_React$Component) {
                             { className: 'row' },
                             _react2.default.createElement(
                                 'div',
-                                { className: 'col' },
+                                { className: 'col-md-6' },
                                 _react2.default.createElement(_chart.BarChart, { x: x, y: y1, title: '\u6BCF\u80A1\u51C0\u8D44\u4EA7(M)' })
                             ),
                             _react2.default.createElement(
                                 'div',
-                                { className: 'col' },
+                                { className: 'col-md-6' },
                                 _react2.default.createElement(_chart.BarChart, { x: x, y: y2, title: '\u6BCF\u80A1\u51C0\u5229\u6DA6(M)' })
                             )
                         )
@@ -48583,7 +48619,149 @@ var global = arguments[3];
   module.exports = createWrapper();
 });
 
-},{}],30:[function(require,module,exports) {
+},{}],43:[function(require,module,exports) {
+"use strict";
+
+var compose = require('redux').compose;
+
+exports.__esModule = true;
+exports.composeWithDevTools = (
+  typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ :
+    function() {
+      if (arguments.length === 0) return undefined;
+      if (typeof arguments[0] === 'object') return compose;
+      return compose.apply(null, arguments);
+    }
+);
+
+exports.devToolsEnhancer = (
+  typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION__ ?
+    window.__REDUX_DEVTOOLS_EXTENSION__ :
+    function() { return function(noop) { return noop; } }
+);
+
+},{"redux":42}],11:[function(require,module,exports) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _redux = require('redux');
+
+var _reduxDevtoolsExtension = require('redux-devtools-extension');
+
+var _macro = require('./lib/macro');
+
+var _macro2 = _interopRequireDefault(_macro);
+
+var _package = require('../../package.json');
+
+var _package2 = _interopRequireDefault(_package);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var quoteReducer = function quoteReducer() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var action = arguments[1];
+
+    switch (action.type) {
+        case 'quote':
+            return action.payload;
+        default:
+            return state;
+    }
+};
+
+var keyRatioReducer = function keyRatioReducer() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var action = arguments[1];
+
+    switch (action.type) {
+        case 'keyRatio':
+            return action.payload;
+        default:
+            return state;
+    }
+};
+
+var incomeReducer = function incomeReducer() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var action = arguments[1];
+
+    switch (action.type) {
+        case 'income':
+            return action.payload;
+        default:
+            return state;
+    }
+};
+
+var balanceReducer = function balanceReducer() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var action = arguments[1];
+
+    switch (action.type) {
+        case 'balance':
+            return action.payload;
+        default:
+            return state;
+    }
+};
+var cashflowReducer = function cashflowReducer() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var action = arguments[1];
+
+    switch (action.type) {
+        case 'cashflow':
+            return action.payload;
+        default:
+            return state;
+    }
+};
+
+var commonReducer = function commonReducer() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { searched: false };
+    var action = arguments[1];
+
+    switch (action.type) {
+        case 'searched':
+            return { searched: true };
+        default:
+            return state;
+    }
+};
+
+var rootReducer = function rootReducer() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var action = arguments[1];
+
+    if (action.type === _macro2.default.STATE_CLEAR) {
+        var s = {
+            common: state.common
+        };
+        return s;
+    } else return appReducer(state, action);
+};
+
+var appReducer = (0, _redux.combineReducers)({
+    quote: quoteReducer,
+    keyRatio: keyRatioReducer,
+    income: incomeReducer,
+    balance: balanceReducer,
+    cashflow: cashflowReducer,
+    common: commonReducer
+});
+
+var build = function build() {
+    if (_package2.default.production) return (0, _redux.createStore)(rootReducer);else return (0, _redux.createStore)(rootReducer, (0, _reduxDevtoolsExtension.composeWithDevTools)());
+};
+
+var store = build();
+
+exports.default = store;
+},{"redux":42,"redux-devtools-extension":43,"./lib/macro":31,"../../package.json":26}],336:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -48592,81 +48770,149 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = require('react');
+var _macro = require('../lib/macro');
 
-var _react2 = _interopRequireDefault(_react);
-
-var _table = require('../widget/table');
-
-var _chart = require('../widget/chart');
-
-var _regression = require('regression');
-
-var _regression2 = _interopRequireDefault(_regression);
+var _macro2 = _interopRequireDefault(_macro);
 
 var _tool = require('../lib/tool');
 
 var _tool2 = _interopRequireDefault(_tool);
 
-var _reactRedux = require('react-redux');
+var _regression = require('regression');
 
-var _macro = require('../lib/macro');
+var _regression2 = _interopRequireDefault(_regression);
 
-var _macro2 = _interopRequireDefault(_macro);
+var _store = require('../store');
 
-var _small = require('../widget/small');
+var _store2 = _interopRequireDefault(_store);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+var DcfCalculator = function () {
+    function DcfCalculator() {
+        _classCallCheck(this, DcfCalculator);
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+        this.riskFree = 0.036;
+        this.riskPremium = 0.035;
+        this.perpetuityGrowth = 0.03;
 
-var DCFMeasure = function (_React$Component) {
-    _inherits(DCFMeasure, _React$Component);
-
-    function DCFMeasure() {
-        _classCallCheck(this, DCFMeasure);
-
-        var _this = _possibleConstructorReturn(this, (DCFMeasure.__proto__ || Object.getPrototypeOf(DCFMeasure)).call(this));
-
-        _this.riskFree = 0.036;
-        _this.riskPremium = 0.035;
-        _this.perpetuityGrowth = 0.03;
-        _this.state = {
-            health: _macro2.default.DATA_EMPTY,
-            lose: {},
-            measureData: null
-        };
-        return _this;
+        this.health = _macro2.default.DATA_EMPTY;
+        this.lose = {};
+        this.measureData = null;
     }
 
-    _createClass(DCFMeasure, [{
+    _createClass(DcfCalculator, [{
+        key: 'startAnalyse',
+        value: function startAnalyse() {
+            var all = _store2.default.getState();
+            var data = {
+                quote: all.quote,
+                income: all.income,
+                balance: all.balance,
+                cashflow: all.cashflow
+            };
+            this.check(data);
+        }
+    }, {
+        key: 'check',
+        value: function check(data) {
+            var quote = data.quote,
+                income = data.income,
+                balance = data.balance,
+                cashflow = data.cashflow;
+
+            if (_tool2.default.empty(quote) || _tool2.default.empty(income) || _tool2.default.empty(balance) || _tool2.default.empty(cashflow)) {
+                this.health = _macro2.default.DATA_EMPTY;
+                return;
+            }
+
+            var measureData = {};
+            var lose = {};
+
+            // measure quote data
+            var measureList = ['Beta', 'Market Cap.', 'Shares Outstanding'];
+            for (var i = 0; i < measureList.length; i++) {
+                var key = measureList[i];
+                var value = quote[key];
+                if (!value || value.length === 0) {
+                    lose[key] = [];
+                } else if (value[0] == '' || value[0] == '-') lose[key] = value;else measureData[key] = key == 'Beta' ? _tool2.default.toFloat(value[0]) : _tool2.default.toMillion(value[0]);
+            }
+
+            // measure balance data
+            measureList = ['Short-term debt', 'Other long-term liabilities'];
+            for (var _i = 0; _i < measureList.length; _i++) {
+                var _key = measureList[_i];
+                var _value = balance[_key];
+                if (!_value || _value.length === 0) {
+                    lose[_key] = [];
+                } else {
+                    measureData[_key] = _tool2.default.toFloat(_value[_value.length - 1]);
+                }
+            }
+
+            // measure income data
+            measureList = ['Provision for income taxes', 'Income before taxes', 'Operating income'];
+            for (var _i2 = 0; _i2 < measureList.length; _i2++) {
+                var _key2 = measureList[_i2];
+                var _value2 = income[_key2];
+                if (!_value2 || _value2.length === 0) {
+                    lose[_key2] = [];
+                } else {
+                    measureData[_key2] = _tool2.default.toNumList(_value2).slice(0, -1);
+                }
+            }
+
+            // measure cashflow data
+            measureList = ['Fiscal year ends in December. CNY in millions except per share data.', 'Free cash flow'];
+            for (var _i3 = 0; _i3 < measureList.length; _i3++) {
+                var _key3 = measureList[_i3];
+                var _value3 = cashflow[_key3];
+                if (!_value3 || _value3.length === 0) {
+                    lose[_key3] = [];
+                } else {
+                    if (_i3 === 0) measureData['Year'] = _tool2.default.sliceYearList(_value3).slice(0, -1);else {
+                        measureData[_key3] = _tool2.default.toNumList(_value3).slice(0, -1);
+                    }
+                }
+            }
+
+            if (!_tool2.default.empty(lose)) {
+                this.health = _macro2.default.DATA_LOSE;
+                this.lose = lose;
+            } else {
+                this.health = _macro2.default.DATA_PERFECT;
+                this.measureData = measureData;
+                this.modelInit();
+            }
+        }
+    }, {
         key: 'modelInit',
         value: function modelInit() {
-            var debt = this.state.measureData['Short-term debt'] + this.state.measureData['Other long-term liabilities'];
+            var debt = this.measureData['Short-term debt'] + this.measureData['Other long-term liabilities'];
 
-            var len = this.state.measureData['Provision for income taxes'].length;
+            var len = this.measureData['Provision for income taxes'].length;
             var rateSum = 0;
             for (var i = 0; i < len; i++) {
-                var taxPay = this.state.measureData['Provision for income taxes'][i];
-                var income = this.state.measureData['Income before taxes'][i];
+                var taxPay = this.measureData['Provision for income taxes'][i];
+                var income = this.measureData['Income before taxes'][i];
                 var rate = taxPay / income;
                 rateSum += rate;
             }
             var taxRate = _tool2.default.toFloat(rateSum / len);
 
-            this.beta = this.state.measureData['Beta'];
+            this.beta = this.measureData['Beta'];
             this.taxRate = taxRate;
-            this.marketEquity = this.state.measureData['Market Cap.'];
+            this.marketEquity = this.measureData['Market Cap.'];
             this.marketDebt = debt;
             this.fcfPass = {
-                'Year': this.state.measureData['Year'],
-                'Free cash flow': this.state.measureData['Free cash flow']
+                'Year': this.measureData['Year'],
+                'Free cash flow': this.measureData['Free cash flow']
             };
-            this.shareOutstanding = this.state.measureData['Shares Outstanding'];
+            this.operatingIncome = this.measureData['Operating income'];
+            this.shareOutstanding = this.measureData['Shares Outstanding'];
         }
     }, {
         key: 'costOfEquity',
@@ -48687,14 +48933,23 @@ var DCFMeasure = function (_React$Component) {
             return parseFloat(afterTax.toFixed(4));
         }
     }, {
+        key: 'calCAGR',
+        value: function calCAGR() {
+            var start = this.operatingIncome[0];
+            var end = this.operatingIncome[this.operatingIncome.length - 1];
+            var year = this.operatingIncome.length;
+            var cagr = Math.pow(end / start, 1 / year) - 1;
+            return _tool2.default.toFloat(cagr, 4);
+        }
+    }, {
         key: 'wacc',
         value: function wacc() {
             var res = (this.marketEquity * this.costOfEquity() + this.marketDebt * this.costOfDebtAfterTax()) / (this.marketEquity + this.marketDebt);
             return parseFloat(res.toFixed(4));
         }
     }, {
-        key: 'predict',
-        value: function predict() {
+        key: 'predictRegression',
+        value: function predictRegression() {
             var num = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 5;
 
             var data = [];
@@ -48709,21 +48964,64 @@ var DCFMeasure = function (_React$Component) {
             var endYear = lastYear + num;
 
             var predictData = {
-                regressionX: [],
-                regressionY: [],
-                historyY: [],
+                fullX: [],
+                fullPredictY: [],
+                fullHistoryY: [],
                 futureX: [],
                 futureY: []
             };
-            for (var _i = startYear, j = 0; _i <= endYear; _i++, j++) {
-                predictData.regressionX.push(_i);
-                var predictValue = parseFloat((k * _i + b).toFixed(2));
-                predictData.regressionY.push(predictValue);
+            for (var _i4 = startYear, j = 0; _i4 <= endYear; _i4++, j++) {
+                predictData.fullX.push(_i4);
+                var predictValue = parseFloat((k * _i4 + b).toFixed(2));
+                predictData.fullPredictY.push(predictValue);
                 var value = j >= this.fcfPass['Year'].length ? 0 : this.fcfPass['Free cash flow'][j];
-                predictData.historyY.push(value);
-                if (_i > lastYear) {
-                    predictData.futureX.push(_i);
+                predictData.fullHistoryY.push(value);
+                if (_i4 > lastYear) {
+                    predictData.futureX.push(_i4);
                     predictData.futureY.push(predictValue);
+                }
+            }
+            return predictData;
+        }
+    }, {
+        key: 'predictOperatingGrowth',
+        value: function predictOperatingGrowth() {
+            var num = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 5;
+
+            var fcfSum = 0;
+            var fcfValue = this.fcfPass['Free cash flow'];
+            for (var i = 0; i < fcfValue.length; i++) {
+                fcfSum += fcfValue[i];
+            }
+            var fcfMean = _tool2.default.toFloat(fcfSum / fcfValue.length);
+
+            var startYear = parseInt(this.fcfPass['Year'][0]);
+            var lastYear = parseInt(this.fcfPass['Year'][this.fcfPass['Year'].length - 1]);
+            var endYear = lastYear + num;
+
+            var predictData = {
+                fullX: [],
+                fullPredictY: [],
+                fullHistoryY: [],
+                futureX: [],
+                futureY: []
+            };
+            var cagr = this.calCAGR();
+            var calWithCagr = function calWithCagr(year) {
+                return _tool2.default.toFloat(fcfMean * Math.pow(cagr + 1, year));
+            };
+
+            for (var _i5 = startYear, j = 0; _i5 <= endYear; _i5++, j++) {
+                predictData.fullX.push(_i5);
+                var predictValue = calWithCagr(j + 1);
+                if (j >= this.fcfPass['Year'].length) {
+                    predictData.fullPredictY.push(predictValue);
+                    predictData.fullHistoryY.push(0);
+                    predictData.futureX.push(_i5);
+                    predictData.futureY.push(predictValue);
+                } else {
+                    predictData.fullPredictY.push(0);
+                    predictData.fullHistoryY.push(this.fcfPass['Free cash flow'][j]);
                 }
             }
             return predictData;
@@ -48775,81 +49073,8 @@ var DCFMeasure = function (_React$Component) {
             return valuationReport;
         }
     }, {
-        key: 'check',
-        value: function check() {
-            var quote = this.props.quote;
-            var income = this.props.income;
-            var balance = this.props.balance;
-            var cashflow = this.props.cashflow;
-            if (_tool2.default.empty(quote) || _tool2.default.empty(income) || _tool2.default.empty(balance) || _tool2.default.empty(cashflow)) {
-                this.state.health = _macro2.default.DATA_EMPTY;
-                return;
-            }
-
-            var measureData = {};
-            var lose = {};
-
-            // measure quote data
-            var measureList = ['Beta', 'Market Cap.', 'Shares Outstanding'];
-            for (var i = 0; i < measureList.length; i++) {
-                var key = measureList[i];
-                var value = quote[key];
-                if (!value || value.length === 0) {
-                    lose[key] = [];
-                } else if (value[0] == '' || value[0] == '-') lose[key] = value;else measureData[key] = key == 'Beta' ? _tool2.default.toFloat(value[0]) : _tool2.default.toMillion(value[0]);
-            }
-
-            // measure balance data
-            measureList = ['Short-term debt', 'Other long-term liabilities'];
-            for (var _i2 = 0; _i2 < measureList.length; _i2++) {
-                var _key = measureList[_i2];
-                var _value = balance[_key];
-                if (!_value || _value.length === 0) {
-                    lose[_key] = [];
-                } else {
-                    measureData[_key] = _tool2.default.toFloat(_value[_value.length - 1]);
-                }
-            }
-
-            // measure income data
-            measureList = ['Provision for income taxes', 'Income before taxes'];
-            for (var _i3 = 0; _i3 < measureList.length; _i3++) {
-                var _key2 = measureList[_i3];
-                var _value2 = income[_key2];
-                if (!_value2 || _value2.length === 0) {
-                    lose[_key2] = [];
-                } else {
-                    measureData[_key2] = _tool2.default.toNumList(_value2);
-                }
-            }
-
-            // measure cashflow data
-            measureList = ['Fiscal year ends in December. CNY in millions except per share data.', 'Free cash flow'];
-            for (var _i4 = 0; _i4 < measureList.length; _i4++) {
-                var _key3 = measureList[_i4];
-                var _value3 = cashflow[_key3];
-                if (!_value3 || _value3.length === 0) {
-                    lose[_key3] = [];
-                } else {
-                    if (_i4 === 0) measureData['Year'] = _tool2.default.sliceYearList(_value3).slice(0, -1);else {
-                        measureData[_key3] = _tool2.default.toNumList(_value3).slice(0, -1);
-                    }
-                }
-            }
-
-            if (!_tool2.default.empty(lose)) {
-                this.state.health = _macro2.default.DATA_LOSE;
-                this.state.lose = lose;
-            } else {
-                this.state.health = _macro2.default.DATA_PERFECT;
-                this.state.measureData = measureData;
-                this.modelInit();
-            }
-        }
-    }, {
-        key: 'analysis',
-        value: function analysis() {
-            // DCF Setting
+        key: 'settingReport',
+        value: function settingReport() {
             var report = {
                 'Beta': [this.beta],
                 'Risk Free': [this.riskFree],
@@ -48861,11 +49086,74 @@ var DCFMeasure = function (_React$Component) {
                 'Market Price Equity': [this.marketEquity],
                 'Market Price Debt': [this.marketDebt],
                 'Perpetuity Growth': [this.perpetuityGrowth],
+                'Cagr': [this.calCAGR()],
                 'Wacc': [this.wacc()]
             };
-            var predictData = this.predict();
+            return report;
+        }
+    }]);
 
-            // Cash Flow Discount
+    return DcfCalculator;
+}();
+
+exports.default = DcfCalculator;
+},{"../lib/macro":31,"../lib/tool":118,"regression":121,"../store":11}],30:[function(require,module,exports) {
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _table = require('../widget/table');
+
+var _chart = require('../widget/chart');
+
+var _macro = require('../lib/macro');
+
+var _macro2 = _interopRequireDefault(_macro);
+
+var _small = require('../widget/small');
+
+var _dcfCalculator = require('./dcfCalculator');
+
+var _dcfCalculator2 = _interopRequireDefault(_dcfCalculator);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var DCFMeasure = function (_React$Component) {
+    _inherits(DCFMeasure, _React$Component);
+
+    function DCFMeasure() {
+        _classCallCheck(this, DCFMeasure);
+
+        var _this = _possibleConstructorReturn(this, (DCFMeasure.__proto__ || Object.getPrototypeOf(DCFMeasure)).call(this));
+
+        _this.dcfCalculator = new _dcfCalculator2.default();
+        _this.selectMethod = _this.selectMethod.bind(_this);
+        _this.state = {
+            method: _macro2.default.MethodRegression
+        };
+        return _this;
+    }
+
+    _createClass(DCFMeasure, [{
+        key: 'analysis',
+        value: function analysis() {
+            var report = this.dcfCalculator.settingReport();
+            var predictData = this.state.method === _macro2.default.MethodRegression ? this.dcfCalculator.predictRegression() : this.dcfCalculator.predictOperatingGrowth();
+
             var fcfReport = {
                 'Year': predictData.futureX,
                 'Predict': predictData.futureY,
@@ -48873,62 +49161,42 @@ var DCFMeasure = function (_React$Component) {
                 'Sum Predict Terminal': [],
                 'Sum Discount': []
             };
-            this.fillFcfReport(fcfReport);
+            this.dcfCalculator.fillFcfReport(fcfReport);
 
-            // Valuation
-            var valuationReport = this.valuationReport(fcfReport);
+            var valuationReport = this.dcfCalculator.valuationReport(fcfReport);
 
             return _react2.default.createElement(
                 'div',
                 null,
                 _react2.default.createElement(_table.TransformTable, { data: report, title: 'DCF\u6A21\u578B\u53C2\u6570' }),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'jumbotron', style: { backgroundColor: _tool2.default.DIV_COLOR } },
-                    _react2.default.createElement(
-                        'h4',
-                        null,
-                        '\u73B0\u91D1\u6D41\u7EBF\u6027\u56DE\u5F52\u9884\u6D4B'
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'row' },
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'col' },
-                            _react2.default.createElement(_chart.BarChart, {
-                                x: this.fcfPass['Year'],
-                                y: this.fcfPass['Free cash flow'],
-                                title: '\u81EA\u7531\u73B0\u91D1\u6D41(M)'
-                            })
-                        ),
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'col' },
-                            _react2.default.createElement(_chart.BarAndLineChart, {
-                                x: predictData.regressionX,
-                                y: predictData.historyY,
-                                y2: predictData.regressionY,
-                                title: '\u81EA\u7531\u73B0\u91D1\u6D41(M)',
-                                title2: '\u81EA\u7531\u73B0\u91D1\u6D41\u7EBF\u6027\u56DE\u5F52(M)'
-                            })
-                        )
-                    )
-                ),
+                _react2.default.createElement(PredictChart, { method: this.state.method, selectMethod: this.selectMethod, predictData: predictData }),
                 _react2.default.createElement(_table.TransformTable, { data: fcfReport, title: '\u73B0\u91D1\u6D41\u9884\u6D4B(M)' }),
                 _react2.default.createElement(_table.TransformTable, { data: valuationReport, title: '\u4F30\u503C\u8BA1\u7B97' })
             );
         }
     }, {
+        key: 'selectMethod',
+        value: function selectMethod(event) {
+            this.setState({
+                method: event.target.value
+            });
+        }
+    }, {
         key: 'render',
         value: function render() {
-            this.check();
+            var data = {
+                quote: this.props.quote,
+                income: this.props.income,
+                balance: this.props.balance,
+                cashflow: this.props.cashflow
+            };
+            this.dcfCalculator.startAnalyse();
             var title = '自由现金流分析';
-            switch (this.state.health) {
+            switch (this.dcfCalculator.health) {
                 case _macro2.default.DATA_EMPTY:
                     return _react2.default.createElement(_small.NoData, { title: title });
                 case _macro2.default.DATA_LOSE:
-                    return _react2.default.createElement(_table.DataTable, { warn: true, title: title, desc: '\u4EE5\u4E0B\u6570\u636E\u7F3A\u5931:', data: this.state.lose });
+                    return _react2.default.createElement(_table.DataTable, { warn: true, title: title, desc: '\u4EE5\u4E0B\u6570\u636E\u7F3A\u5931:', data: this.dcfCalculator.lose });
                 case _macro2.default.DATA_PERFECT:
                     return this.analysis();
                 default:
@@ -48940,17 +49208,73 @@ var DCFMeasure = function (_React$Component) {
     return DCFMeasure;
 }(_react2.default.Component);
 
-var mapStateToProps = function mapStateToProps(state) {
-    return {
-        quote: state.quote,
-        income: state.income,
-        balance: state.balance,
-        cashflow: state.cashflow
-    };
+var PredictChart = function PredictChart(props) {
+    var chartTitle = '现金流线性回归预测';
+    var bar1Title = '自由现金流(M)';
+    var bar2Title = props.method === _macro2.default.MethodRegression ? '自由现金流线性回归' : '自由现金流均值增长';
+
+    return _react2.default.createElement(
+        'div',
+        { className: 'jumbotron', style: { backgroundColor: _macro2.default.DIV_COLOR } },
+        _react2.default.createElement(
+            'h4',
+            null,
+            chartTitle
+        ),
+        _react2.default.createElement(
+            'div',
+            { className: 'row' },
+            _react2.default.createElement(
+                'div',
+                { className: 'col-md-5' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'input-group ' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'input-group-prepend' },
+                        _react2.default.createElement(
+                            'label',
+                            { className: 'input-group-text', htmlFor: 'inputGroupSelect01' },
+                            '\u9884\u6D4B\u65B9\u6CD5'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'select',
+                        { className: 'custom-select',
+                            id: 'inputGroupSelect01',
+                            value: props.method,
+                            onChange: props.selectMethod },
+                        _react2.default.createElement(
+                            'option',
+                            { value: _macro2.default.MethodRegression },
+                            '\u81EA\u7531\u73B0\u91D1\u6D41\u7EBF\u6027\u56DE\u5F52'
+                        ),
+                        _react2.default.createElement(
+                            'option',
+                            { value: _macro2.default.MethodCAGR },
+                            '\u8425\u4E1A\u5229\u6DA6\u590D\u5408\u589E\u957F\u7387'
+                        )
+                    )
+                )
+            ),
+            _react2.default.createElement(
+                'div',
+                { className: 'col-md-7' },
+                _react2.default.createElement(_chart.BarAndBarChart, {
+                    x: props.predictData.fullX,
+                    y: props.predictData.fullHistoryY,
+                    y2: props.predictData.fullPredictY,
+                    title: bar1Title,
+                    title2: bar2Title
+                })
+            )
+        )
+    );
 };
 
-exports.default = (0, _reactRedux.connect)(mapStateToProps)(DCFMeasure);
-},{"react":14,"../widget/table":119,"../widget/chart":120,"regression":121,"../lib/tool":118,"react-redux":17,"../lib/macro":31,"../widget/small":33}],32:[function(require,module,exports) {
+exports.default = DCFMeasure;
+},{"react":14,"../widget/table":119,"../widget/chart":120,"../lib/macro":31,"../widget/small":33,"./dcfCalculator":336}],32:[function(require,module,exports) {
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -52979,149 +53303,7 @@ exports.Switch = _Switch3.default;
 exports.generatePath = _generatePath3.default;
 exports.matchPath = _matchPath3.default;
 exports.withRouter = _withRouter3.default;
-},{"./BrowserRouter":44,"./HashRouter":45,"./Link":46,"./MemoryRouter":47,"./NavLink":48,"./Prompt":49,"./Redirect":50,"./Route":51,"./Router":52,"./StaticRouter":53,"./Switch":54,"./generatePath":55,"./matchPath":56,"./withRouter":57}],43:[function(require,module,exports) {
-"use strict";
-
-var compose = require('redux').compose;
-
-exports.__esModule = true;
-exports.composeWithDevTools = (
-  typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
-    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ :
-    function() {
-      if (arguments.length === 0) return undefined;
-      if (typeof arguments[0] === 'object') return compose;
-      return compose.apply(null, arguments);
-    }
-);
-
-exports.devToolsEnhancer = (
-  typeof window !== 'undefined' && window.__REDUX_DEVTOOLS_EXTENSION__ ?
-    window.__REDUX_DEVTOOLS_EXTENSION__ :
-    function() { return function(noop) { return noop; } }
-);
-
-},{"redux":42}],11:[function(require,module,exports) {
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _redux = require('redux');
-
-var _reduxDevtoolsExtension = require('redux-devtools-extension');
-
-var _macro = require('./lib/macro');
-
-var _macro2 = _interopRequireDefault(_macro);
-
-var _package = require('../../package.json');
-
-var _package2 = _interopRequireDefault(_package);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var quoteReducer = function quoteReducer() {
-    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var action = arguments[1];
-
-    switch (action.type) {
-        case 'quote':
-            return action.payload;
-        default:
-            return state;
-    }
-};
-
-var keyRatioReducer = function keyRatioReducer() {
-    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var action = arguments[1];
-
-    switch (action.type) {
-        case 'keyRatio':
-            return action.payload;
-        default:
-            return state;
-    }
-};
-
-var incomeReducer = function incomeReducer() {
-    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var action = arguments[1];
-
-    switch (action.type) {
-        case 'income':
-            return action.payload;
-        default:
-            return state;
-    }
-};
-
-var balanceReducer = function balanceReducer() {
-    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var action = arguments[1];
-
-    switch (action.type) {
-        case 'balance':
-            return action.payload;
-        default:
-            return state;
-    }
-};
-var cashflowReducer = function cashflowReducer() {
-    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var action = arguments[1];
-
-    switch (action.type) {
-        case 'cashflow':
-            return action.payload;
-        default:
-            return state;
-    }
-};
-
-var commonReducer = function commonReducer() {
-    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { searched: false };
-    var action = arguments[1];
-
-    switch (action.type) {
-        case 'searched':
-            return { searched: true };
-        default:
-            return state;
-    }
-};
-
-var rootReducer = function rootReducer() {
-    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var action = arguments[1];
-
-    if (action.type === _macro2.default.STATE_CLEAR) {
-        var s = {
-            common: state.common
-        };
-        return s;
-    } else return appReducer(state, action);
-};
-
-var appReducer = (0, _redux.combineReducers)({
-    quote: quoteReducer,
-    keyRatio: keyRatioReducer,
-    income: incomeReducer,
-    balance: balanceReducer,
-    cashflow: cashflowReducer,
-    common: commonReducer
-});
-
-var build = function build() {
-    if (_package2.default.production) return (0, _redux.createStore)(rootReducer);else return (0, _redux.createStore)(rootReducer, (0, _reduxDevtoolsExtension.composeWithDevTools)());
-};
-
-var store = build();
-
-exports.default = store;
-},{"redux":42,"redux-devtools-extension":43,"./lib/macro":31,"../../package.json":26}],6:[function(require,module,exports) {
+},{"./BrowserRouter":44,"./HashRouter":45,"./Link":46,"./MemoryRouter":47,"./NavLink":48,"./Prompt":49,"./Redirect":50,"./Route":51,"./Router":52,"./StaticRouter":53,"./Switch":54,"./generatePath":55,"./matchPath":56,"./withRouter":57}],6:[function(require,module,exports) {
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
