@@ -1,6 +1,6 @@
 import { createStore, combineReducers } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import macro from '../lib/macro'
+import macro from './lib/macro'
 import pjson from '../../package.json'
 
 const quoteReducer = (state = {}, action) => {

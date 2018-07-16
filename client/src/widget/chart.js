@@ -1,6 +1,7 @@
 import React from 'react'
 import { Bar } from 'react-chartjs-2'
 import tool from '../lib/tool'
+import macro from '../lib/macro'
 
 const blue = 'rgb(69,69,127)'
 const yellow = '#EC932F'
@@ -23,7 +24,7 @@ const BarChart = (props) => {
         ]
     }
     let options = { maintainAspectRatio: false }
-    return <div className='jumbotron' style={{backgroundColor:tool.CHART_COLOR}} >
+    return <div className='jumbotron' style={{backgroundColor:macro.CHART_COLOR}} >
         <Bar data={data} width={width} options={options} />
     </div>
 }
@@ -46,7 +47,7 @@ const LineChart = (props) => {
         ]
     }
     let options = { maintainAspectRatio: false }
-    return <div className='jumbotron' style={{backgroundColor:tool.CHART_COLOR}} >
+    return <div className='jumbotron' style={{backgroundColor:macro.CHART_COLOR}} >
         <Bar data={data} width={width} options={options} />
     </div>
 
@@ -80,7 +81,7 @@ const BarAndLineChart = (props) => {
         ]
     }
     let options = { maintainAspectRatio: false }
-    return <div className='jumbotron' style={{backgroundColor:tool.CHART_COLOR}} >
+    return <div className='jumbotron' style={{backgroundColor:macro.CHART_COLOR}} >
         <Bar data={data} width={width} options={options} />
     </div>
 }

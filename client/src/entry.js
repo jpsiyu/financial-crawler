@@ -4,10 +4,10 @@ import pjson from '../../package.json'
 import DebtMeasure from './analysis/debtMeasure'
 import GrowthMeasure from './analysis/growthMeasure'
 import DCFMeasure from './analysis/dcfMeasure'
-import macro from '../lib/macro';
-import Search from './search'
+import macro from './lib/macro';
+import Search from './widget/search'
 import { connect } from 'react-redux'
-import {Hello} from './small'
+import {Hello} from './widget/small'
 
 class Entry extends React.Component {
     constructor() {

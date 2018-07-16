@@ -1,5 +1,6 @@
 import React from 'react'
 import tool from '../lib/tool'
+import macro from '../lib/macro'
 
 const DataTable = (props) => {
     const data = props.data
@@ -22,11 +23,11 @@ const DataTable = (props) => {
         targets.push(<tr key={i}>{row}</tr>)
         i++
     })
-    const divColor = props.warn ? tool.DIV_COLOR_WARN: tool.DIV_COLOR
+    const divColor = props.warn ? macro.DIV_COLOR_WARN: macro.DIV_COLOR
     return <div className='jumbotron' style={{backgroundColor: divColor}}>
         <h4>{props.title}</h4>
         <p>{props.desc}</p>
-        <table className='table table-bordered' style={{backgroundColor: tool.TABLE_COLOR}}>
+        <table className='table table-bordered' style={{backgroundColor: macro.TABLE_COLOR}}>
             <thead>{heads}</thead>
             <tbody>{rows}</tbody>
         </table>
@@ -51,10 +52,10 @@ const TransformTable = (props) => {
     for(let i=0; i < rows.length; i++){
         rowsTab.push(<tr key={i}>{rows[i]}</tr>)
     }
-    return <div className='jumbotron' style={{backgroundColor:tool.DIV_COLOR}}>
+    return <div className='jumbotron' style={{backgroundColor:macro.DIV_COLOR}}>
         <h4>{props.title}</h4>
         <p>{props.desc}</p>
-        <table className='table table-bordered table-sm table-responsive-md' style={{backgroundColor:tool.TABLE_COLOR}}>
+        <table className='table table-bordered table-sm table-responsive-md' style={{backgroundColor:macro.TABLE_COLOR}}>
             <thead><tr>{heads}</tr></thead>
             <tbody>{rowsTab}</tbody>
         </table>

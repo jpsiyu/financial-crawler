@@ -1,9 +1,9 @@
 import React from 'react'
-import tool from '../../lib/tool'
-import macro from '../../lib/macro'
-import {TransformTable, DataTable} from '../table'
+import tool from '../lib/tool'
+import macro from '../lib/macro'
+import {TransformTable, DataTable} from '../widget/table'
 import {connect} from 'react-redux'
-import {NoData} from '../small'
+import {NoData} from '../widget/small'
 
 class DebtMesure extends React.Component {
     constructor() {

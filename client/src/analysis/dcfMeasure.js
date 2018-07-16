@@ -1,11 +1,11 @@
 import React from 'react'
-import { TransformTable, DataTable } from '../table'
-import { BarChart, BarAndLineChart } from '../chart'
+import { TransformTable, DataTable } from '../widget/table'
+import { BarChart, BarAndLineChart } from '../widget/chart'
 import regression from 'regression'
-import tool from '../../lib/tool';
+import tool from '../lib/tool';
 import { connect } from 'react-redux';
-import macro from '../../lib/macro'
-import {NoData} from '../small'
+import macro from '../lib/macro'
+import {NoData} from '../widget/small'
 
 class DCFMeasure extends React.Component {
     constructor() {

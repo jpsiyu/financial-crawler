@@ -1,5 +1,6 @@
 import React from 'react'
 import tool from '../lib/tool'
+import macro from '../lib/macro'
 import {Intro} from './small'
 import {connect} from 'react-redux'
 
@@ -62,7 +63,7 @@ class Search extends React.Component {
     }
 
     render() {
-        return <div className='jumbotron mt-3' style={{ backgroundColor: tool.DIV_COLOR}}>
+        return <div className='jumbotron mt-3' style={{ backgroundColor: macro.DIV_COLOR}}>
             <Intro />
             <div className='d-flex justify-content-left' >
                 <form onSubmit={this.onBtnSearch}>

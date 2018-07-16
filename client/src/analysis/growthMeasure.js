@@ -1,10 +1,10 @@
 import React from 'react'
-import tool from '../../lib/tool'
-import macro from '../../lib/macro'
-import { DataTable } from '../table'
+import tool from '../lib/tool'
+import macro from '../lib/macro'
+import { DataTable } from '../widget/table'
 import { connect } from 'react-redux'
-import { BarChart } from '../chart'
-import {NoData} from '../small'
+import { BarChart } from '../widget/chart'
+import {NoData} from '../widget/small'
 
 class GrowthMeasure extends React.Component {
     constructor() {
