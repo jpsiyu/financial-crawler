@@ -7,13 +7,14 @@ import DCFMeasure from './analysis/dcfMeasure'
 import macro from './lib/macro';
 import Search from './widget/search'
 import { connect } from 'react-redux'
-import {Hello} from './widget/small'
+import { Hello, TickerName } from './widget/small'
 
 class Entry extends React.Component {
     constructor() {
         super()
         this.state = {
-            loading: false
+            loading: false,
+            tickerName: undefined,
         }
         this.ticker = undefined
         this.analysisState = [
@@ -35,7 +36,21 @@ class Entry extends React.Component {
         }
     }
 
+    getTickerName(ticker) {
+        axios.get(`${this.url}/ticker_name?ticker=${ticker}`).then(response => {
+            const serverMsg = response.data
+            const tickerName = serverMsg.msg
+
+            if (tickerName) {
+                this.setState({ tickerName })
+            }
+        }).catch(error => console.log('ERR:', error))
+
+    }
+
     startAnalysis(ticker) {
+        this.getTickerName(ticker)
+        this.getTickerName(ticker)
         this.setState({ loading: true })
         this.clearState()
         this.ticker = ticker
@@ -92,11 +107,12 @@ class Entry extends React.Component {
         if (this.props.common.searched) {
             return <div className="container">
                 <Search startAnalysis={ticker => this.startAnalysis(ticker)} loading={this.state.loading} />
+                <TickerName tickerName={this.state.tickerName} />
                 <DebtMeasure />
                 <GrowthMeasure />
                 <DCFMeasure />
             </div>
-        }else{
+        } else {
             return <div className="container">
                 <Search startAnalysis={ticker => this.startAnalysis(ticker)} loading={this.state.loading} />
                 <Hello />

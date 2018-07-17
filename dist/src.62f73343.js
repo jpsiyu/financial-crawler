@@ -24481,7 +24481,7 @@ exports.connect = _connect2.default;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.Hello = exports.NoData = exports.Intro = undefined;
+exports.TickerName = exports.Hello = exports.NoData = exports.Intro = undefined;
 
 var _react = require('react');
 
@@ -24548,9 +24548,27 @@ var Hello = function Hello(props) {
     );
 };
 
+var TickerName = function TickerName(props) {
+    if (!props.tickerName) return null;
+    return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+            'h3',
+            null,
+            _react2.default.createElement(
+                'span',
+                { className: 'alert alert-light' },
+                props.tickerName
+            )
+        )
+    );
+};
+
 exports.Intro = Intro;
 exports.NoData = NoData;
 exports.Hello = Hello;
+exports.TickerName = TickerName;
 },{"react":14,"../lib/tool":118,"../lib/macro":31}],28:[function(require,module,exports) {
 'use strict';
 
@@ -49443,6 +49461,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var loadingSize = 30;
+var tickerTips = '支持沪深市场，股票代码6位数字，如: 000423';
 
 var Search = function (_React$Component) {
     _inherits(Search, _React$Component);
@@ -49477,7 +49496,7 @@ var Search = function (_React$Component) {
             var input = this.searchInput.value;
             var pass = false;
             if (isNaN(input) || input.length > 6) {
-                this.setState({ inputTips: '输入股票代码6位数字，如: 000423' });
+                this.setState({ inputTips: tickerTips });
             } else {
                 this.setState({ inputTips: null });
                 pass = true;
@@ -49490,7 +49509,7 @@ var Search = function (_React$Component) {
             var input = this.searchInput.value;
             var pass = false;
             if (isNaN(input) || input.length != 6) {
-                this.setState({ inputTips: '输入股票代码6位数字，如: 000423' });
+                this.setState({ inputTips: tickerTips });
             } else {
                 this.setState({ inputTips: null });
                 pass = true;
@@ -49514,6 +49533,11 @@ var Search = function (_React$Component) {
         value: function render() {
             var _this2 = this;
 
+            var tipsComp = _react2.default.createElement(
+                'div',
+                { 'class': 'alert alert-danger', role: 'alert' },
+                this.state.inputTips
+            );
             return _react2.default.createElement(
                 'div',
                 { className: 'jumbotron mt-3', style: { backgroundColor: _macro2.default.DIV_COLOR } },
@@ -49537,15 +49561,7 @@ var Search = function (_React$Component) {
                                 style: { width: 300 } }),
                             this.conditionImg()
                         ),
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'form-group' },
-                            _react2.default.createElement(
-                                'span',
-                                { className: 'badge badge-danger' },
-                                this.state.inputTips
-                            )
-                        )
+                        this.state.inputTips ? tipsComp : null
                     )
                 )
             );
@@ -49632,7 +49648,8 @@ var Entry = function (_React$Component) {
         var _this = _possibleConstructorReturn(this, (Entry.__proto__ || Object.getPrototypeOf(Entry)).call(this));
 
         _this.state = {
-            loading: false
+            loading: false,
+            tickerName: undefined
         };
         _this.ticker = undefined;
         _this.analysisState = [{ name: 'quote', path: 'quote', open: true, pass: false }, { name: 'keyRatio', path: 'key_ratio', open: true, pass: false }, { name: 'income', path: 'income_statement', open: true, pass: false }, { name: 'balance', path: 'balance_sheet', open: true, pass: false }, { name: 'cashflow', path: 'cashflow', open: true, pass: false }];
@@ -49651,8 +49668,26 @@ var Entry = function (_React$Component) {
             }
         }
     }, {
+        key: 'getTickerName',
+        value: function getTickerName(ticker) {
+            var _this2 = this;
+
+            _axios2.default.get(this.url + '/ticker_name?ticker=' + ticker).then(function (response) {
+                var serverMsg = response.data;
+                var tickerName = serverMsg.msg;
+
+                if (tickerName) {
+                    _this2.setState({ tickerName: tickerName });
+                }
+            }).catch(function (error) {
+                return console.log('ERR:', error);
+            });
+        }
+    }, {
         key: 'startAnalysis',
         value: function startAnalysis(ticker) {
+            this.getTickerName(ticker);
+            this.getTickerName(ticker);
             this.setState({ loading: true });
             this.clearState();
             this.ticker = ticker;
@@ -49685,15 +49720,15 @@ var Entry = function (_React$Component) {
     }, {
         key: 'specifyAnalysis',
         value: function specifyAnalysis(state) {
-            var _this2 = this;
+            var _this3 = this;
 
             _axios2.default.get(this.url + '/' + state.path + '?ticker=' + this.ticker).then(function (response) {
                 var serverMsg = response.data;
                 var rawData = JSON.parse(serverMsg.msg);
-                var dictData = _this2.rawData2Dict(rawData);
-                _this2.props.actionReceive(state.name, dictData);
-                _this2.analysisPass(state.name);
-                _this2.analysisLoop();
+                var dictData = _this3.rawData2Dict(rawData);
+                _this3.props.actionReceive(state.name, dictData);
+                _this3.analysisPass(state.name);
+                _this3.analysisLoop();
             }).catch(function (error) {
                 return console.log('ERR:', error);
             });
@@ -49711,15 +49746,16 @@ var Entry = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
-            var _this3 = this;
+            var _this4 = this;
 
             if (this.props.common.searched) {
                 return _react2.default.createElement(
                     'div',
                     { className: 'container' },
                     _react2.default.createElement(_search2.default, { startAnalysis: function startAnalysis(ticker) {
-                            return _this3.startAnalysis(ticker);
+                            return _this4.startAnalysis(ticker);
                         }, loading: this.state.loading }),
+                    _react2.default.createElement(_small.TickerName, { tickerName: this.state.tickerName }),
                     _react2.default.createElement(_debtMeasure2.default, null),
                     _react2.default.createElement(_growthMeasure2.default, null),
                     _react2.default.createElement(_dcfMeasure2.default, null)
@@ -49729,7 +49765,7 @@ var Entry = function (_React$Component) {
                     'div',
                     { className: 'container' },
                     _react2.default.createElement(_search2.default, { startAnalysis: function startAnalysis(ticker) {
-                            return _this3.startAnalysis(ticker);
+                            return _this4.startAnalysis(ticker);
                         }, loading: this.state.loading }),
                     _react2.default.createElement(_small.Hello, null)
                 );

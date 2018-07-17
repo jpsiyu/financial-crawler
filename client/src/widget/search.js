@@ -1,10 +1,11 @@
 import React from 'react'
 import tool from '../lib/tool'
 import macro from '../lib/macro'
-import {Intro} from './small'
-import {connect} from 'react-redux'
+import { Intro } from './small'
+import { connect } from 'react-redux'
 
 const loadingSize = 30
+const tickerTips = '支持沪深市场，股票代码6位数字，如: 000423' 
 
 class Search extends React.Component {
     constructor() {
@@ -22,7 +23,7 @@ class Search extends React.Component {
         if (this.checkInput()) {
             const ticker = this.searchInput.value.trim()
             this.props.startAnalysis(ticker)
-            if(!this.props.common.searched) this.props.actionSearch()
+            if (!this.props.common.searched) this.props.actionSearch()
         }
     }
 
@@ -30,7 +31,7 @@ class Search extends React.Component {
         const input = this.searchInput.value
         let pass = false
         if (isNaN(input) || input.length > 6) {
-            this.setState({ inputTips: '输入股票代码6位数字，如: 000423' })
+            this.setState({ inputTips: tickerTips })
         } else {
             this.setState({ inputTips: null })
             pass = true
@@ -43,7 +44,7 @@ class Search extends React.Component {
         const input = this.searchInput.value
         let pass = false
         if (isNaN(input) || input.length != 6) {
-            this.setState({ inputTips: '输入股票代码6位数字，如: 000423' })
+            this.setState({ inputTips: tickerTips })
         } else {
             this.setState({ inputTips: null })
             pass = true
@@ -63,7 +64,11 @@ class Search extends React.Component {
     }
 
     render() {
-        return <div className='jumbotron mt-3' style={{ backgroundColor: macro.DIV_COLOR}}>
+        const tipsComp =
+            <div class="alert alert-danger" role="alert">
+                {this.state.inputTips}
+            </div>
+        return <div className='jumbotron mt-3' style={{ backgroundColor: macro.DIV_COLOR }}>
             <Intro />
             <div className='d-flex justify-content-left' >
                 <form onSubmit={this.onBtnSearch}>
@@ -76,9 +81,7 @@ class Search extends React.Component {
                             style={{ width: 300 }} />
                         {this.conditionImg()}
                     </div>
-                    <div className='form-group'>
-                        <span className="badge badge-danger">{this.state.inputTips}</span>
-                    </div>
+                    {this.state.inputTips ? tipsComp : null}
                 </form>
             </div>
         </div>
@@ -93,7 +96,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        actionSearch: () => { dispatch({type:'searched', payload:null})} 
+        actionSearch: () => { dispatch({ type: 'searched', payload: null }) }
     }
 }
 
