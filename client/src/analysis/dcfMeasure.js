@@ -1,5 +1,6 @@
 import React from 'react'
 import { TransformTable, DataTable } from '../widget/table'
+import {Grid} from '../widget/grid'
 import { BarAndBarChart } from '../widget/chart'
 import macro from '../lib/macro'
 import { NoData } from '../widget/small'
@@ -35,7 +36,7 @@ class DCFMeasure extends React.Component {
         const valuationReport = this.dcfCalculator.valuationReport(fcfReport)
 
         return <div>
-            <TransformTable data={report} title='DCF模型参数' />
+            <Grid data={report} title='DCF模型参数' />
             <PredictChart
                 method={this.state.method}
                 onMethodChange={this.onMethodChange}
@@ -44,7 +45,7 @@ class DCFMeasure extends React.Component {
                 onDurationChange={this.onDurationChange}
             />
             <TransformTable data={fcfReport} title='现金流预测(M)' />
-            <TransformTable data={valuationReport} title='估值计算' />
+            <Grid data={valuationReport} title='估值计算' />
         </div>
 
     }

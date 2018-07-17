@@ -1,6 +1,5 @@
 import React from 'react'
 import { Bar } from 'react-chartjs-2'
-import tool from '../lib/tool'
 import macro from '../lib/macro'
 
 const blue = 'rgb(69,69,127)'
