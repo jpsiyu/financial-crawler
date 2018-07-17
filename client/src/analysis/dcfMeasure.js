@@ -27,9 +27,6 @@ class DCFMeasure extends React.Component {
         const fcfReport = {
             'Year': predictData.futureX,
             'Predict': predictData.futureY,
-            'Terminal': [],
-            'Sum Predict Terminal': [],
-            'Sum Discount': [],
         }
         this.dcfCalculator.fillFcfReport(fcfReport)
 

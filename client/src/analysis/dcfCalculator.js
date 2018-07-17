@@ -76,7 +76,7 @@ class DcfCalculator {
             'Fiscal year ends in December. CNY in millions except per share data.',
             'Free cash flow'
         ]
-        measureList.forEach((key,i) => {
+        measureList.forEach((key, i) => {
             let value = cashflow[key]
             if (!value || value.length === 0) lose[key] = []
             else {
@@ -230,6 +230,9 @@ class DcfCalculator {
     }
 
     fillFcfReport(fcfReport) {
+        fcfReport['Terminal'] = []
+        fcfReport['Sum'] = []
+        fcfReport['Discount'] = []
         const wacc = this.wacc()
         const l = fcfReport['Year'].length
         for (let i = 0; i < l; i++) {
@@ -242,16 +245,16 @@ class DcfCalculator {
             let sum = tool.toFloat(predict + termValue)
             let discount = tool.toFloat((sum / Math.pow(1 + wacc, i + 1)))
             fcfReport['Terminal'].push(termValue)
-            fcfReport['Sum Predict Terminal'].push(sum)
-            fcfReport['Sum Discount'].push(discount)
+            fcfReport['Sum'].push(sum)
+            fcfReport['Discount'].push(discount)
         }
     }
 
     valuationReport(fcfReport) {
         const valuationReport = {}
         let totalValue = 0
-        for (let i = 0; i < fcfReport['Sum Discount'].length; i++) {
-            totalValue += fcfReport['Sum Discount'][i]
+        for (let i = 0; i < fcfReport['Discount'].length; i++) {
+            totalValue += fcfReport['Discount'][i]
         }
         totalValue = tool.toFloat(totalValue)
         const intrinsic = tool.toFloat(totalValue - this.marketDebt)

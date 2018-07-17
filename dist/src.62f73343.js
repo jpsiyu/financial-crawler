@@ -49102,6 +49102,9 @@ var DcfCalculator = function () {
     }, {
         key: 'fillFcfReport',
         value: function fillFcfReport(fcfReport) {
+            fcfReport['Terminal'] = [];
+            fcfReport['Sum'] = [];
+            fcfReport['Discount'] = [];
             var wacc = this.wacc();
             var l = fcfReport['Year'].length;
             for (var i = 0; i < l; i++) {
@@ -49114,8 +49117,8 @@ var DcfCalculator = function () {
                 var sum = _tool2.default.toFloat(predict + termValue);
                 var discount = _tool2.default.toFloat(sum / Math.pow(1 + wacc, i + 1));
                 fcfReport['Terminal'].push(termValue);
-                fcfReport['Sum Predict Terminal'].push(sum);
-                fcfReport['Sum Discount'].push(discount);
+                fcfReport['Sum'].push(sum);
+                fcfReport['Discount'].push(discount);
             }
         }
     }, {
@@ -49123,8 +49126,8 @@ var DcfCalculator = function () {
         value: function valuationReport(fcfReport) {
             var valuationReport = {};
             var totalValue = 0;
-            for (var i = 0; i < fcfReport['Sum Discount'].length; i++) {
-                totalValue += fcfReport['Sum Discount'][i];
+            for (var i = 0; i < fcfReport['Discount'].length; i++) {
+                totalValue += fcfReport['Discount'][i];
             }
             totalValue = _tool2.default.toFloat(totalValue);
             var intrinsic = _tool2.default.toFloat(totalValue - this.marketDebt);
@@ -49224,10 +49227,7 @@ var DCFMeasure = function (_React$Component) {
 
             var fcfReport = {
                 'Year': predictData.futureX,
-                'Predict': predictData.futureY,
-                'Terminal': [],
-                'Sum Predict Terminal': [],
-                'Sum Discount': []
+                'Predict': predictData.futureY
             };
             this.dcfCalculator.fillFcfReport(fcfReport);
 
@@ -53478,7 +53478,7 @@ var App = function (_React$Component) {
 }(_react2.default.Component);
 
 _reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById('container'));
-},{"react":15,"react-dom":14,"./entry":10,"react-router-dom":16,"./store":11,"react-redux":17}],372:[function(require,module,exports) {
+},{"react":15,"react-dom":14,"./entry":10,"react-router-dom":16,"./store":11,"react-redux":17}],331:[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 
@@ -53507,7 +53507,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '50690' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '58422' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 
@@ -53648,5 +53648,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},[372,6], null)
+},{}]},{},[331,6], null)
 //# sourceMappingURL=/src.62f73343.map
