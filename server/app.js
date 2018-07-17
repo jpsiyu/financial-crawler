@@ -7,6 +7,7 @@ const cors = require('cors')
 const MSNQuote = require('./crawler/MSNQuote')
 const MSKeyRatio = require('./crawler/MSKeyRatio')
 const MSReport = require('./crawler/MSReport')
+const GuChengTicker = require('./crawler/GuChengTicker')
 
 const app = express()
 app.use(express.static(path.resolve(__dirname, '../dist')))
@@ -66,6 +67,11 @@ app.get('/cashflow', (req, res) => {
     const ticker = req.query.ticker
     const cashflow = new MSReport(ticker, 'cf')
     pipeline(req, res, cashflow)
+})
+
+app.get('/tickers', (req, res) => {
+    const emTicker = new GuChengTicker()
+    pipeline(req, res, emTicker)
 })
 
 app.use((req, res, next) => {

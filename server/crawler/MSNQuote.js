@@ -38,7 +38,7 @@ class MSNQuote extends Crawler {
 
             data = JSON.stringify(data)
             const ok = !err
-            if(ok) util.json2local(this.localPath, data)
+            //if(ok) util.json2local(this.localPath, data)
             callback(ok, data)
         })
     }

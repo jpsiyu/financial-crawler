@@ -4,7 +4,7 @@ const CSV = require('csv-string')
 
 // switches
 const LOG_OPEN = true
-const SAVE_HTML = false
+const SAVE_HTML = true
 const SAVE_JSON = true
 const READ_LOCAL = true
 
