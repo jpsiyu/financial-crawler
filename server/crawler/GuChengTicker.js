@@ -15,7 +15,7 @@ class GuChengTicker extends Crawler {
     }
 
     loadLocal() {
-        const data = util.local2json(this.localPath)
+        const data = util.local2json(this.localPath, false)
         this.data = JSON.parse(data)
         return data
     }
@@ -23,14 +23,16 @@ class GuChengTicker extends Crawler {
     crawlWebSite(callback) {
         const url = 'https://hq.gucheng.com/gpdmylb.html'
         request(url, (err, response, body) => {
-            let data = []
+            let data = {}
             if (!err) {
                 const $ = cheerio.load(body, { decodeEntities: true })
                 util.saveCrawled($.html())
                 const div = $('div.stock_sub')
                 div.find('a').each((i, aObj) => {
-                    let a = $(aObj)
-                    data.push(a.text())
+                    const a = $(aObj)
+                    const t = a.text().trim()
+                    const {name, ticker} = this.parseTicker(t) 
+                    data[ticker] = name
                 })
             } else {
                 util.log('ERR:', err)
@@ -40,6 +42,16 @@ class GuChengTicker extends Crawler {
             if(ok) util.json2local(this.localPath, jsonData)
             callback(ok, jsonData)
         })
+    }
+
+    parseTicker(str){
+        const name = str.slice(0, -8)
+        const ticker = str.slice(-7, -1)
+        return {name, ticker}
+    }
+
+    getTickerName(ticker){
+        return this.data[ticker.toString()]
     }
 }
 

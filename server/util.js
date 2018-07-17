@@ -4,7 +4,7 @@ const CSV = require('csv-string')
 
 // switches
 const LOG_OPEN = true
-const SAVE_HTML = true
+const SAVE_HTML = false
 const SAVE_JSON = true
 const READ_LOCAL = true
 
@@ -35,13 +35,14 @@ function json2local(path, jsonData) {
     }
 }
 
-function local2json(path) {
+function local2json(path, dayCheck=true) {
     if (!READ_LOCAL) return false
     let data = false
     if (fs.existsSync(path)) {
         const s = fs.statSync(path)
         const diff = Date.now() - (new Date(s.mtime)).getTime()
-        if (diff < A_DAY)
+        const read = dayCheck ? diff < A_DAY : true
+        if (read)
             data = fs.readFileSync(path, 'utf8')
     }
     return data

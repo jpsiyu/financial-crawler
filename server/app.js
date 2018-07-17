@@ -70,8 +70,13 @@ app.get('/cashflow', (req, res) => {
 })
 
 app.get('/tickers', (req, res) => {
-    const emTicker = new GuChengTicker()
-    pipeline(req, res, emTicker)
+    pipeline(req, res, tickerStore)
+})
+
+app.get('/ticker_name', (req, res) => {
+    const ticker = req.query.ticker
+    const name = tickerStore.getTickerName(ticker)
+    util.serverMsg(res, name)
 })
 
 app.use((req, res, next) => {
@@ -82,5 +87,8 @@ app.use((err, req, res, next) => {
     util.log('Err:', err)
     res.status(500).json('500 - Internal Server Error...')
 })
+
+const tickerStore = new GuChengTicker()
+tickerStore.loadLocal()
 
 app.listen('3000', () => console.log('Server Listening On Port 3000..'))
