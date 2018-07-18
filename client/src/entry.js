@@ -24,7 +24,7 @@ class Entry extends React.Component {
             { name: 'balance', path: 'balance_sheet', open: true, pass: false },
             { name: 'cashflow', path: 'cashflow', open: true, pass: false },
         ]
-        this.url = pjson.production ? "http://120.78.240.132:3000" : "http://localhost"
+        this.url = pjson.production ? "http://120.78.240.132" : "http://localhost"
         this.clearState = this.clearState.bind(this)
     }
 
