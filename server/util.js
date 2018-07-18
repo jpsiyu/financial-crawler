@@ -9,6 +9,7 @@ const SAVE_JSON = true
 const READ_LOCAL = true
 
 const DATA_PATH = 'server/data'
+const DATA_TEMP_PATH = 'server/dataTemp'
 const A_DAY = 24 * 3600 * 1000
 
 function log(...args) {
@@ -124,4 +125,5 @@ module.exports = {
     quoteUrl,
     checkTickerValid,
     DATA_PATH,
+    DATA_TEMP_PATH,
 }

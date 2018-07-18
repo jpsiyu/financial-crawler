@@ -13,13 +13,13 @@ class MSReport extends Crawler {
         let path = ''
         switch (this.reportType) {
             case 'is':
-                path = `${util.DATA_PATH}/${this.ticker}-income-statement.json`
+                path = `${util.DATA_TEMP_PATH}/${this.ticker}-income-statement.json`
                 break
             case 'bs':
-                path = `${util.DATA_PATH}/${this.ticker}-balance-sheet.json`
+                path = `${util.DATA_TEMP_PATH}/${this.ticker}-balance-sheet.json`
                 break
             case 'cf':
-                path = `${util.DATA_PATH}/${this.ticker}-cashflow.json`
+                path = `${util.DATA_TEMP_PATH}/${this.ticker}-cashflow.json`
                 break
             default:
                 util.log('Not Support Report Type: ' + this.reportType)

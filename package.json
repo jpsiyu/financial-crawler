@@ -5,11 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server/app.js --ignore client/ --ignore server/data/ --ignore server/temp/",
+    "start": "nodemon server/app.js --ignore client/ --ignore server/data/ --ignore server/temp/ --ignore server/dataTemp",
     "watch": "parcel watch client/public/index.html",
     "build": "parcel build client/public/index.html"
   },
-  "production": true,
+  "production": false,
   "keywords": [],
   "author": "",
   "license": "ISC",

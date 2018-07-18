@@ -5,7 +5,7 @@ const request = require('request')
 class MSKeyRatio extends Crawler {
     constructor(ticker) {
         super(ticker)
-        this.localPath = `${util.DATA_PATH}/${ticker}-key-ratio.json`
+        this.localPath = `${util.DATA_TEMP_PATH}/${ticker}-key-ratio.json`
     }
     checkTickerValid() {
         return util.checkTickerValid(this.ticker)
