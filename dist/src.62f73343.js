@@ -53546,7 +53546,7 @@ var App = function (_React$Component) {
 }(_react2.default.Component);
 
 _reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById('container'));
-},{"react":14,"react-dom":15,"./entry":10,"react-router-dom":16,"./store":11,"react-redux":17}],373:[function(require,module,exports) {
+},{"react":14,"react-dom":15,"./entry":10,"react-router-dom":16,"./store":11,"react-redux":17}],331:[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 
@@ -53575,7 +53575,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '63152' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '49252' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 
@@ -53716,5 +53716,5 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},[373,6], null)
+},{}]},{},[331,6], null)
 //# sourceMappingURL=/src.62f73343.map
