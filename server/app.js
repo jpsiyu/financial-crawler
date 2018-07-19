@@ -75,8 +75,9 @@ app.get('/tickers', (req, res) => {
 
 app.get('/ticker_name', (req, res) => {
     const ticker = req.query.ticker
-    const name = tickerStore.getTickerName(ticker)
-    util.serverMsg(res, name)
+    const tickerName = tickerStore.getTickerName(ticker)
+    const msg = JSON.stringify({ticker, tickerName})
+    util.serverMsg(res, msg)
 })
 
 app.use((req, res, next) => {

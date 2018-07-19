@@ -38,10 +38,10 @@ class Entry extends React.Component {
     getTickerName(ticker) {
         axios.get(`${this.url}/ticker_name?ticker=${ticker}`).then(response => {
             const serverMsg = response.data
-            const tickerName = serverMsg.msg
+            const info = JSON.parse(serverMsg.msg)
 
-            if (tickerName) {
-                this.props.actionTickername(tickerName)
+            if (info.tickerName) {
+                this.props.actionTickername(info)
             }
         }).catch(error => console.log('ERR:', error))
 
@@ -128,7 +128,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        actionTickername: (tickerName) => dispatch({type:macro.ActionTickerName, payload:tickerName}),
+        actionTickername: (tickerInfo) => dispatch({type:macro.ActionTickerInfo, payload:tickerInfo}),
         actionReceive: (name, dictData) => dispatch({ type: name, payload: dictData }),
         actionClear: () => dispatch({ type: macro.ActionStateClear, payload: {} })
     }

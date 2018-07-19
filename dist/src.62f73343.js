@@ -21489,7 +21489,7 @@ exports.default = {
     DATA_PERFECT: 'DATA_PERFECT',
 
     ActionStateClear: 'ActionStateClear',
-    ActionTickerName: 'ActionTickerName',
+    ActionTickerInfo: 'ActionTickerInfo',
     ActionSearch: 'ActionSearch',
 
     DIV_COLOR: 'rgb(250,250,250)',
@@ -24559,7 +24559,7 @@ var NoData = function NoData(props) {
     );
 };
 
-var Hello = function Hello(props) {
+var Hello = function Hello() {
     var size = 300;
     return _react2.default.createElement(
         'div',
@@ -24580,18 +24580,27 @@ var TickerName = function (_React$Component) {
     _createClass(TickerName, [{
         key: 'render',
         value: function render() {
-            var tickerName = this.props.common.tickerName;
-            if (!tickerName) return null;
+            var tickerInfo = this.props.common.tickerInfo;
+            if (!tickerInfo) return null;
             return _react2.default.createElement(
                 'div',
-                null,
+                { className: 'jumbotron', style: { backgroundColor: _macro2.default.DIV_COLOR, color: _macro2.default.FontGray } },
                 _react2.default.createElement(
-                    'h3',
-                    null,
+                    'span',
+                    { className: 'd-inline-block' },
                     _react2.default.createElement(
-                        'span',
-                        { className: 'alert alert-light' },
-                        this.props.common.tickerName
+                        'h4',
+                        null,
+                        tickerInfo.tickerName
+                    )
+                ),
+                _react2.default.createElement(
+                    'span',
+                    { className: 'd-inline-block ml-3' },
+                    _react2.default.createElement(
+                        'p',
+                        null,
+                        tickerInfo.ticker
                     )
                 )
             );
@@ -48871,8 +48880,8 @@ var commonReducer = function commonReducer() {
     switch (action.type) {
         case _macro2.default.ActionSearch:
             return _tool2.default.copy(state, { searched: true });
-        case _macro2.default.ActionTickerName:
-            return _tool2.default.copy(state, { tickerName: action.payload });
+        case _macro2.default.ActionTickerInfo:
+            return _tool2.default.copy(state, { tickerInfo: action.payload });
         default:
             return state;
     }
@@ -49718,10 +49727,10 @@ var Entry = function (_React$Component) {
 
             _axios2.default.get(this.url + '/ticker_name?ticker=' + ticker).then(function (response) {
                 var serverMsg = response.data;
-                var tickerName = serverMsg.msg;
+                var info = JSON.parse(serverMsg.msg);
 
-                if (tickerName) {
-                    _this2.props.actionTickername(tickerName);
+                if (info.tickerName) {
+                    _this2.props.actionTickername(info);
                 }
             }).catch(function (error) {
                 return console.log('ERR:', error);
@@ -49828,8 +49837,8 @@ var mapStateToProps = function mapStateToProps(state) {
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
     return {
-        actionTickername: function actionTickername(tickerName) {
-            return dispatch({ type: _macro2.default.ActionTickerName, payload: tickerName });
+        actionTickername: function actionTickername(tickerInfo) {
+            return dispatch({ type: _macro2.default.ActionTickerInfo, payload: tickerInfo });
         },
         actionReceive: function actionReceive(name, dictData) {
             return dispatch({ type: name, payload: dictData });

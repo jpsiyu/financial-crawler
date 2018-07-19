@@ -4,7 +4,7 @@ export default {
     DATA_PERFECT: 'DATA_PERFECT',
 
     ActionStateClear: 'ActionStateClear',
-    ActionTickerName: 'ActionTickerName',
+    ActionTickerInfo: 'ActionTickerInfo',
     ActionSearch: 'ActionSearch',
     
 

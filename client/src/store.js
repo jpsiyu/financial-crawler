@@ -52,8 +52,8 @@ const commonReducer = (state = { searched: false }, action) => {
     switch (action.type) {
         case macro.ActionSearch:
             return tool.copy(state, {searched: true})
-        case macro.ActionTickerName:
-            return tool.copy(state, {tickerName: action.payload})
+        case macro.ActionTickerInfo:
+            return tool.copy(state, {tickerInfo: action.payload})
         default:
             return state
     }
