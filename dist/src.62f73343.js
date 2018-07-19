@@ -21469,13 +21469,21 @@ var copy = function copy(obj, add) {
     return target;
 };
 
+var zeroList = function zeroList(len) {
+    var l = [];
+    for (var i = 0; i < len; i++) {
+        l.push(0);
+    }return l;
+};
+
 exports.default = {
     empty: empty,
     toNumList: toNumList,
     sliceYearList: sliceYearList,
     toMillion: toMillion,
     toFloat: toFloat,
-    copy: copy
+    copy: copy,
+    zeroList: zeroList
 };
 },{}],31:[function(require,module,exports) {
 'use strict';
@@ -24689,6 +24697,14 @@ var DebtMesure = function (_React$Component) {
                 }
                 if (i == 0) measureData['Year'] = _tool2.default.sliceYearList(data[key]);else measureData[key] = _tool2.default.toNumList(data[key]);
             }
+            // replace with 0 if not exist
+            var replaceList = ['Long-term debt'];
+            var dataLen = measureData[Object.keys(measureData)[0]].length;
+            replaceList.forEach(function (key) {
+                delete lose[key];
+                measureData[key] = _tool2.default.zeroList(dataLen);
+            });
+
             if (!_tool2.default.empty(lose)) {
                 this.state.health = _macro2.default.DATA_LOSE;
                 this.state.lose = lose;
@@ -48996,7 +49012,8 @@ var DcfCalculator = function () {
             measureList = ['Short-term debt', 'Long-term debt'];
             measureList.forEach(function (key) {
                 var value = balance[key];
-                if (!value || value.length === 0) lose[key] = [];else measureData[key] = _tool2.default.toFloat(value[value.length - 1]);
+                if (!value || value.length === 0) value = [0];
+                measureData[key] = _tool2.default.toFloat(value[value.length - 1]);
             });
 
             // measure income data
@@ -49027,6 +49044,7 @@ var DcfCalculator = function () {
     }, {
         key: 'modelInit',
         value: function modelInit() {
+            console.log(this.measureData);
             var debt = this.measureData['Short-term debt'] + this.measureData['Long-term debt'];
 
             var len = this.measureData['Provision for income taxes'].length;

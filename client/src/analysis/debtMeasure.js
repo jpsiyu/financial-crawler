@@ -44,6 +44,14 @@ class DebtMesure extends React.Component {
             else
                 measureData[key] = tool.toNumList(data[key])
         }
+        // replace with 0 if not exist
+        const replaceList = ['Long-term debt']
+        const dataLen = measureData[Object.keys(measureData)[0]].length
+        replaceList.forEach( key => {
+            delete lose[key]
+            measureData[key] = tool.zeroList(dataLen)
+        })
+
         if (!tool.empty(lose)) {
             this.state.health = macro.DATA_LOSE
             this.state.lose = lose

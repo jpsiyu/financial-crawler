@@ -53,6 +53,13 @@ const copy = (obj, add) => {
     return target
 }
 
+const zeroList = (len) => {
+    const l = []
+    for(let i = 0; i < len; i++)
+        l.push(0)
+    return l
+}
+
 export default {
     empty,
     toNumList,
@@ -60,4 +67,5 @@ export default {
     toMillion,
     toFloat,
     copy,
+    zeroList,
 }

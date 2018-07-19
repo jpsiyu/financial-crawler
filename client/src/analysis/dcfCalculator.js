@@ -55,8 +55,9 @@ class DcfCalculator {
         ]
         measureList.forEach(key => {
             let value = balance[key]
-            if (!value || value.length === 0) lose[key] = []
-            else measureData[key] = tool.toFloat(value[value.length - 1])
+            if (!value || value.length === 0) 
+                value = [0]
+            measureData[key] = tool.toFloat(value[value.length - 1])
         })
 
         // measure income data
@@ -97,6 +98,7 @@ class DcfCalculator {
 
 
     modelInit() {
+        console.log(this.measureData)
         const debt = this.measureData['Short-term debt'] + this.measureData['Long-term debt']
 
         const len = this.measureData['Provision for income taxes'].length
