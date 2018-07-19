@@ -25,7 +25,7 @@ class DebtMesure extends React.Component {
         const measureList = [
             'Fiscal year ends in December. CNY in millions except per share data.',
             'Short-term debt',
-            'Other long-term liabilities',
+            'Long-term debt',
             "Total stockholders' equity",
             'Total current assets',
             'Total current liabilities'
@@ -56,7 +56,7 @@ class DebtMesure extends React.Component {
                 measureData['Debt on Equity'] = []
                 measureData['Current Ratio'] = []
             }
-            const totalDebt = (measureData['Short-term debt'][i] + measureData['Other long-term liabilities'][i])
+            const totalDebt = (measureData['Short-term debt'][i] + measureData['Long-term debt'][i])
             const debtOnEquity = totalDebt == 0 ? 0 : totalDebt / measureData["Total stockholders' equity"][i]
             measureData['Debt Total'][i] = tool.toFloat(totalDebt)
             measureData['Debt on Equity'][i] = tool.toFloat(debtOnEquity)

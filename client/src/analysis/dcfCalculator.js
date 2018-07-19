@@ -51,7 +51,7 @@ class DcfCalculator {
         // measure balance data
         measureList = [
             'Short-term debt',
-            'Other long-term liabilities'
+            'Long-term debt',
         ]
         measureList.forEach(key => {
             let value = balance[key]
@@ -97,7 +97,7 @@ class DcfCalculator {
 
 
     modelInit() {
-        const debt = this.measureData['Short-term debt'] + this.measureData['Other long-term liabilities']
+        const debt = this.measureData['Short-term debt'] + this.measureData['Long-term debt']
 
         const len = this.measureData['Provision for income taxes'].length
         let rateSum = 0

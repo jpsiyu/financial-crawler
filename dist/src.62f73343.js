@@ -24677,7 +24677,7 @@ var DebtMesure = function (_React$Component) {
                 return;
             }
 
-            var measureList = ['Fiscal year ends in December. CNY in millions except per share data.', 'Short-term debt', 'Other long-term liabilities', "Total stockholders' equity", 'Total current assets', 'Total current liabilities'];
+            var measureList = ['Fiscal year ends in December. CNY in millions except per share data.', 'Short-term debt', 'Long-term debt', "Total stockholders' equity", 'Total current assets', 'Total current liabilities'];
             var lose = {};
             var measureData = {};
             for (var i = 0; i < measureList.length; i++) {
@@ -24701,7 +24701,7 @@ var DebtMesure = function (_React$Component) {
                     measureData['Debt on Equity'] = [];
                     measureData['Current Ratio'] = [];
                 }
-                var totalDebt = measureData['Short-term debt'][_i] + measureData['Other long-term liabilities'][_i];
+                var totalDebt = measureData['Short-term debt'][_i] + measureData['Long-term debt'][_i];
                 var debtOnEquity = totalDebt == 0 ? 0 : totalDebt / measureData["Total stockholders' equity"][_i];
                 measureData['Debt Total'][_i] = _tool2.default.toFloat(totalDebt);
                 measureData['Debt on Equity'][_i] = _tool2.default.toFloat(debtOnEquity);
@@ -48993,7 +48993,7 @@ var DcfCalculator = function () {
             });
 
             // measure balance data
-            measureList = ['Short-term debt', 'Other long-term liabilities'];
+            measureList = ['Short-term debt', 'Long-term debt'];
             measureList.forEach(function (key) {
                 var value = balance[key];
                 if (!value || value.length === 0) lose[key] = [];else measureData[key] = _tool2.default.toFloat(value[value.length - 1]);
@@ -49027,7 +49027,7 @@ var DcfCalculator = function () {
     }, {
         key: 'modelInit',
         value: function modelInit() {
-            var debt = this.measureData['Short-term debt'] + this.measureData['Other long-term liabilities'];
+            var debt = this.measureData['Short-term debt'] + this.measureData['Long-term debt'];
 
             var len = this.measureData['Provision for income taxes'].length;
             var rateSum = 0;
