@@ -7,14 +7,13 @@ import DCFMeasure from './analysis/dcfMeasure'
 import macro from './lib/macro';
 import Search from './widget/search'
 import { connect } from 'react-redux'
-import { Hello, TickerName } from './widget/small'
+import { Hello, TickerNameWrap } from './widget/small'
 
 class Entry extends React.Component {
     constructor() {
         super()
         this.state = {
             loading: false,
-            tickerName: undefined,
         }
         this.ticker = undefined
         this.analysisState = [
@@ -42,7 +41,7 @@ class Entry extends React.Component {
             const tickerName = serverMsg.msg
 
             if (tickerName) {
-                this.setState({ tickerName })
+                this.props.actionTickername(tickerName)
             }
         }).catch(error => console.log('ERR:', error))
 
@@ -107,7 +106,7 @@ class Entry extends React.Component {
         if (this.props.common.searched) {
             return <div className="container">
                 <Search startAnalysis={ticker => this.startAnalysis(ticker)} loading={this.state.loading} />
-                <TickerName tickerName={this.state.tickerName} />
+                <TickerNameWrap />
                 <DebtMeasure />
                 <GrowthMeasure />
                 <DCFMeasure />
@@ -129,8 +128,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        actionTickername: (tickerName) => dispatch({type:macro.ActionTickerName, payload:tickerName}),
         actionReceive: (name, dictData) => dispatch({ type: name, payload: dictData }),
-        actionClear: () => dispatch({ type: macro.STATE_CLEAR, payload: {} })
+        actionClear: () => dispatch({ type: macro.ActionStateClear, payload: {} })
     }
 }
 

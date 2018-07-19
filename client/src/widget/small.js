@@ -1,6 +1,6 @@
 import React from 'react'
-import tool from '../lib/tool'
 import macro from '../lib/macro'
+import {connect} from 'react-redux'
 
 const Intro = (props) => {
     const iconSize = 50
@@ -27,25 +27,29 @@ const NoData = (props) => {
 
 const Hello = (props) => {
     const size = 300
-    return <div className='jumbotron' style={{ backgroundColor: macro.DIV_COLOR}}>
+    return <div className='jumbotron' style={{ backgroundColor: macro.DIV_COLOR }}>
         <img src='welcome.gif' style={{ width: size, margin: 'auto', display: 'block' }} />
     </div>
 }
 
-const TickerName = (props) => {
-    if(!props.tickerName) return null
-    return <div>
-        <h3>
-            <span className='alert alert-light' >
-                {props.tickerName}
-            </span>
-        </h3>
-    </div>
-}
+class TickerName extends React.Component {
+    render() {
+        const tickerName = this.props.common.tickerName
+        if (!tickerName) return null
+        return <div>
+            <h3>
+                <span className='alert alert-light' >
+                    {this.props.common.tickerName}
+                </span>
+            </h3>
+        </div>
 
+    }
+}
+const TickerNameWrap =  connect((state)=>{return {common: state.common}})(TickerName)
 export {
     Intro,
     NoData,
     Hello,
-    TickerName,
+    TickerNameWrap,
 }

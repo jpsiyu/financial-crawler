@@ -96,7 +96,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        actionSearch: () => { dispatch({ type: 'searched', payload: null }) }
+        actionSearch: () => { dispatch({ type: macro.ActionSearch, payload: null }) }
     }
 }
 

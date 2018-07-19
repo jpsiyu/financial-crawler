@@ -8,8 +8,9 @@ const SAVE_HTML = false
 const SAVE_JSON = true
 const READ_LOCAL = true
 
-const DATA_PATH = 'server/data'
-const DATA_TEMP_PATH = 'server/dataTemp'
+const DATA_PATH = 'server/download/data'
+const DATA_TEMP_PATH = 'server/download/dataTemp'
+const TEMP_PATH = 'server/download/temp' 
 const A_DAY = 24 * 3600 * 1000
 
 function log(...args) {
@@ -19,7 +20,7 @@ function log(...args) {
 
 function saveCrawled(data) {
     if (!SAVE_HTML) return
-    fs.writeFile('server/temp/crawled.html', data, (err) => {
+    fs.writeFile(`${TEMP_PATH}/crawled.html`, data, (err) => {
         if (err) throw err
         log('Html Saved!')
     })

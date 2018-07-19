@@ -2,6 +2,7 @@ import { createStore, combineReducers } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import macro from './lib/macro'
 import pjson from '../../package.json'
+import tool from './lib/tool'
 
 const quoteReducer = (state = {}, action) => {
     switch (action.type) {
@@ -49,8 +50,10 @@ const cashflowReducer = (state = {}, action) => {
 
 const commonReducer = (state = { searched: false }, action) => {
     switch (action.type) {
-        case 'searched':
-            return { searched: true }
+        case macro.ActionSearch:
+            return tool.copy(state, {searched: true})
+        case macro.ActionTickerName:
+            return tool.copy(state, {tickerName: action.payload})
         default:
             return state
     }

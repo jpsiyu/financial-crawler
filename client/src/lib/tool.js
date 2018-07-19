@@ -42,10 +42,22 @@ const toFloat = (value, d = 2) => {
     return parseFloat(value).toFixed(d) * 1
 }
 
+const copy = (obj, add) => {
+    const target = {}
+    Object.keys(obj).forEach( key => {
+        target[key] = obj[key]
+    }) 
+    Object.keys(add).forEach( key => {
+        target[key] = add[key]
+    })
+    return target
+}
+
 export default {
     empty,
     toNumList,
     sliceYearList,
     toMillion,
     toFloat,
+    copy,
 }

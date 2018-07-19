@@ -3,7 +3,10 @@ export default {
     DATA_LOSE: 'DATA_LOSE',
     DATA_PERFECT: 'DATA_PERFECT',
 
-    STATE_CLEAR: 'STATE_CLEAR',
+    ActionStateClear: 'ActionStateClear',
+    ActionTickerName: 'ActionTickerName',
+    ActionSearch: 'ActionSearch',
+    
 
     DIV_COLOR: 'rgb(250,250,250)',
     TABLE_COLOR: 'white',
