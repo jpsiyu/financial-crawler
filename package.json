@@ -10,6 +10,7 @@
     "build": "parcel build client/public/index.html"
   },
   "production": true,
+  "url":"valuation.qianrenju.club",
   "keywords": [],
   "author": "",
   "license": "ISC",
