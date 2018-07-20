@@ -10,7 +10,7 @@
     "build": "parcel build client/public/index.html"
   },
   "production": true,
-  "url":"valuation.qianrenju.club",
+  "ip": "http://34.209.241.122",
   "keywords": [],
   "author": "",
   "license": "ISC",
