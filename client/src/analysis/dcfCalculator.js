@@ -98,7 +98,6 @@ class DcfCalculator {
 
 
     modelInit() {
-        console.log(this.measureData)
         const debt = this.measureData['Short-term debt'] + this.measureData['Long-term debt']
 
         const len = this.measureData['Provision for income taxes'].length
@@ -129,7 +128,7 @@ class DcfCalculator {
     }
 
     costOfDebtPreTax() {
-        return 0.03
+        return 0.07
     }
 
     costOfDebtAfterTax() {
