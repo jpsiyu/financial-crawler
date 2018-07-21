@@ -24715,13 +24715,13 @@ var DebtMesure = function (_React$Component) {
 
             for (var _i = 0; _i < measureData['Short-term debt'].length; _i++) {
                 if (_i == 0) {
-                    measureData['Debt Total'] = [];
+                    measureData['Total Debt'] = [];
                     measureData['Debt on Equity'] = [];
                     measureData['Current Ratio'] = [];
                 }
                 var totalDebt = measureData['Short-term debt'][_i] + measureData['Long-term debt'][_i];
                 var debtOnEquity = totalDebt == 0 ? 0 : totalDebt / measureData["Total stockholders' equity"][_i];
-                measureData['Debt Total'][_i] = _tool2.default.toFloat(totalDebt);
+                measureData['Total Debt'][_i] = _tool2.default.toFloat(totalDebt);
                 measureData['Debt on Equity'][_i] = _tool2.default.toFloat(debtOnEquity);
 
                 var currentRatio = measureData['Total current assets'][_i] / measureData['Total current liabilities'][_i];

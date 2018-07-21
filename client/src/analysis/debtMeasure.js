@@ -60,13 +60,13 @@ class DebtMesure extends React.Component {
 
         for (let i = 0; i < measureData['Short-term debt'].length; i++) {
             if (i == 0) {
-                measureData['Debt Total'] = []
+                measureData['Total Debt'] = []
                 measureData['Debt on Equity'] = []
                 measureData['Current Ratio'] = []
             }
             const totalDebt = (measureData['Short-term debt'][i] + measureData['Long-term debt'][i])
             const debtOnEquity = totalDebt == 0 ? 0 : totalDebt / measureData["Total stockholders' equity"][i]
-            measureData['Debt Total'][i] = tool.toFloat(totalDebt)
+            measureData['Total Debt'][i] = tool.toFloat(totalDebt)
             measureData['Debt on Equity'][i] = tool.toFloat(debtOnEquity)
 
             const currentRatio = measureData['Total current assets'][i] / measureData['Total current liabilities'][i]
