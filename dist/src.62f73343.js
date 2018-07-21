@@ -49198,33 +49198,7 @@ var DcfCalculator = function () {
     }, {
         key: 'costOfDebtPreTax',
         value: function costOfDebtPreTax() {
-
-            var interestRecord = this.recordMgr.get('Interest Expense');
-            interestRecord = new _record.Record(interestRecord.sliceLastAsNum());
-
-            var lDebt = this.recordMgr.get('Long-term debt');
-            lDebt = new _record.Record(lDebt.asNum());
-            var sDebt = this.recordMgr.get('Short-term debt');
-            sDebt = new _record.Record(sDebt.asNum());
-
-            var iLen = interestRecord.data.length;
-            var sLen = sDebt.data.length;
-            var lLen = lDebt.data.length;
-
-            if (iLen !== sLen || iLen !== lLen) return 0.07;
-
-            var rate = 0;
-
-            for (var i = 0; i < iLen; i++) {
-                var s = sDebt.data[i];
-                var l = lDebt.data[i];
-                var inte = interestRecord.data[i];
-                var r = s + l === 0 ? 0 : inte / (s + l);
-                rate += r;
-            }
-            var rateMean = rate / iLen;
-            rateMean = _tool2.default.toFloat(rateMean, 4);
-            return rateMean;
+            return 0.07;
         }
     }, {
         key: 'costOfDebtAfterTax',

@@ -94,6 +94,7 @@ class DcfCalculator {
         }
         this.operatingIncome = this.recordMgr.get('Operating income').sliceLastAsNum()
         this.shareOutstanding = this.recordMgr.get('Shares Outstanding').firstAsNum(true)
+
     }
 
     costOfEquity() {
@@ -102,34 +103,7 @@ class DcfCalculator {
     }
 
     costOfDebtPreTax() {
-
-        let interestRecord = this.recordMgr.get('Interest Expense')
-        interestRecord = new Record(interestRecord.sliceLastAsNum())
-
-        let lDebt = this.recordMgr.get('Long-term debt')
-        lDebt = new Record(lDebt.asNum())
-        let sDebt = this.recordMgr.get('Short-term debt')
-        sDebt = new Record(sDebt.asNum())
-
-        const iLen = interestRecord.data.length
-        const sLen = sDebt.data.length
-        const lLen = lDebt.data.length
-
-        if (iLen !== sLen || iLen !== lLen)
-            return 0.07
-
-        let rate = 0
-
-        for (let i = 0; i < iLen; i++) {
-            let s = sDebt.data[i]
-            let l = lDebt.data[i]
-            let inte = interestRecord.data[i]
-            let r = (s + l) === 0 ? 0 : inte / (s + l)
-            rate += r
-        }
-        let rateMean = rate / iLen
-        rateMean = tool.toFloat(rateMean, 4)
-        return rateMean
+        return 0.07
     }
 
     costOfDebtAfterTax() {
