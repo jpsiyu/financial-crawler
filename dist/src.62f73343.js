@@ -21381,7 +21381,7 @@ module.exports = {
     "watch": "parcel watch client/public/index.html",
     "build": "parcel build client/public/index.html"
   },
-  "production": false,
+  "production": true,
   "ip": "http://34.209.241.122",
   "local": "http://localhost",
   "keywords": [],
