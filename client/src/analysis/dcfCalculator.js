@@ -2,6 +2,7 @@ import macro from '../lib/macro'
 import tool from '../lib/tool'
 import regression from 'regression'
 import store from '../store'
+import { Record, RecordManager } from './record'
 
 class DcfCalculator {
     constructor() {
@@ -11,7 +12,7 @@ class DcfCalculator {
 
         this.health = macro.DATA_EMPTY
         this.lose = {}
-        this.measureData = null
+        this.recordMgr = new RecordManager()
     }
 
     startAnalyse() {
@@ -32,94 +33,67 @@ class DcfCalculator {
             return
         }
 
-        const measureData = {}
-        const lose = {}
+        this.recordMgr.add('Beta', new Record(quote['Beta']))
+        this.recordMgr.add('Market Cap.', new Record(quote['Market Cap.']))
+        this.recordMgr.add('Shares Outstanding', new Record(quote['Shares Outstanding']))
 
-        // measure quote data
-        let measureList = [
-            'Beta',
-            'Market Cap.',
-            'Shares Outstanding'
-        ]
-        measureList.forEach(key => {
-            let value = quote[key]
-            if (!value || value.length === 0) lose[key] = []
-            else if (value[0] == '' || value[0] == '-') lose[key] = value
-            else measureData[key] = key == 'Beta' ? tool.toFloat(value[0]) : tool.toMillion(value[0])
-        })
+        const recordLDebt = new Record(balance['Long-term debt'])
+        recordLDebt.replaceZeros(5)
+        const recordSDebt = new Record(balance['Short-term debt'])
+        recordSDebt.replaceZeros(5)
+        this.recordMgr.add('Short-term debt', recordSDebt)
+        this.recordMgr.add('Long-term debt', recordLDebt)
 
-        // measure balance data
-        measureList = [
-            'Short-term debt',
-            'Long-term debt',
-        ]
-        measureList.forEach(key => {
-            let value = balance[key]
-            if (!value || value.length === 0) 
-                value = [0]
-            measureData[key] = tool.toFloat(value[value.length - 1])
-        })
+        this.recordMgr.add('Provision for income taxes', new Record(income['Provision for income taxes']))
+        this.recordMgr.add('Income before taxes', new Record(income['Income before taxes']))
+        this.recordMgr.add('Operating income', new Record(income['Operating income']))
+        this.recordMgr.add('Interest Expense', new Record(income['Interest Expense']))
 
-        // measure income data
-        measureList = [
-            'Provision for income taxes',
-            'Income before taxes',
-            'Operating income',
-        ]
-        measureList.forEach(key => {
-            let value = income[key]
-            if (!value || value.length === 0) lose[key] = []
-            else measureData[key] = tool.toNumList(value).slice(0, -1)
-        })
+        this.recordMgr.add('Year', new Record(cashflow['Fiscal year ends in December. CNY in millions except per share data.']))
+        this.recordMgr.add('Free cash flow', new Record(cashflow['Free cash flow']))
 
-        // measure cashflow data
-        measureList = [
-            'Fiscal year ends in December. CNY in millions except per share data.',
-            'Free cash flow'
-        ]
-        measureList.forEach((key, i) => {
-            let value = cashflow[key]
-            if (!value || value.length === 0) lose[key] = []
-            else {
-                if (i === 0) measureData['Year'] = tool.sliceYearList(value).slice(0, -1)
-                else measureData[key] = tool.toNumList(value).slice(0, -1)
-            }
-        })
-
+        const lose = this.recordMgr.getLose()
         if (!tool.empty(lose)) {
             this.health = macro.DATA_LOSE
             this.lose = lose
         } else {
             this.health = macro.DATA_PERFECT
-            this.measureData = measureData
             this.modelInit()
         }
     }
 
 
     modelInit() {
-        const debt = this.measureData['Short-term debt'] + this.measureData['Long-term debt']
-
-        const len = this.measureData['Provision for income taxes'].length
-        let rateSum = 0
-        for (let i = 0; i < len; i++) {
-            let taxPay = this.measureData['Provision for income taxes'][i]
-            let income = this.measureData['Income before taxes'][i]
-            let rate = taxPay / income
-            rateSum += rate
-        }
-        const taxRate = tool.toFloat((rateSum / len))
-
-        this.beta = this.measureData['Beta']
-        this.taxRate = taxRate
-        this.marketEquity = this.measureData['Market Cap.']
+        const lDebt = this.recordMgr.get('Long-term debt')
+        const sDebt = this.recordMgr.get('Short-term debt')
+        const debt = lDebt.lastAsNum() + sDebt.lastAsNum()
+        this.bookDebt = debt
         this.marketDebt = debt
-        this.fcfPass = {
-            'Year': this.measureData['Year'],
-            'Free cash flow': this.measureData['Free cash flow']
+
+        const incomeTax = this.recordMgr.get('Provision for income taxes')
+        incomeTax.sliceLastAsNum()
+        const incomeRecord = this.recordMgr.get('Income before taxes')
+        incomeRecord.sliceLastAsNum()
+
+        const len = incomeTax.data.length
+
+        let taxRate = 0
+        for (let i = 0; i < len; i++) {
+            let taxPay = incomeTax.data[i]
+            let income = incomeRecord.data[i]
+            let rate = taxPay / income
+            taxRate += rate
         }
-        this.operatingIncome = this.measureData['Operating income']
-        this.shareOutstanding = this.measureData['Shares Outstanding']
+        this.taxRate = tool.toFloat((taxRate / len))
+
+        this.beta = this.recordMgr.get('Beta').firstAsNum()
+        this.marketEquity = this.recordMgr.get('Market Cap.').firstAsNum(true)
+        this.fcfPass = {
+            'Year': this.recordMgr.get('Year').sliceLastAsYear(),
+            'Free cash flow': this.recordMgr.get('Free cash flow').sliceLastAsNum()
+        }
+        this.operatingIncome = this.recordMgr.get('Operating income').sliceLastAsNum()
+        this.shareOutstanding = this.recordMgr.get('Shares Outstanding').firstAsNum(true)
     }
 
     costOfEquity() {
@@ -128,7 +102,34 @@ class DcfCalculator {
     }
 
     costOfDebtPreTax() {
-        return 0.07
+
+        let interestRecord = this.recordMgr.get('Interest Expense')
+        interestRecord = new Record(interestRecord.sliceLastAsNum())
+
+        let lDebt = this.recordMgr.get('Long-term debt')
+        lDebt = new Record(lDebt.asNum())
+        let sDebt = this.recordMgr.get('Short-term debt')
+        sDebt = new Record(sDebt.asNum())
+
+        const iLen = interestRecord.data.length
+        const sLen = sDebt.data.length
+        const lLen = lDebt.data.length
+
+        if (iLen !== sLen || iLen !== lLen)
+            return 0.07
+
+        let rate = 0
+
+        for (let i = 0; i < iLen; i++) {
+            let s = sDebt.data[i]
+            let l = lDebt.data[i]
+            let inte = interestRecord.data[i]
+            let r = (s + l) === 0 ? 0 : inte / (s + l)
+            rate += r
+        }
+        let rateMean = rate / iLen
+        rateMean = tool.toFloat(rateMean, 4)
+        return rateMean
     }
 
     costOfDebtAfterTax() {
