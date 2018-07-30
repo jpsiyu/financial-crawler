@@ -3,34 +3,38 @@ const util = require('./util.js')
 const path = require('path')
 const bodyParser = require('body-parser')
 const cors = require('cors')
+const pjson = require('../package.json')
 
 const MSNQuote = require('./crawler/MSNQuote')
 const MSKeyRatio = require('./crawler/MSKeyRatio')
 const MSReport = require('./crawler/MSReport')
 const GuChengTicker = require('./crawler/GuChengTicker')
 
+const prefix = (path='') => { return `${pjson.prefix}${path}` }
+
 const app = express()
-app.use(express.static(path.resolve(__dirname, '../dist')))
-app.use(express.static(path.resolve(__dirname, '../client/public')))
+app.use(prefix(), express.static(path.resolve(__dirname, '../dist')))
+app.use(prefix(), express.static(path.resolve(__dirname, '../client/public')))
+
 app.use(bodyParser.json())
 app.use(cors())
 
 app.use((req, res, next) => {
-    util.log(`${req.method},${req.url}`)
+    util.log(`${req.method},${req.originalUrl}`)
     next()
 })
 
 const pipeline = (req, res, handler) => {
-    if(!handler.checkTickerValid()) {
+    if (!handler.checkTickerValid()) {
         util.serverMsg(res, JSON.stringify([]))
         return
     }
 
     const data = handler.loadLocal()
-    if(data){
+    if (data) {
         util.log('Read From Local')
         util.serverMsg(res, data)
-        return 
+        return
     }
     handler.crawlWebSite((ok, data) => {
         util.log('Crawb The Website...')
@@ -38,45 +42,45 @@ const pipeline = (req, res, handler) => {
     })
 }
 
-app.get('/quote', (req, res) => {
+app.get(prefix('/quote'), (req, res) => {
     const ticker = req.query.ticker
     const msnQuote = new MSNQuote(ticker)
     pipeline(req, res, msnQuote)
 })
 
-app.get('/key_ratio', (req, res) => {
+app.get(prefix('/key_ratio'), (req, res) => {
     const ticker = req.query.ticker
     const msKeyRatio = new MSKeyRatio(ticker)
     pipeline(req, res, msKeyRatio)
 })
 
-app.get('/income_statement', (req, res) => {
+app.get(prefix('/income_statement'), (req, res) => {
     const ticker = req.query.ticker
     const income = new MSReport(ticker, 'is')
     pipeline(req, res, income)
 })
 
-app.get('/balance_sheet', (req, res) => {
+app.get(prefix('/balance_sheet'), (req, res) => {
     const ticker = req.query.ticker
     const balance = new MSReport(ticker, 'bs')
     pipeline(req, res, balance)
 })
 
 
-app.get('/cashflow', (req, res) => {
+app.get(prefix('/cashflow'), (req, res) => {
     const ticker = req.query.ticker
     const cashflow = new MSReport(ticker, 'cf')
     pipeline(req, res, cashflow)
 })
 
-app.get('/tickers', (req, res) => {
+app.get(prefix('/tickers'), (req, res) => {
     pipeline(req, res, tickerStore)
 })
 
-app.get('/ticker_name', (req, res) => {
+app.get(prefix('/ticker_name'), (req, res) => {
     const ticker = req.query.ticker
     const tickerName = tickerStore.getTickerName(ticker)
-    const msg = JSON.stringify({ticker, tickerName})
+    const msg = JSON.stringify({ ticker, tickerName })
     util.serverMsg(res, msg)
 })
 
@@ -92,4 +96,4 @@ app.use((err, req, res, next) => {
 const tickerStore = new GuChengTicker()
 tickerStore.loadLocal()
 
-app.listen('3000', () => console.log('Server Listening On Port 3000..'))
+app.listen(pjson.port, () => console.log(`Server Listening On Port ${pjson.port}..`))

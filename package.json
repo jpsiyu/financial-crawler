@@ -6,12 +6,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server/app.js -w server -V --ignore server/download",
-    "watch": "parcel watch client/public/index.html",
-    "build": "parcel build client/public/index.html"
+    "watch": "parcel watch client/public/index.html --public-url /valuation",
+    "build": "parcel build client/public/index.html --public-url /valuation"
   },
   "production": true,
+  "prefix": "/valuation",
+  "port": 3000,
   "ip": "http://34.209.241.122",
-  "local": "http://localhost",
+  "local": "http://localhost/valuation",
   "keywords": [],
   "author": "",
   "license": "ISC",
