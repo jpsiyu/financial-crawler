@@ -12,7 +12,7 @@
   "production": true,
   "prefix": "/valuation",
   "port": 3000,
-  "ip": "http://34.209.241.122",
+  "ip": "http://34.209.241.122/valuation",
   "local": "http://localhost/valuation",
   "keywords": [],
   "author": "",
