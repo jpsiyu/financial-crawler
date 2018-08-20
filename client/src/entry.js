@@ -23,7 +23,6 @@ class Entry extends React.Component {
             { name: 'balance', path: 'balance_sheet', open: true, pass: false },
             { name: 'cashflow', path: 'cashflow', open: true, pass: false },
         ]
-        this.url = pjson.production ? pjson.ip : pjson.local
         this.clearState = this.clearState.bind(this)
     }
 
@@ -36,7 +35,7 @@ class Entry extends React.Component {
     }
 
     getTickerName(ticker) {
-        axios.get(`${this.url}/ticker_name?ticker=${ticker}`).then(response => {
+        axios.get(`ticker_name?ticker=${ticker}`).then(response => {
             const serverMsg = response.data
             const info = JSON.parse(serverMsg.msg)
 
@@ -83,7 +82,7 @@ class Entry extends React.Component {
     }
 
     specifyAnalysis(state) {
-        axios.get(`${this.url}/${state.path}?ticker=${this.ticker}`).then(response => {
+        axios.get(`${state.path}?ticker=${this.ticker}`).then(response => {
             const serverMsg = response.data
             const rawData = JSON.parse(serverMsg.msg)
             const dictData = this.rawData2Dict(rawData)
