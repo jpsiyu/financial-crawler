@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server/app.js -w server -V --ignore server/download",
     "watch": "parcel watch client/public/index.html",
+    "forever": "forever start server/app.js --uid valuation",
     "build": "parcel build client/public/index.html"
   },
   "production": true,
