@@ -10,11 +10,9 @@ const MSKeyRatio = require('./crawler/MSKeyRatio')
 const MSReport = require('./crawler/MSReport')
 const GuChengTicker = require('./crawler/GuChengTicker')
 
-const prefix = (path='') => { return `${pjson.prefix}${path}` }
-
 const app = express()
-app.use(prefix(), express.static(path.resolve(__dirname, '../dist')))
-app.use(prefix(), express.static(path.resolve(__dirname, '../client/public')))
+app.use(express.static(path.resolve(__dirname, '../dist')))
+app.use(express.static(path.resolve(__dirname, '../client/public')))
 
 app.use(bodyParser.json())
 app.use(cors())
@@ -42,42 +40,42 @@ const pipeline = (req, res, handler) => {
     })
 }
 
-app.get(prefix('/quote'), (req, res) => {
+app.get('/quote', (req, res) => {
     const ticker = req.query.ticker
     const msnQuote = new MSNQuote(ticker)
     pipeline(req, res, msnQuote)
 })
 
-app.get(prefix('/key_ratio'), (req, res) => {
+app.get('/key_ratio', (req, res) => {
     const ticker = req.query.ticker
     const msKeyRatio = new MSKeyRatio(ticker)
     pipeline(req, res, msKeyRatio)
 })
 
-app.get(prefix('/income_statement'), (req, res) => {
+app.get('/income_statement', (req, res) => {
     const ticker = req.query.ticker
     const income = new MSReport(ticker, 'is')
     pipeline(req, res, income)
 })
 
-app.get(prefix('/balance_sheet'), (req, res) => {
+app.get('/balance_sheet', (req, res) => {
     const ticker = req.query.ticker
     const balance = new MSReport(ticker, 'bs')
     pipeline(req, res, balance)
 })
 
 
-app.get(prefix('/cashflow'), (req, res) => {
+app.get('/cashflow', (req, res) => {
     const ticker = req.query.ticker
     const cashflow = new MSReport(ticker, 'cf')
     pipeline(req, res, cashflow)
 })
 
-app.get(prefix('/tickers'), (req, res) => {
+app.get('/tickers', (req, res) => {
     pipeline(req, res, tickerStore)
 })
 
-app.get(prefix('/ticker_name'), (req, res) => {
+app.get('/ticker_name', (req, res) => {
     const ticker = req.query.ticker
     const tickerName = tickerStore.getTickerName(ticker)
     const msg = JSON.stringify({ ticker, tickerName })

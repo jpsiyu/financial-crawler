@@ -6,11 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server/app.js -w server -V --ignore server/download",
-    "watch": "parcel watch client/public/index.html --public-url /valuation",
-    "build": "parcel build client/public/index.html --public-url /valuation"
+    "watch": "parcel watch client/public/index.html",
+    "build": "parcel build client/public/index.html"
   },
   "production": true,
-  "prefix": "/valuation",
   "port": 3000,
   "keywords": [],
   "author": "",
