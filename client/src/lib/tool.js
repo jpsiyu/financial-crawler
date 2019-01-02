@@ -24,17 +24,25 @@ const sliceYearList = (list) => {
 }
 
 /**
- * units: tr, bn, m
+ * units: tr, bn, m, B, M
  */
 const toMillion = (value) => {
-    let v = value.slice(0, -2)
-    let u = value.slice(-2)
+    const v1 = value.slice(0, -1)
+    const v2 = value.slice(0, -2)
+    let res = 0
     if (value.match('tr'))
-        return parseFloat(v) * 1000 * 1000
+        res = parseFloat(v2) * 1000 * 1000
     else if (value.match('bn'))
-        return parseFloat(v) * 1000
+        res = parseFloat(v2) * 1000
+    else if (value.match('B'))
+        res = parseFloat(v1) * 1000
     else if (value.match('m'))
-        return parseFloat(v)
+        res = parseFloat(v1)
+    else if (value.match('M'))
+        res = parseFloat(v1)
+
+    return res
+
 }
 
 const toFloat = (value, d = 2) => {

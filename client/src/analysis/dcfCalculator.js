@@ -34,7 +34,7 @@ class DcfCalculator {
         }
 
         this.recordMgr.add('Beta', new Record(quote['Beta']))
-        this.recordMgr.add('Market Cap.', new Record(quote['Market Cap.']))
+        this.recordMgr.add('Market Cap', new Record(quote['Market Cap']))
         this.recordMgr.add('Shares Outstanding', new Record(quote['Shares Outstanding']))
 
         const recordLDebt = new Record(balance['Long-term debt'])
@@ -87,7 +87,11 @@ class DcfCalculator {
         this.taxRate = tool.toFloat((taxRate / len))
 
         this.beta = this.recordMgr.get('Beta').firstAsNum()
-        this.marketEquity = this.recordMgr.get('Market Cap.').firstAsNum(true)
+
+        const mcRecord = this.recordMgr.get('Market Cap')
+        mcRecord.removeAllHeadSymbol()
+        this.marketEquity = mcRecord.firstAsNum(true)
+
         this.fcfPass = {
             'Year': this.recordMgr.get('Year').sliceLastAsYear(),
             'Free cash flow': this.recordMgr.get('Free cash flow').sliceLastAsNum()

@@ -96,14 +96,7 @@ function csvStr2Json(csvStr) {
 }
 
 function quoteUrl(ticker) {
-    if (ticker.match('^60'))
-        return `https://www.msn.com/en-gb/money/stockdetails/fi-136.1.${ticker}.SHG?symbol=${ticker}&form=PRFIHQ`
-    else if (ticker.match('^00'))
-        return `https://www.msn.com/en-gb/money/stockdetails/fi-137.1.${ticker}.SHE?symbol=${ticker}&form=PRFIHQ`
-    else if (ticker.match('^30'))
-        return `https://www.msn.com/en-gb/money/stockdetails/fi-137.1.${ticker}.SHE?symbol=${ticker}&form=PRFIHQ`
-    else
-        return ''
+    return `https://www.marketwatch.com/investing/stock/${ticker}?countrycode=cn`
 }
 
 function checkTickerValid(ticker) {

@@ -3,7 +3,7 @@ const util = require('../util')
 const cheerio = require('cheerio')
 const request = require('request')
 
-class MSNQuote extends Crawler {
+class MWQuote extends Crawler {
     constructor(ticker) {
         super(ticker)
         this.localPath = `${util.DATA_TEMP_PATH}/${ticker}-quote.json`
@@ -25,7 +25,7 @@ class MSNQuote extends Crawler {
             if (!err) {
                 const $ = cheerio.load(body)
                 util.saveCrawled($.html())
-                const ul = $('ul.today-trading-container')
+                const ul = $('ul.list--kv')
                 ul.find('li').each((index, obj) => {
                     let li = $(obj)
                     let keyTab = li.children().first()
@@ -44,4 +44,4 @@ class MSNQuote extends Crawler {
     }
 }
 
-module.exports = MSNQuote
+module.exports = MWQuote

@@ -5,7 +5,7 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 const pjson = require('../package.json')
 
-const MSNQuote = require('./crawler/MSNQuote')
+const MWQuote = require('./crawler/MWQuote')
 const MSKeyRatio = require('./crawler/MSKeyRatio')
 const MSReport = require('./crawler/MSReport')
 const GuChengTicker = require('./crawler/GuChengTicker')
@@ -42,8 +42,8 @@ const pipeline = (req, res, handler) => {
 
 app.get('/quote', (req, res) => {
     const ticker = req.query.ticker
-    const msnQuote = new MSNQuote(ticker)
-    pipeline(req, res, msnQuote)
+    const mwQuote = new MWQuote(ticker)
+    pipeline(req, res, mwQuote)
 })
 
 app.get('/key_ratio', (req, res) => {

@@ -42,7 +42,7 @@ class DCFMeasure extends React.Component {
                 onDurationChange={this.onDurationChange}
             />
             <TransformTable data={fcfReport} title='现金流预测(M)' />
-            <Grid data={valuationReport} title='估值计算' />
+            <Grid data={valuationReport} title='估值计算(M)' />
         </div>
 
     }

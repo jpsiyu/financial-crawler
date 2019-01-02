@@ -26,6 +26,15 @@ class Record {
             return tool.toFloat(this.data[0])
     }
 
+    removeAllHeadSymbol(){
+        const newData = [] 
+        this.data.forEach(d => {
+            const nd = d.slice(1)
+            newData.push(nd)
+        })
+        this.data = newData
+    }
+
     last() {
         return this.data[this.data.length - 1]
     }

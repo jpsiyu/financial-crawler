@@ -65,7 +65,7 @@ class Search extends React.Component {
 
     render() {
         const tipsComp =
-            <div class="alert alert-danger" role="alert">
+            <div className="alert alert-danger" role="alert">
                 {this.state.inputTips}
             </div>
         return <div className='jumbotron mt-3' style={{ backgroundColor: macro.DIV_COLOR }}>
