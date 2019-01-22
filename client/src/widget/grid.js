@@ -17,26 +17,28 @@ const data = {
 }
 
 const Column = (props) => {
-    return <div className='col'>
-        <span className='key'>{props.name}</span>
-        <span className='value'>{props.value}</span>
+    const add = props.isLast ? 'high-light' : ''
+    return <div className={`col ${add}`}>
+        <span className='label'>{props.name}</span>
+        <span className='label'>{props.value}</span>
     </div>
 }
 
 const Grid = (props) => {
     const data = props.data
     const rows = []
-    let columns = []
+    const columns = []
     const keyList = Object.keys(data)
-    const num = Math.min(20, keyList.length)
+    const len = keyList.length
     keyList.forEach((name, i) => {
         const value = data[name]
-        columns.push(<Column key={i} name={name} value={value} />)
-        if (columns.length === num) {
-            rows.push(<div key={i} className='row'>{columns}</div>)
-            columns = []
+        const isLast = i == (len - 1)
+        columns.push(<Column key={i} name={name} value={value} isLast={isLast} />)
+        if (isLast && (len % 2 == 1)) {
+            columns.push(<Column key={i + 1} name='' value='' />)
         }
     })
+    rows.push(<div key={0} className='row'>{columns}</div>)
     return <div className='grid section'>
         <h3 className='title'>{props.title}</h3>
         {rows}

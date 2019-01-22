@@ -103,7 +103,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   // Override the current require with this new one
   return newRequire;
-})({107:[function(require,module,exports) {
+})({110:[function(require,module,exports) {
 var bundleURL = null;
 function getBundleURLCached() {
   if (!bundleURL) {
@@ -133,7 +133,7 @@ function getBaseURL(url) {
 
 exports.getBundleURL = getBundleURLCached;
 exports.getBaseURL = getBaseURL;
-},{}],38:[function(require,module,exports) {
+},{}],40:[function(require,module,exports) {
 var bundle = require('./bundle-url');
 
 function updateLink(link) {
@@ -164,47 +164,47 @@ function reloadCSS() {
 }
 
 module.exports = reloadCSS;
-},{"./bundle-url":107}],26:[function(require,module,exports) {
+},{"./bundle-url":110}],26:[function(require,module,exports) {
 
 var reloadCSS = require('_css_loader');
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":38}],27:[function(require,module,exports) {
+},{"_css_loader":40}],27:[function(require,module,exports) {
 
 var reloadCSS = require('_css_loader');
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":38}],28:[function(require,module,exports) {
+},{"_css_loader":40}],28:[function(require,module,exports) {
 
 var reloadCSS = require('_css_loader');
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":38}],29:[function(require,module,exports) {
+},{"_css_loader":40}],29:[function(require,module,exports) {
 
 var reloadCSS = require('_css_loader');
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":38}],30:[function(require,module,exports) {
+},{"_css_loader":40}],30:[function(require,module,exports) {
 
 var reloadCSS = require('_css_loader');
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":38}],31:[function(require,module,exports) {
+},{"_css_loader":40}],31:[function(require,module,exports) {
 
 var reloadCSS = require('_css_loader');
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":38}],402:[function(require,module,exports) {
+},{"_css_loader":40}],32:[function(require,module,exports) {
 
 var reloadCSS = require('_css_loader');
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"_css_loader":38}],8:[function(require,module,exports) {
+},{"_css_loader":40}],8:[function(require,module,exports) {
 
 var reloadCSS = require('_css_loader');
 module.hot.dispose(reloadCSS);
 module.hot.accept(reloadCSS);
-},{"./small.css":26,"./search.css":27,"./table.css":28,"./growth.css":29,"./grid.css":30,"./predict.css":31,"./chart.css":402,"_css_loader":38}],401:[function(require,module,exports) {
+},{"./small.css":26,"./search.css":27,"./table.css":28,"./growth.css":29,"./grid.css":30,"./predict.css":31,"./chart.css":32,"_css_loader":40}],404:[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 
@@ -233,7 +233,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '49512' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '49866' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 
@@ -374,4 +374,4 @@ function hmrAccept(bundle, id) {
     return hmrAccept(global.parcelRequire, id);
   });
 }
-},{}]},{},[401], null)
+},{}]},{},[404], null)

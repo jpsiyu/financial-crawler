@@ -17,8 +17,29 @@
 
 .predict .part-b{
     flex: 1;
+    padding: 10px 0;
 }
 
+.predict .choose{
+    padding: 3px 0;
+}
+
+.predict .title{
+    color: gray;
+    padding: 3px 0;
+}
+
+.predict .explain{
+    padding: 10px 0;
+}
+
+.predict ul{
+    padding-left: 20px;
+}
+
+.predict select{
+    margin: 0 10px;
+}
 
 @media (min-width: 768px){
     .predict .detail{

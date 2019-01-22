@@ -36,3 +36,12 @@
 .ticker p:nth-child(2){
     padding: 0 5px;
 }
+
+.nodata .title{
+    padding: 10px 0;
+}
+
+.nodata img{
+    width: 300px;
+    margin: auto;
+}

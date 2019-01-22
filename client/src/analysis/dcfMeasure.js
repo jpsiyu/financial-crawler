@@ -93,26 +93,34 @@ const PredictChart = (props) => {
                 />
             </div>
             <div className='part-b'>
-                <p>参数调解与说明</p>
-                <label className="input-group-text" htmlFor="inputGroupSelect01">预测方法</label>
-                <select className="custom-select"
-                    id="inputGroupSelect01"
-                    onChange={props.onMethodChange}>
+                <h3 className='title'>模型选择</h3>
+                <div className='choose'>
+                    <label className="input-group-text" htmlFor="inputGroupSelect01">预测方法</label>
+                    <select className="custom-select"
+                        id="inputGroupSelect01"
+                        onChange={props.onMethodChange}>
 
-                    <option value={macro.MethodRegression}>自由现金流线性回归</option>
-                    <option value={macro.MethodCAGR}>营业利润复合增长率</option>
-                </select>
-                <label className="input-group-text" htmlFor="inputGroupSelect02">预测时长</label>
-                <select className="custom-select"
-                    id="inputGroupSelect02"
-                    onChange={props.onDurationChange}>
+                        <option value={macro.MethodRegression}>自由现金流线性回归</option>
+                        <option value={macro.MethodCAGR}>营业利润复合增长率</option>
+                    </select>
+                </div>
+                <div className='choose'>
+                    <label className="input-group-text" htmlFor="inputGroupSelect02">预测时长</label>
+                    <select className="custom-select"
+                        id="inputGroupSelect02"
+                        onChange={props.onDurationChange}>
 
-                    <option value={macro.Duration5}>未来5年</option>
-                    <option value={macro.Duration10}>未来10年</option>
-                </select>
-                <p className='font-weight-bold'>说明</p>
-                <p className='font-weight-light'>1. 自由现金流线性回归: 以过往年份的自由现金流作线性回归线，未来的自由现金流选取该年份在线上的点.</p>
-                <p className='font-weight-light'>2. 营业利润复合增长率: 以过往年份的自由现金流均值为起点，以相等于营业利润增长率的速度增长.</p>
+                        <option value={macro.Duration5}>未来5年</option>
+                        <option value={macro.Duration10}>未来10年</option>
+                    </select>
+                </div>
+                <div className='explain'>
+                    <h3 className='title'>说明</h3>
+                    <ul>
+                        <li><p>自由现金流线性回归: 以过往年份的自由现金流作线性回归线，未来的自由现金流选取该年份在线上的点.</p></li>
+                        <li><p>营业利润复合增长率: 以过往年份的自由现金流均值为起点，以相等于营业利润增长率的速度增长.</p></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

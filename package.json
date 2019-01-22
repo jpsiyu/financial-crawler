@@ -4,11 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server/app.js -w server -V --ignore server/download",
-    "watch": "parcel watch client/public/index.html",
+    "parcel-watch": "parcel watch client/public/index.html",
+    "parcel-build": "parcel build client/public/index.html",
+    "parcel-clear": "rm -rf dist .cache",
     "forever": "forever start server/app.js --uid valuation",
-    "build": "parcel build client/public/index.html"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "production": true,
   "port": 3000,

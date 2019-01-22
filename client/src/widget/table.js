@@ -22,11 +22,11 @@ const DataTable = (props) => {
         targets.push(<tr key={i}>{row}</tr>)
         i++
     })
-    const divColor = props.warn ? macro.DIV_COLOR_WARN : macro.DIV_COLOR
-    return <div className='jumbotron' style={{ backgroundColor: divColor }}>
-        <h4>{props.title}</h4>
-        <p>{props.desc}</p>
-        <table className='table table-bordered' style={{ backgroundColor: macro.TABLE_COLOR }}>
+
+    return <div className='tf-table section'>
+        <h3 className='title'>{props.title}</h3>
+        <p className='desc'>{props.desc}</p>
+        <table className='table'>
             <thead>{heads}</thead>
             <tbody>{rows}</tbody>
         </table>

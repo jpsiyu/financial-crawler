@@ -10,12 +10,11 @@ const Intro = (props) => {
 }
 
 const NoData = (props) => {
-    const size = 400
     const desc = '数据尚未采集'
-    return <div className='jumbotron' style={{ backgroundColor: macro.DIV_COLOR_WARN }}>
-        <h4>{props.title}</h4>
+    return <div className='nodata section'>
+        <h3 className='title'>{props.title}</h3>
         <p>{desc}</p>
-        <img className='img-fluid' src='nodata.gif' style={{ width: size }} />
+        <img className='img-fluid' src='nodata.gif' />
     </div>
 
 }
