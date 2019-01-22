@@ -22,11 +22,11 @@ const DataTable = (props) => {
         targets.push(<tr key={i}>{row}</tr>)
         i++
     })
-    const divColor = props.warn ? macro.DIV_COLOR_WARN: macro.DIV_COLOR
-    return <div className='jumbotron' style={{backgroundColor: divColor}}>
+    const divColor = props.warn ? macro.DIV_COLOR_WARN : macro.DIV_COLOR
+    return <div className='jumbotron' style={{ backgroundColor: divColor }}>
         <h4>{props.title}</h4>
         <p>{props.desc}</p>
-        <table className='table table-bordered' style={{backgroundColor: macro.TABLE_COLOR}}>
+        <table className='table table-bordered' style={{ backgroundColor: macro.TABLE_COLOR }}>
             <thead>{heads}</thead>
             <tbody>{rows}</tbody>
         </table>
@@ -41,26 +41,27 @@ const TransformTable = (props) => {
     Object.keys(data).forEach(key => {
         heads.push(<th key={i}>{key}</th>)
         let values = data[key]
-        for(let j= 0; j < values.length; j++){
-            if(!rows[j])  rows[j] = []
+        for (let j = 0; j < values.length; j++) {
+            if (!rows[j]) rows[j] = []
             rows[j].push(<td key={`${i}-${j}`}>{values[j]}</td>)
         }
         i++
     })
     let rowsTab = []
-    for(let i=0; i < rows.length; i++){
+    for (let i = 0; i < rows.length; i++) {
         rowsTab.push(<tr key={i}>{rows[i]}</tr>)
     }
-    return <div className='jumbotron' style={{backgroundColor:macro.DIV_COLOR}}>
-        <h4>{props.title}</h4>
-        <p>{props.desc}</p>
-        <table className='table table-bordered table-sm table-responsive-md' style={{backgroundColor:macro.TABLE_COLOR}}>
-            <thead><tr>{heads}</tr></thead>
-            <tbody>{rowsTab}</tbody>
-        </table>
+    return <div className='tf-table'>
+        <p className='title'>{props.title}</p>
+        <p className='desc'>{props.desc}</p>
+        <div className='table-wrap'>
+            <table className='table'>
+                <thead><tr>{heads}</tr></thead>
+                <tbody>{rowsTab}</tbody>
+            </table>
+        </div>
     </div>
-
 }
 
 
-export {DataTable, TransformTable}
+export { DataTable, TransformTable }

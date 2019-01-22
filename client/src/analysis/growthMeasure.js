@@ -4,7 +4,7 @@ import macro from '../lib/macro'
 import { DataTable } from '../widget/table'
 import { connect } from 'react-redux'
 import { BarChart } from '../widget/chart'
-import {NoData} from '../widget/small'
+import { NoData } from '../widget/small'
 
 class GrowthMeasure extends React.Component {
     constructor() {
@@ -63,16 +63,14 @@ class GrowthMeasure extends React.Component {
                 const x = this.state.measureData['Cash Flow Ratios']
                 const y1 = this.state.measureData['Book Value Per Share * CNY']
                 const y2 = this.state.measureData['Earnings Per Share CNY']
-                return <div className='jumbotron' style={{backgroundColor:macro.DIV_COLOR}}>
-                    <h4>{title}</h4>
-                    <p>{standard}</p>
-                    <div className='row'>
-                        <div className='col-md-6'>
-                            <BarChart x={x} y={y1} title='每股净资产(M)' />
-                        </div>
-                        <div className='col-md-6'>
-                            <BarChart x={x} y={y2} title='每股净利润(M)' />
-                        </div>
+                return <div className='growth section'>
+                    <p className='title'>{title}</p>
+                    <p className='desc'>{standard}</p>
+                    <div className='chart'>
+                        <BarChart x={x} y={y1} title='每股净资产(M)' />
+                    </div>
+                    <div className='chart'>
+                        <BarChart x={x} y={y1} title='每股净资产(M)' />
                     </div>
                 </div>
             default:

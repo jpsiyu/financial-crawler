@@ -1,0 +1,31 @@
+.intro {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    padding: 10px 0;
+}
+
+.intro img{
+    width: 50px;
+    height: 50px;
+}
+
+.intro p{
+    font-size: 20px;
+    padding: 0 10px;
+}
+
+.hello img{
+    width: 100%;
+}
+
+.ticker{
+    display: flex;
+    align-items: flex-end;
+    padding: 20px 0;
+    color: gray;
+}
+
+.ticker p:nth-child(2){
+    padding: 0 5px;
+}

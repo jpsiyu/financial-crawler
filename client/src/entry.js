@@ -1,13 +1,12 @@
 import React from 'react'
 import axios from 'axios'
-import pjson from '../../package.json'
 import DebtMeasure from './analysis/debtMeasure'
 import GrowthMeasure from './analysis/growthMeasure'
 import DCFMeasure from './analysis/dcfMeasure'
 import macro from './lib/macro';
 import Search from './widget/search'
 import { connect } from 'react-redux'
-import { Hello, TickerNameWrap } from './widget/small'
+import { TickerNameWrap } from './widget/small'
 
 class Entry extends React.Component {
     constructor() {
@@ -102,20 +101,25 @@ class Entry extends React.Component {
     }
 
     render() {
-        if (this.props.common.searched) {
-            return <div className="container">
-                <Search startAnalysis={ticker => this.startAnalysis(ticker)} loading={this.state.loading} />
-                <TickerNameWrap />
-                <DebtMeasure />
-                <GrowthMeasure />
-                <DCFMeasure />
-            </div>
-        } else {
-            return <div className="container">
-                <Search startAnalysis={ticker => this.startAnalysis(ticker)} loading={this.state.loading} />
-                <Hello />
-            </div>
-        }
+        return <div className='entry'>
+            <Search startAnalysis={ticker => this.startAnalysis(ticker)} loading={this.state.loading} />
+            {this.props.common.searched ? this.renderModel() : this.renderHello()}
+        </div>
+    }
+
+    renderModel() {
+        return <div className='model'>
+            <TickerNameWrap />
+            <DebtMeasure />
+            <GrowthMeasure />
+            <DCFMeasure />
+        </div>
+    }
+
+    renderHello() {
+        return <div className='hello'>
+            <img src='welcome.gif' />
+        </div>
     }
 }
 
@@ -127,7 +131,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        actionTickername: (tickerInfo) => dispatch({type:macro.ActionTickerInfo, payload:tickerInfo}),
+        actionTickername: (tickerInfo) => dispatch({ type: macro.ActionTickerInfo, payload: tickerInfo }),
         actionReceive: (name, dictData) => dispatch({ type: name, payload: dictData }),
         actionClear: () => dispatch({ type: macro.ActionStateClear, payload: {} })
     }
