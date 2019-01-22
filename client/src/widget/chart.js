@@ -22,8 +22,8 @@ const BarChart = (props) => {
             },
         ]
     }
-    return <div className='jumbotron' style={{ backgroundColor: macro.CHART_COLOR }} >
-        <Bar data={data} width={width} height={height} />
+    return <div className='bar-chart' >
+        <Bar data={data} />
     </div>
 }
 
@@ -112,14 +112,14 @@ const BarAndBarChart = (props) => {
     const options = {
         legend: {
             display: true,
-            labels: { 
+            labels: {
                 fontSize: 10,
                 boxWidth: 10,
             }
         }
     }
-    return <div className='jumbotron' style={{ backgroundColor: macro.CHART_COLOR }} >
-        <Bar data={data} width={width} height={height} options={options} />
+    return <div className='bar-bar-chart' >
+        <Bar data={data} options={options} />
     </div>
 }
 

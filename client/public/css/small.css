@@ -15,15 +15,22 @@
     padding: 0 10px;
 }
 
+.hello{
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
 .hello img{
-    width: 100%;
+    margin: auto;
+    width: 400px;
+    height: auto;
 }
 
 .ticker{
     display: flex;
     align-items: flex-end;
     padding: 20px 0;
-    color: gray;
 }
 
 .ticker p:nth-child(2){

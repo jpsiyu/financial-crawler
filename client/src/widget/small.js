@@ -24,7 +24,7 @@ class TickerName extends React.Component {
     render() {
         const tickerInfo = this.props.common.tickerInfo
         if (!tickerInfo) return null
-        return <div className='ticker'>
+        return <div className='ticker section'>
             <p>{tickerInfo.tickerName}</p>
             <p>({tickerInfo.ticker})</p>
         </div>

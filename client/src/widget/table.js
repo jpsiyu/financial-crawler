@@ -51,8 +51,8 @@ const TransformTable = (props) => {
     for (let i = 0; i < rows.length; i++) {
         rowsTab.push(<tr key={i}>{rows[i]}</tr>)
     }
-    return <div className='tf-table'>
-        <p className='title'>{props.title}</p>
+    return <div className='tf-table section'>
+        <h3 className='title'>{props.title}</h3>
         <p className='desc'>{props.desc}</p>
         <div className='table-wrap'>
             <table className='table'>

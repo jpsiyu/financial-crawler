@@ -4,18 +4,28 @@
 @import './growth.css';
 @import './grid.css';
 @import './predict.css';
+@import './chart.css';
 
 *{
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    -webkit-overflow-scrolling: touch;
 }
 
 .entry{
     width: 90%;
     margin: auto;
+    color: gray;
 }
 
 .section{
+    margin: 30px 0;
     padding: 30px 0;
+}
+
+@media (min-width: 768px){
+    .entry{
+        max-width: 1024px;
+    }
 }

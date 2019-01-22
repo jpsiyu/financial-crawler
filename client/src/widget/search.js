@@ -54,7 +54,8 @@ class Search extends React.Component {
         return <div className='search'>
             <Intro />
             <div className='form' onSubmit={this.onBtnSearch}>
-                <input type='text' placeholder='股票代码:' ref={this.inputRef} onChange={this.onChange} required />
+                <p className='placeholder'>股票代码:</p>
+                <input type='text' ref={this.inputRef} onChange={this.onChange} required />
                 <button onClick={this.onBtnSearch}>评估</button>
             </div>
             {this.state.inputTips ? this.renderTips() : null}

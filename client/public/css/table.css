@@ -3,32 +3,31 @@
 }
 
 .tf-table .table-wrap{
+    padding-bottom: 20px;
     overflow: scroll;
-    padding: 10px 0;
 }
 
 .tf-table table{
+    min-width: 80%;
     white-space: nowrap;
     border-collapse: collapse;
 }
 
 .tf-table th{
     padding: 5px;
-    border-right: 1px gray solid;
-    border-left: 1px gray solid;
-    border-bottom: 1px gray solid;
+    border: 1px lightgray solid;
 }
 
 .tf-table td{
     padding: 5px;
-    border-right: 1px gray solid;
-    border-left: 1px gray solid;
+    border: 1px lightgray solid;
 }
 
 .tf-table .title{
-    font-size: 22px;
+    font-weight: bold;
+    color: black;
 }
 
 .tf-table .desc{
-    color: gray;
+    padding: 10px 0;
 }

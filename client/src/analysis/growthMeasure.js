@@ -64,13 +64,11 @@ class GrowthMeasure extends React.Component {
                 const y1 = this.state.measureData['Book Value Per Share * CNY']
                 const y2 = this.state.measureData['Earnings Per Share CNY']
                 return <div className='growth section'>
-                    <p className='title'>{title}</p>
+                    <h3 className='title'>{title}</h3>
                     <p className='desc'>{standard}</p>
-                    <div className='chart'>
+                    <div className='chart-container'>
                         <BarChart x={x} y={y1} title='每股净资产(M)' />
-                    </div>
-                    <div className='chart'>
-                        <BarChart x={x} y={y1} title='每股净资产(M)' />
+                        <BarChart x={x} y={y2} title='每股净利润(M)' />
                     </div>
                 </div>
             default:

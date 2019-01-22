@@ -1,2 +1,27 @@
 .predict{
 }
+
+.predict .title{
+    color: black;
+    padding: 10px 0;
+}
+
+.predict .detail{
+    display: flex;
+    flex-direction: column;
+}
+
+.predict .part-a{
+    flex: 1;
+}
+
+.predict .part-b{
+    flex: 1;
+}
+
+
+@media (min-width: 768px){
+    .predict .detail{
+        flex-direction: row;
+    }
+}

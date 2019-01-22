@@ -16,6 +16,10 @@
     flex: 1;
     outline-width: 1px;
     border-radius: 0;
+    padding-left: 75px;
+    font-size: 16px;
+    font-weight: bold;
+    color: blue;
 }
 
 .search .form button{
@@ -25,14 +29,19 @@
     background-color: black;
     border: 1px black solid;
     color: white;
+    white-space: nowrap;
 }
 
 .search .form button:hover{
     cursor: pointer;
-    color: gray;
 }
 
 .search .tips{
     color: red;
     width: 100%;
+}
+
+.search .placeholder{
+    padding: 2px;
+    position: absolute;
 }

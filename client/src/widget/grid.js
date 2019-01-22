@@ -17,9 +17,9 @@ const data = {
 }
 
 const Column = (props) => {
-    return <div className='col-sm-4 d-flex justify-content-between mb-1' style={{ backgroundColor: macro.BG_COLOR }}>
-        <span className='label' style={{ color: macro.FontGray }}>{props.name}</span>
-        <span className='label'>{props.value}</span>
+    return <div className='col'>
+        <span className='key'>{props.name}</span>
+        <span className='value'>{props.value}</span>
     </div>
 }
 
@@ -33,12 +33,12 @@ const Grid = (props) => {
         const value = data[name]
         columns.push(<Column key={i} name={name} value={value} />)
         if (columns.length === num) {
-            rows.push(<div key={i} className='row mb-3'>{columns}</div>)
+            rows.push(<div key={i} className='row'>{columns}</div>)
             columns = []
         }
     })
     return <div className='grid section'>
-        <h4>{props.title}</h4>
+        <h3 className='title'>{props.title}</h3>
         {rows}
     </div>
 }

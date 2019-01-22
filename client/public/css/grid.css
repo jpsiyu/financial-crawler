@@ -1,2 +1,27 @@
-.grid{
+.grid .title{
+    color: black;
+    padding: 10px 0;
+}
+
+.grid .row{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+}
+
+.grid .col{
+    padding: 2px 20px;
+    width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px lightgray solid;
+}
+
+.grid .key{
+    white-space: nowrap;
+}
+
+.grid .value{
+    color: black;
 }
