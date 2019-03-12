@@ -18,8 +18,12 @@ class MWQuote extends Crawler {
         return data
     }
 
+    quoteUrl(ticker) {
+        return `https://www.marketwatch.com/investing/stock/${ticker}?countrycode=cn`
+    }
+
     crawlWebSite(callback) {
-        const url = util.quoteUrl(this.ticker)
+        const url = this.quoteUrl(this.ticker)
         request(url, (err, response, body) => {
             let data = []
             if (!err) {
@@ -38,7 +42,7 @@ class MWQuote extends Crawler {
 
             data = JSON.stringify(data)
             const ok = !err
-            if(ok) util.json2local(this.localPath, data)
+            if (ok) util.json2local(this.localPath, data)
             callback(ok, data)
         })
     }

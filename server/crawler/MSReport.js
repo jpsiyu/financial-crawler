@@ -1,6 +1,7 @@
 const Crawler = require('./crawler')
 const util = require('../util')
 const request = require('request')
+const buildUrl = require('build-url')
 
 class MSReport extends Crawler {
     constructor(ticker, reportType) {
@@ -37,21 +38,46 @@ class MSReport extends Crawler {
         return data
     }
 
+
+    /*
+    code: Tick's symbol
+    reportType: is = Income Statement, cf = Cash Flow, bs = Balance Sheet
+    period: 12 for annual reporting, 3 for quarterly reporting
+    dataType: this doesn't seem to change and is always A
+    order: asc or desc (ascending or descending)
+    columnYear: 5 or 10 are the only two values supported
+    number: The units of the response data. 1 = None 2 = Thousands 3 = Millions 4 = Billions
+    api detail: https://gist.github.com/hahnicity/45323026693cdde6a116
+*/
+    financialUrl(url, code, reportType = 'is', period = 12, dataType = 'A', order = 'asc', columnYear = 10, number = 3) {
+        const queryParams = {
+            't': code,
+            'reportType': reportType,
+            'period': period,
+            'dataType': dataType,
+            'order': order,
+            'columnYear': columnYear,
+            'number': number
+        }
+        const res = buildUrl(url, { queryParams })
+        return res
+    }
+
     crawlWebSite(callback) {
         const url = 'http://financials.morningstar.com/ajax/ReportProcess4CSV.html'
-        const combinedUrl = util.financialUrl(url, this.ticker, this.reportType)
+        const combinedUrl = this.financialUrl(url, this.ticker, this.reportType)
         util.log('************', url, combinedUrl)
         request(combinedUrl, (error, response, body) => {
             let data = []
             let ok = false
-            if(body === ''){
+            if (body === '') {
                 util.log('Err: Body Empty')
                 data = JSON.stringify([])
-            }else if (!error) {
+            } else if (!error) {
                 data = util.csvStr2Json(body)
                 util.json2local(this.localPath, data)
                 ok = true
-            }else {
+            } else {
                 util.log('ERR:', error)
                 data = JSON.stringify([])
             }

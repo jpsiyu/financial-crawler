@@ -1,6 +1,7 @@
 const Crawler = require('./crawler')
 const util = require('../util')
 const request = require('request')
+const buildUrl = require('build-url')
 
 class MSKeyRatio extends Crawler {
     constructor(ticker) {
@@ -16,16 +17,24 @@ class MSKeyRatio extends Crawler {
         return data
     }
 
+    keyRatioUrl(url, ticker) {
+        const queryParams = {
+            't': ticker
+        }
+        const res = buildUrl(url, { queryParams })
+        return res
+    }
+
     crawlWebSite(callback) {
         const url = 'http://financials.morningstar.com/ajax/exportKR2CSV.html'
-        const combinedUrl = util.keyRatioUrl(url, this.ticker)
+        const combinedUrl = this.keyRatioUrl(url, this.ticker)
         request(combinedUrl, (error, response, body) => {
             let data = []
             let ok = false
-            if(body === ''){
+            if (body === '') {
                 util.log('Err: Body Empty')
                 data = JSON.stringify([])
-            }else if (!error) {
+            } else if (!error) {
                 data = util.csvStr2Json(body)
                 util.json2local(this.localPath, data)
                 ok = true
