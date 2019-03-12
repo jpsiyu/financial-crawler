@@ -6,7 +6,7 @@ const CSV = require('csv-string')
 const LOG_OPEN = true
 const SAVE_HTML = false
 const SAVE_JSON = true
-const READ_LOCAL = true
+const READ_LOCAL = false
 
 const DATA_PATH = 'server/download/data'
 const DATA_TEMP_PATH = 'server/download/dataTemp'

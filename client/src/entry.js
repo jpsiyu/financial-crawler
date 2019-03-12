@@ -118,7 +118,7 @@ class Entry extends React.Component {
 
     renderHello() {
         return <div className='hello'>
-            <img src='welcome.gif' />
+            <img src='welcome.png' />
         </div>
     }
 }

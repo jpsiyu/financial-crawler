@@ -40,6 +40,7 @@ class MSReport extends Crawler {
     crawlWebSite(callback) {
         const url = 'http://financials.morningstar.com/ajax/ReportProcess4CSV.html'
         const combinedUrl = util.financialUrl(url, this.ticker, this.reportType)
+        util.log('************', url, combinedUrl)
         request(combinedUrl, (error, response, body) => {
             let data = []
             let ok = false

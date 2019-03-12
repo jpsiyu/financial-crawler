@@ -39,6 +39,7 @@ class Search extends React.Component {
 
 
     checkInput(event) {
+        /*
         const input = this.inputRef.current.value
         let pass = false
         if (isNaN(input) || input.length != 6) {
@@ -48,6 +49,9 @@ class Search extends React.Component {
             pass = true
         }
         return pass
+        */
+        this.setState({inputTips: '应用升级中，敬请期待!'})
+        return false
     }
 
     render() {
