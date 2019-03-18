@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 const Intro = (props) => {
     return <div className='intro'>
-        <img src='logo.png' />
+        <img src='/images/logo.png' />
         <p>牛大车估值</p>
     </div>
 }
@@ -14,7 +14,7 @@ const NoData = (props) => {
     return <div className='nodata section'>
         <h3 className='title'>{props.title}</h3>
         <p>{desc}</p>
-        <img className='img-fluid' src='nodata.gif' />
+        <img className='img-fluid' src='/images/nodata.gif' />
     </div>
 
 }

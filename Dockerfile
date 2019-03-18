@@ -1,13 +1,23 @@
-FROM node:10
+# ---- Base Node ----
+FROM node:carbon AS base
+# Create app directory
+WORKDIR /app
 
-WORKDIR /financial
+# ---- Dependencies ----
+FROM base AS dependencies  
+COPY package*.json ./
+RUN pwd && ls -l
+RUN npm install --only-production
 
-COPY . /financial
-
-RUN npm install
-
-RUN npm install -g nodemon
+# --- Release with Alpine ----
+FROM node:alpine AS release  
+WORKDIR /app
+COPY ./dist ./dist
+COPY ./server ./server
+COPY ./package.json ./
+COPY --from=dependencies /app/node_modules ./node_modules
+RUN pwd && ls -al
 
 EXPOSE 80
 
-CMD ["npm", "start"]
+CMD ["node", "server/app.js"]

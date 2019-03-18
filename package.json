@@ -7,7 +7,8 @@
     "start": "node server/app.js",
     "dev":  "nodemon server/app.js -w server -V --ignore server/download",
     "cdev": "parcel watch ./client/public/index.html",
-    "cbuild": "rm -rf .cache dist && parcel build ./client/public/index.html",
+    "cres": "cp -r ./client/public/images ./dist/",
+    "cbuild": "npm run cclear && parcel build ./client/public/index.html && npm run cres",
     "cclear": "rm -rf .cache dist",
     "docker-build": "docker build -t stephenwu2019/financial:latest .",
     "docker-run": "docker run -p 3008:80 -d stephenwu2019/financial:latest"
